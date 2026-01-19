@@ -679,8 +679,8 @@
         </div>
 
         <div class="filters">
-            <button class="filter-btn active" data-filter="all" onclick="filterResults('all')">All</button>
-            <button class="filter-btn" data-filter="free" onclick="filterResults('free')">Free</button>
+            <button class="filter-btn" data-filter="all" onclick="filterResults('all')">All</button>
+            <button class="filter-btn active" data-filter="free" onclick="filterResults('free')">Free</button>
             <button class="filter-btn" data-filter="people" onclick="filterResults('people')">People</button>
             <button class="filter-btn" data-filter="social" onclick="filterResults('social')">Social</button>
             <button class="filter-btn" data-filter="technical" onclick="filterResults('technical')">Technical</button>
@@ -726,8 +726,8 @@
                 iconClass: "people",
                 filterGroup: "people",
                 tools: [
-                    { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/find/person/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
-                    { name: "TruePeopleSearch (Loc)", url: "https://www.truepeoplesearch.com/find/person/{first}-{last}/{city}-{state}", badge: "free", fields: ["firstName", "lastName", "city", "state"] },
+                    { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "TruePeopleSearch (Loc)", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}&citystatezip={city}%20{state}", badge: "free", fields: ["firstName", "lastName", "city", "state"] },
                     { name: "FastPeopleSearch", url: "https://www.fastpeoplesearch.com/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
                     { name: "FastPeopleSearch (State)", url: "https://www.fastpeoplesearch.com/{first}-{last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
                     { name: "ThatsThem", url: "https://thatsthem.com/name/{First}-{Last}", badge: "free", fields: ["firstName", "lastName"] },
@@ -851,7 +851,7 @@
                 iconClass: "phone",
                 filterGroup: "people",
                 tools: [
-                    { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/resultphone?phoneno={phoneClean}", badge: "free", fields: ["phone"] },
+                    { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/results?phoneno={phoneClean}", badge: "free", fields: ["phone"] },
                     { name: "FastPeopleSearch", url: "https://www.fastpeoplesearch.com/{phoneClean}", badge: "free", fields: ["phone"] },
                     { name: "ThatsThem Phone", url: "https://thatsthem.com/phone/{phoneClean}", badge: "free", fields: ["phone"] },
                     { name: "USPhonebook", url: "https://www.usphonebook.com/{phoneClean}", badge: "free", fields: ["phone"] },
@@ -1077,7 +1077,7 @@
 
         // State
         let generatedLinks = [];
-        let currentFilter = 'all';
+        let currentFilter = 'free';
 
         // Helpers
         function capitalize(str) {
@@ -1160,6 +1160,8 @@
                 const toolsHtml = cat.tools.map(tool => {
                     const isActive = hasRequiredFields(tool, values);
                     const url = isActive ? buildUrl(tool.url, values) : '#';
+                    const isFree = tool.badge === 'free';
+                    const hideForFreeFilter = currentFilter === 'free' && !isFree;
                     
                     if (isActive) {
                         generatedLinks.push({ category: cat.name, categoryId: catId, name: tool.name, url, badge: tool.badge });
@@ -1167,7 +1169,7 @@
                     }
 
                     return `
-                        <a href="${url}" target="_blank" class="tool-item ${isActive ? '' : 'disabled'}">
+                        <a href="${url}" target="_blank" class="tool-item ${isActive ? '' : 'disabled'}" style="${hideForFreeFilter ? 'display:none' : ''}">
                             <span class="tool-dot ${isActive ? 'active' : 'inactive'}"></span>
                             <span class="tool-name">${tool.name}</span>
                             <span class="tool-badge ${tool.badge}">${tool.badge}</span>
@@ -1210,7 +1212,8 @@
         }
 
         function openCategory(catId) {
-            const links = generatedLinks.filter(l => l.categoryId === catId);
+            let links = generatedLinks.filter(l => l.categoryId === catId);
+            if (currentFilter === 'free') links = links.filter(l => l.badge === 'free');
             if (links.length === 0) return showToast('No active links', 'error');
             if (links.length > 10 && !confirm(`Open ${links.length} tabs?`)) return;
             links.forEach((l, i) => setTimeout(() => window.open(l.url, '_blank'), i * 250));
@@ -1223,8 +1226,19 @@
             
             document.querySelectorAll('.category-card').forEach(card => {
                 const group = card.dataset.filterGroup;
-                let show = filter === 'all' || filter === 'free' || group === filter;
-                card.style.display = show ? '' : 'none';
+                let showCategory = filter === 'all' || filter === 'free' || group === filter;
+                card.style.display = showCategory ? '' : 'none';
+                
+                // Hide/show individual tools based on free filter
+                card.querySelectorAll('.tool-item').forEach(tool => {
+                    const badge = tool.querySelector('.tool-badge');
+                    const isFree = badge && badge.classList.contains('free');
+                    if (filter === 'free') {
+                        tool.style.display = isFree ? '' : 'none';
+                    } else {
+                        tool.style.display = '';
+                    }
+                });
             });
         }
 
@@ -1240,7 +1254,9 @@
 
         function openAllLinks() {
             if (generatedLinks.length === 0) return showToast('No links', 'error');
-            const links = currentFilter === 'free' ? generatedLinks.filter(l => l.badge === 'free') : generatedLinks;
+            let links = generatedLinks;
+            if (currentFilter === 'free') links = links.filter(l => l.badge === 'free');
+            if (links.length === 0) return showToast('No free links available', 'error');
             if (links.length > 15 && !confirm(`Open ${links.length} tabs?`)) return;
             links.forEach((l, i) => setTimeout(() => window.open(l.url, '_blank'), i * 200));
             showToast(`Opening ${links.length} links...`, 'info');
@@ -1248,8 +1264,11 @@
 
         function copyAllLinks() {
             if (generatedLinks.length === 0) return showToast('No links', 'error');
-            const text = generatedLinks.map(l => l.url).join('\n');
-            navigator.clipboard.writeText(text).then(() => showToast(`Copied ${generatedLinks.length} links`, 'success'));
+            let links = generatedLinks;
+            if (currentFilter === 'free') links = links.filter(l => l.badge === 'free');
+            if (links.length === 0) return showToast('No free links available', 'error');
+            const text = links.map(l => l.url).join('\n');
+            navigator.clipboard.writeText(text).then(() => showToast(`Copied ${links.length} links`, 'success'));
         }
 
         function exportLinks() {
