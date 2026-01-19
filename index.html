@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECON | Intelligence Aggregator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a24;
+            --bg-card: #16161f;
+            --border-color: #2a2a3a;
+            --border-glow: #3b82f6;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --gradient-1: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --radius: 8px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Input Panel */
+        .input-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .panel-title {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+            font-family: var(--font-mono);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .search-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+        }
+
+        .btn-search:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            width: 100%;
+            background: transparent;
+            border: 1px dashed var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-title {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .results-count {
+            background: var(--accent-blue);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Category Cards */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        .category-header {
+            padding: 1rem 1.25rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .category-icon.people { background: rgba(59, 130, 246, 0.15); }
+        .category-icon.social { background: rgba(236, 72, 153, 0.15); }
+        .category-icon.username { background: rgba(139, 92, 246, 0.15); }
+        .category-icon.email { background: rgba(6, 182, 212, 0.15); }
+        .category-icon.phone { background: rgba(16, 185, 129, 0.15); }
+        .category-icon.image { background: rgba(245, 158, 11, 0.15); }
+        .category-icon.records { background: rgba(239, 68, 68, 0.15); }
+        .category-icon.domain { background: rgba(99, 102, 241, 0.15); }
+        .category-icon.archive { background: rgba(107, 114, 128, 0.15); }
+        .category-icon.breach { background: rgba(220, 38, 38, 0.15); }
+        .category-icon.geo { background: rgba(34, 197, 94, 0.15); }
+        .category-icon.business { background: rgba(168, 85, 247, 0.15); }
+
+        .category-name {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .category-count {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.75rem;
+        }
+
+        .category-body {
+            padding: 1rem 1.25rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            transition: all 0.15s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .tool-item:hover {
+            background: var(--bg-card);
+            transform: translateX(4px);
+        }
+
+        .tool-item.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .tool-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tool-status.active { background: var(--accent-green); }
+        .tool-status.inactive { background: var(--text-muted); }
+
+        .tool-name {
+            flex: 1;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }
+
+        .tool-badge {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .tool-badge.free { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .tool-badge.freemium { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+        .tool-badge.paid { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .tool-badge.cli { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+
+        .tool-arrow {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            font-size: 0.9rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* History Panel */
+        .history-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .history-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .history-item:hover {
+            background: var(--bg-card);
+        }
+
+        .history-type {
+            color: var(--accent-cyan);
+        }
+
+        .history-value {
+            flex: 1;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-delete {
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .history-delete:hover {
+            color: var(--accent-red);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .toast.success { border-color: var(--accent-green); }
+        .toast.error { border-color: var(--accent-red); }
+        .toast.info { border-color: var(--accent-blue); }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            border-color: var(--accent-blue);
+            background: var(--bg-card);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            font-size: 1.5rem;
+        }
+
+        .quick-action-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .input-panel {
+                position: static;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Collapsible */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.open {
+            max-height: 500px;
+        }
+
+        .collapse-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collapse-icon {
+            transition: transform 0.2s;
+        }
+
+        .collapse-icon.open {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🔍</div>
+                <div>
+                    <div class="logo-text">RECON</div>
+                    <div class="logo-subtitle">Intelligence Aggregator</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn" onclick="exportAllLinks()">
+                    📋 Export Links
+                </button>
+                <button class="btn" onclick="toggleDarkMode()">
+                    🌙 Theme
+                </button>
+                <button class="btn btn-primary" onclick="window.open('https://osintframework.com', '_blank')">
+                    🌐 OSINT Framework
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <aside class="input-panel">
+            <div class="panel-title">
+                ⌨️ Search Parameters
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="quick-action" onclick="focusInput('firstName')">
+                    <span class="quick-action-icon">👤</span>
+                    <span class="quick-action-label">Person</span>
+                </div>
+                <div class="quick-action" onclick="focusInput('email')">
+                    <span class="quick-action-icon">📧</span>
+                    <span class="quick-action-label">Email</span>
+                </div>
+                <div class="quick-action" onclick="focusInput('username')">
+                    <span class="quick-action-icon">@</span>
+                    <span class="quick-action-label">Username</span>
+                </div>
+                <div class="quick-action" onclick="focusInput('phone')">
+                    <span class="quick-action-icon">📱</span>
+                    <span class="quick-action-label">Phone</span>
+                </div>
+            </div>
+
+            <!-- Person Info -->
+            <div class="input-section">
+                <div class="input-section-title">👤 Person Information</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">First Name</label>
+                        <input type="text" id="firstName" class="input-field" placeholder="John">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Last Name</label>
+                        <input type="text" id="lastName" class="input-field" placeholder="Smith">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">City</label>
+                        <input type="text" id="city" class="input-field" placeholder="Denver">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">State</label>
+                        <input type="text" id="state" class="input-field" placeholder="CO">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="input-section">
+                <div class="input-section-title">📞 Contact Information</div>
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input type="email" id="email" class="input-field" placeholder="example@email.com">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input type="tel" id="phone" class="input-field" placeholder="555-123-4567">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Username / Handle</label>
+                    <input type="text" id="username" class="input-field" placeholder="johndoe123">
+                </div>
+            </div>
+
+            <!-- Digital Info -->
+            <div class="input-section">
+                <div class="input-section-title">🌐 Digital Identifiers</div>
+                <div class="input-group">
+                    <label class="input-label">Domain Name</label>
+                    <input type="text" id="domain" class="input-field" placeholder="example.com">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">IP Address</label>
+                    <input type="text" id="ip" class="input-field" placeholder="192.168.1.1">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Image URL (for reverse search)</label>
+                    <input type="url" id="imageUrl" class="input-field" placeholder="https://...">
+                </div>
+            </div>
+
+            <div class="search-actions">
+                <button class="btn btn-search" onclick="generateResults()">
+                    🔍 Generate Search Links
+                </button>
+                <button class="btn btn-clear" onclick="clearAll()">
+                    ✕ Clear All Fields
+                </button>
+            </div>
+
+            <!-- Search History -->
+            <div class="history-section" id="historySection" style="display: none;">
+                <div class="history-title">📜 Recent Searches</div>
+                <div class="history-list" id="historyList"></div>
+            </div>
+        </aside>
+
+        <section class="results-panel">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalTools">200+</span>
+                    <span class="stat-label">Tools Available</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="activeLinks">0</span>
+                    <span class="stat-label">Active Links</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">12</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+            </div>
+
+            <div class="filter-tabs">
+                <span class="filter-tab active" data-filter="all" onclick="filterCategories('all')">All Tools</span>
+                <span class="filter-tab" data-filter="free" onclick="filterCategories('free')">Free Only</span>
+                <span class="filter-tab" data-filter="people" onclick="filterCategories('people')">People Search</span>
+                <span class="filter-tab" data-filter="social" onclick="filterCategories('social')">Social Media</span>
+                <span class="filter-tab" data-filter="technical" onclick="filterCategories('technical')">Technical</span>
+            </div>
+
+            <div class="results-header">
+                <div class="results-title">
+                    📊 Search Results
+                    <span class="results-count" id="resultsCount">Enter data to generate links</span>
+                </div>
+                <div class="results-actions">
+                    <button class="btn btn-small" onclick="openAllLinks()">🚀 Open All</button>
+                    <button class="btn btn-small" onclick="copyAllLinks()">📋 Copy All</button>
+                    <button class="btn btn-small" onclick="expandAll()">⬇️ Expand All</button>
+                </div>
+            </div>
+
+            <div class="category-grid" id="categoryGrid">
+                <!-- Categories will be dynamically populated -->
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🔎</div>
+                <div class="empty-title">Ready to Search</div>
+                <div class="empty-text">Enter information in the left panel and click "Generate Search Links" to find intelligence across 200+ sources.</div>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ============================================
+        // COMPREHENSIVE OSINT TOOLS DATABASE
+        // ============================================
+        
+        const toolsDatabase = {
+            people: {
+                name: "People Search",
+                icon: "👤",
+                iconClass: "people",
+                requiredFields: ["firstName", "lastName"],
+                tools: [
+                    { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/find/person/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "FastPeopleSearch", url: "https://www.fastpeoplesearch.com/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "ThatsThem (Name)", url: "https://thatsthem.com/name/{First}-{Last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "ThatsThem (State)", url: "https://thatsthem.com/name/{First}-{Last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
+                    { name: "USPhonebook", url: "https://www.usphonebook.com/{first}-{last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
+                    { name: "FamilyTreeNow", url: "https://www.familytreenow.com/search/people/results?first={first}&last={last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "Nuwber", url: "https://nuwber.com/search?name={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "CyberBackgroundChecks", url: "https://www.cyberbackgroundchecks.com/people/{first}-{last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
+                    { name: "WhitePages", url: "https://www.whitepages.com/name/{First}-{Last}/{city}-{state}", badge: "freemium", fields: ["firstName", "lastName", "city", "state"] },
+                    { name: "Spokeo", url: "https://www.spokeo.com/{First}-{Last}/{state}/{city}", badge: "freemium", fields: ["firstName", "lastName", "state", "city"] },
+                    { name: "BeenVerified", url: "https://www.beenverified.com/people/{first}-{last}/{state}/{city}/", badge: "freemium", fields: ["firstName", "lastName", "state", "city"] },
+                    { name: "Intelius", url: "https://www.intelius.com/people-search/{first}-{last}/{state}/{city}/", badge: "freemium", fields: ["firstName", "lastName", "state", "city"] },
+                    { name: "PeopleFinder", url: "https://www.peoplefinder.com/people/{first}+{last}/{city}/{state}", badge: "freemium", fields: ["firstName", "lastName", "city", "state"] },
+                    { name: "Radaris", url: "https://radaris.com/p/{First}/{Last}/", badge: "freemium", fields: ["firstName", "lastName"] },
+                    { name: "PeekYou", url: "https://www.peekyou.com/{first}_{last}/{state}", badge: "freemium", fields: ["firstName", "lastName", "state"] },
+                    { name: "ZabaSearch", url: "https://www.zabasearch.com/people/{first}+{last}/{state}/", badge: "free", fields: ["firstName", "lastName", "state"] },
+                    { name: "AnyWho", url: "https://www.anywho.com/people/{first}+{last}/{city}+{state}", badge: "free", fields: ["firstName", "lastName", "city", "state"] },
+                    { name: "411.com", url: "https://www.411.com/name/{First}-{Last}/{city}-{state}/", badge: "free", fields: ["firstName", "lastName", "city", "state"] },
+                ]
+            },
+            social: {
+                name: "Social Media",
+                icon: "💬",
+                iconClass: "social",
+                requiredFields: ["username"],
+                tools: [
+                    { name: "Twitter/X", url: "https://twitter.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "X.com Direct", url: "https://x.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Instagram", url: "https://www.instagram.com/{username}/", badge: "free", fields: ["username"] },
+                    { name: "Facebook", url: "https://www.facebook.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Facebook Search", url: "https://www.facebook.com/search/people/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "LinkedIn", url: "https://www.linkedin.com/in/{username}/", badge: "free", fields: ["username"] },
+                    { name: "LinkedIn Search", url: "https://www.linkedin.com/search/results/all/?keywords={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "TikTok", url: "https://www.tiktok.com/@{username}", badge: "free", fields: ["username"] },
+                    { name: "Reddit", url: "https://www.reddit.com/user/{username}", badge: "free", fields: ["username"] },
+                    { name: "YouTube", url: "https://www.youtube.com/@{username}", badge: "free", fields: ["username"] },
+                    { name: "Pinterest", url: "https://www.pinterest.com/{username}/", badge: "free", fields: ["username"] },
+                    { name: "Snapchat", url: "https://www.snapchat.com/add/{username}", badge: "free", fields: ["username"] },
+                    { name: "Tumblr", url: "https://{username}.tumblr.com", badge: "free", fields: ["username"] },
+                    { name: "GitHub", url: "https://github.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "GitLab", url: "https://gitlab.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Medium", url: "https://medium.com/@{username}", badge: "free", fields: ["username"] },
+                    { name: "Twitch", url: "https://www.twitch.tv/{username}", badge: "free", fields: ["username"] },
+                    { name: "Telegram", url: "https://t.me/{username}", badge: "free", fields: ["username"] },
+                    { name: "VK", url: "https://vk.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Mastodon (search)", url: "https://mastodon.social/@{username}", badge: "free", fields: ["username"] },
+                    { name: "SoundCloud", url: "https://soundcloud.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Spotify", url: "https://open.spotify.com/user/{username}", badge: "free", fields: ["username"] },
+                    { name: "Steam", url: "https://steamcommunity.com/id/{username}", badge: "free", fields: ["username"] },
+                    { name: "DeviantArt", url: "https://www.deviantart.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Flickr", url: "https://www.flickr.com/people/{username}", badge: "free", fields: ["username"] },
+                    { name: "Vimeo", url: "https://vimeo.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Patreon", url: "https://www.patreon.com/{username}", badge: "free", fields: ["username"] },
+                    { name: "Linktree", url: "https://linktr.ee/{username}", badge: "free", fields: ["username"] },
+                    { name: "About.me", url: "https://about.me/{username}", badge: "free", fields: ["username"] },
+                    { name: "Gravatar", url: "https://gravatar.com/{username}", badge: "free", fields: ["username"] },
+                ]
+            },
+            username: {
+                name: "Username Enumeration",
+                icon: "@",
+                iconClass: "username",
+                requiredFields: ["username"],
+                tools: [
+                    { name: "WhatsMyName", url: "https://whatsmyname.app/?q={username}", badge: "free", fields: ["username"] },
+                    { name: "Namechk", url: "https://namechk.com", badge: "free", fields: ["username"], note: "Manual entry" },
+                    { name: "KnowEm", url: "https://knowem.com/checkusernames.php", badge: "free", fields: ["username"], note: "Manual entry" },
+                    { name: "InstantUsername", url: "https://instantusername.com/#/{username}", badge: "free", fields: ["username"] },
+                    { name: "CheckUsernames", url: "https://checkusernames.com/", badge: "free", fields: ["username"], note: "Manual entry" },
+                    { name: "NameCheckr", url: "https://www.namecheckr.com/", badge: "free", fields: ["username"], note: "Manual entry" },
+                    { name: "UserSearch.org", url: "https://usersearch.org/results_normal.php?URL_username={username}", badge: "free", fields: ["username"] },
+                    { name: "Sherlock (CLI)", url: "https://github.com/sherlock-project/sherlock", badge: "cli", fields: ["username"], note: "400+ sites" },
+                    { name: "Maigret (CLI)", url: "https://github.com/soxoj/maigret", badge: "cli", fields: ["username"], note: "3000+ sites" },
+                    { name: "Blackbird", url: "https://github.com/p1ngul1n0/blackbird", badge: "cli", fields: ["username"], note: "500+ sites" },
+                    { name: "Social Analyzer", url: "https://github.com/qeeqbox/social-analyzer", badge: "cli", fields: ["username"] },
+                ]
+            },
+            email: {
+                name: "Email OSINT",
+                icon: "📧",
+                iconClass: "email",
+                requiredFields: ["email"],
+                tools: [
+                    { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"] },
+                    { name: "Hunter.io Verify", url: "https://hunter.io/email-verifier/{email}", badge: "freemium", fields: ["email"] },
+                    { name: "Epieos", url: "https://epieos.com/?q={email}", badge: "free", fields: ["email"] },
+                    { name: "ThatsThem Email", url: "https://thatsthem.com/email/{email}", badge: "free", fields: ["email"] },
+                    { name: "EmailRep.io", url: "https://emailrep.io/{email}", badge: "free", fields: ["email"] },
+                    { name: "Phonebook.cz", url: "https://phonebook.cz/search?query={email}", badge: "freemium", fields: ["email"] },
+                    { name: "Intelligence X", url: "https://intelx.io/?s={email}", badge: "freemium", fields: ["email"] },
+                    { name: "Dehashed", url: "https://dehashed.com/search?query={email}", badge: "freemium", fields: ["email"] },
+                    { name: "Snusbase", url: "https://snusbase.com/search?q={email}", badge: "paid", fields: ["email"] },
+                    { name: "LeakCheck", url: "https://leakcheck.io/", badge: "freemium", fields: ["email"], note: "Manual entry" },
+                    { name: "BreachDirectory", url: "https://breachdirectory.org/search?email={email}", badge: "free", fields: ["email"] },
+                    { name: "Holehe (CLI)", url: "https://github.com/megadose/holehe", badge: "cli", fields: ["email"], note: "Email to accounts" },
+                ]
+            },
+            phone: {
+                name: "Phone Lookup",
+                icon: "📱",
+                iconClass: "phone",
+                requiredFields: ["phone"],
+                tools: [
+                    { name: "TruePeopleSearch Phone", url: "https://www.truepeoplesearch.com/resultphone?phoneno={phoneClean}", badge: "free", fields: ["phone"] },
+                    { name: "FastPeopleSearch Phone", url: "https://www.fastpeoplesearch.com/{phoneClean}", badge: "free", fields: ["phone"] },
+                    { name: "ThatsThem Phone", url: "https://thatsthem.com/phone/{phone}", badge: "free", fields: ["phone"] },
+                    { name: "USPhonebook Phone", url: "https://www.usphonebook.com/{phoneClean}", badge: "free", fields: ["phone"] },
+                    { name: "SpyDialer", url: "https://spydialer.com/default.aspx", badge: "free", fields: ["phone"], note: "Manual entry" },
+                    { name: "NumLookup", url: "https://www.numlookup.com/{phoneClean}", badge: "free", fields: ["phone"] },
+                    { name: "Sync.me", url: "https://sync.me/search/?number={phone}", badge: "freemium", fields: ["phone"] },
+                    { name: "TrueCaller", url: "https://www.truecaller.com/search/us/{phoneClean}", badge: "freemium", fields: ["phone"] },
+                    { name: "CallerID Test", url: "https://calleridtest.com/", badge: "free", fields: ["phone"], note: "Manual entry" },
+                    { name: "Free Carrier Lookup", url: "https://freecarrierlookup.com/", badge: "free", fields: ["phone"], note: "Manual entry" },
+                    { name: "WhitePages Phone", url: "https://www.whitepages.com/phone/{phone}", badge: "freemium", fields: ["phone"] },
+                    { name: "Spokeo Phone", url: "https://www.spokeo.com/phone/{phone}", badge: "freemium", fields: ["phone"] },
+                ]
+            },
+            image: {
+                name: "Reverse Image & Face",
+                icon: "🖼️",
+                iconClass: "image",
+                requiredFields: ["imageUrl"],
+                tools: [
+                    { name: "Google Images", url: "https://www.google.com/searchbyimage?image_url={imageUrl}", badge: "free", fields: ["imageUrl"] },
+                    { name: "Google Lens", url: "https://lens.google.com/uploadbyurl?url={imageUrl}", badge: "free", fields: ["imageUrl"] },
+                    { name: "TinEye", url: "https://tineye.com/search?url={imageUrl}", badge: "free", fields: ["imageUrl"] },
+                    { name: "Yandex Images", url: "https://yandex.com/images/search?url={imageUrl}&rpt=imageview", badge: "free", fields: ["imageUrl"], note: "Best for faces" },
+                    { name: "Bing Visual Search", url: "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:{imageUrl}", badge: "free", fields: ["imageUrl"] },
+                    { name: "PimEyes", url: "https://pimeyes.com/en", badge: "paid", fields: ["imageUrl"], note: "Facial recognition" },
+                    { name: "FaceCheck.id", url: "https://facecheck.id/", badge: "freemium", fields: ["imageUrl"], note: "Manual upload" },
+                    { name: "FaceOnLive", url: "https://faceonlive.com/face-search-online/", badge: "free", fields: ["imageUrl"], note: "Manual upload" },
+                    { name: "Lenso.ai", url: "https://lenso.ai/en", badge: "freemium", fields: ["imageUrl"], note: "Manual upload" },
+                    { name: "Search4Faces", url: "https://search4faces.com/", badge: "freemium", fields: ["imageUrl"], note: "VK/OK faces" },
+                    { name: "Social Catfish", url: "https://socialcatfish.com/", badge: "freemium", fields: ["imageUrl"], note: "Manual upload" },
+                    { name: "Picarta", url: "https://picarta.ai/", badge: "freemium", fields: ["imageUrl"], note: "Geolocation from image" },
+                    { name: "FotoForensics", url: "https://fotoforensics.com/", badge: "free", fields: ["imageUrl"], note: "EXIF/manipulation" },
+                    { name: "Pic2Map", url: "https://www.pic2map.com/", badge: "free", fields: ["imageUrl"], note: "EXIF GPS extraction" },
+                ]
+            },
+            records: {
+                name: "Public Records",
+                icon: "📋",
+                iconClass: "records",
+                requiredFields: ["firstName", "lastName"],
+                tools: [
+                    { name: "JudyRecords", url: "https://www.judyrecords.com/records?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], note: "630M+ cases" },
+                    { name: "CourtListener", url: "https://www.courtlistener.com/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "PACER", url: "https://pacer.uscourts.gov/", badge: "freemium", fields: [], note: "Federal courts" },
+                    { name: "UniCourt", url: "https://unicourt.com/", badge: "freemium", fields: ["firstName", "lastName"], note: "Manual search" },
+                    { name: "VoterRecords", url: "https://voterrecords.com/", badge: "free", fields: ["firstName", "lastName", "state"], note: "Manual search" },
+                    { name: "FEC Donations", url: "https://www.fec.gov/data/receipts/?contributor_name={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "OpenSecrets", url: "https://www.opensecrets.org/donor-lookup", badge: "free", fields: ["firstName", "lastName"], note: "Manual search" },
+                    { name: "FollowTheMoney", url: "https://www.followthemoney.org/", badge: "free", fields: [], note: "State-level" },
+                    { name: "Netronline", url: "https://publicrecords.netronline.com/", badge: "free", fields: [], note: "Property records directory" },
+                    { name: "County Assessor (Google)", url: "https://www.google.com/search?q={city}+{state}+county+property+records", badge: "free", fields: ["city", "state"] },
+                ]
+            },
+            business: {
+                name: "Business & Corporate",
+                icon: "🏢",
+                iconClass: "business",
+                requiredFields: [],
+                tools: [
+                    { name: "SEC EDGAR", url: "https://www.sec.gov/cgi-bin/browse-edgar?company={first}+{last}&action=getcompany", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "OpenCorporates", url: "https://opencorporates.com/companies?q={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"] },
+                    { name: "LinkedIn Company", url: "https://www.linkedin.com/search/results/companies/?keywords={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                    { name: "Crunchbase", url: "https://www.crunchbase.com/textsearch?q={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"] },
+                    { name: "Bloomberg", url: "https://www.bloomberg.com/search?query={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"] },
+                    { name: "ZoomInfo", url: "https://www.zoominfo.com/", badge: "paid", fields: [], note: "Manual search" },
+                    { name: "D&B", url: "https://www.dnb.com/", badge: "paid", fields: [], note: "Business data" },
+                    { name: "Google Patents", url: "https://patents.google.com/?inventor={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                ]
+            },
+            domain: {
+                name: "Domain & IP OSINT",
+                icon: "🌐",
+                iconClass: "domain",
+                requiredFields: ["domain"],
+                tools: [
+                    { name: "Who.is", url: "https://who.is/whois/{domain}", badge: "free", fields: ["domain"] },
+                    { name: "ICANN Lookup", url: "https://lookup.icann.org/en/lookup?name={domain}", badge: "free", fields: ["domain"] },
+                    { name: "ViewDNS WHOIS", url: "https://viewdns.info/whois/?domain={domain}", badge: "free", fields: ["domain"] },
+                    { name: "DNSdumpster", url: "https://dnsdumpster.com/", badge: "free", fields: ["domain"], note: "Manual entry" },
+                    { name: "SecurityTrails", url: "https://securitytrails.com/domain/{domain}", badge: "freemium", fields: ["domain"] },
+                    { name: "Shodan (Domain)", url: "https://www.shodan.io/search?query=hostname:{domain}", badge: "freemium", fields: ["domain"] },
+                    { name: "Shodan (IP)", url: "https://www.shodan.io/host/{ip}", badge: "freemium", fields: ["ip"] },
+                    { name: "Censys", url: "https://search.censys.io/hosts/{ip}", badge: "freemium", fields: ["ip"] },
+                    { name: "IPinfo", url: "https://ipinfo.io/{ip}", badge: "free", fields: ["ip"] },
+                    { name: "ViewDNS Reverse IP", url: "https://viewdns.info/reverseip/?host={ip}", badge: "free", fields: ["ip"] },
+                    { name: "BuiltWith", url: "https://builtwith.com/{domain}", badge: "freemium", fields: ["domain"] },
+                    { name: "Wappalyzer", url: "https://www.wappalyzer.com/lookup/{domain}", badge: "freemium", fields: ["domain"] },
+                    { name: "Hunter.io Domain", url: "https://hunter.io/domain-search/{domain}", badge: "freemium", fields: ["domain"] },
+                    { name: "crt.sh (Certs)", url: "https://crt.sh/?q={domain}", badge: "free", fields: ["domain"] },
+                    { name: "Sublist3r (CLI)", url: "https://github.com/aboul3la/Sublist3r", badge: "cli", fields: ["domain"] },
+                ]
+            },
+            archive: {
+                name: "Archives & Deleted",
+                icon: "📦",
+                iconClass: "archive",
+                requiredFields: [],
+                tools: [
+                    { name: "Wayback Machine", url: "https://web.archive.org/web/*/{domain}", badge: "free", fields: ["domain"] },
+                    { name: "Archive.today", url: "https://archive.today/{domain}", badge: "free", fields: ["domain"] },
+                    { name: "CachedView", url: "https://cachedview.com/", badge: "free", fields: [], note: "Manual entry" },
+                    { name: "Google Cache", url: "https://webcache.googleusercontent.com/search?q=cache:{domain}", badge: "free", fields: ["domain"] },
+                    { name: "Reveddit (Reddit)", url: "https://www.reveddit.com/user/{username}", badge: "free", fields: ["username"] },
+                    { name: "Camas Reddit Search", url: "https://camas.unddit.com/", badge: "free", fields: ["username"], note: "Manual search" },
+                    { name: "Politwoops", url: "https://politwoops.com/", badge: "free", fields: [], note: "Deleted politician tweets" },
+                    { name: "Web Archive (search)", url: "https://web.archive.org/web/*/{first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
+                ]
+            },
+            breach: {
+                name: "Breach & Leak Data",
+                icon: "🔓",
+                iconClass: "breach",
+                requiredFields: ["email"],
+                tools: [
+                    { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"] },
+                    { name: "DeHashed", url: "https://dehashed.com/search?query={email}", badge: "freemium", fields: ["email"] },
+                    { name: "LeakCheck", url: "https://leakcheck.io/", badge: "freemium", fields: ["email"], note: "Manual entry" },
+                    { name: "Intelligence X", url: "https://intelx.io/?s={email}", badge: "freemium", fields: ["email"] },
+                    { name: "Snusbase", url: "https://snusbase.com/", badge: "paid", fields: ["email"], note: "Manual search" },
+                    { name: "BreachDirectory", url: "https://breachdirectory.org/search?email={email}", badge: "free", fields: ["email"] },
+                    { name: "Pwned Passwords", url: "https://haveibeenpwned.com/Passwords", badge: "free", fields: [], note: "Check passwords" },
+                    { name: "GhostProject", url: "https://ghostproject.fr/", badge: "free", fields: ["email"], note: "Manual search" },
+                ]
+            },
+            geo: {
+                name: "Geolocation & Tracking",
+                icon: "📍",
+                iconClass: "geo",
+                requiredFields: [],
+                tools: [
+                    { name: "Google Maps", url: "https://www.google.com/maps/search/{city}+{state}", badge: "free", fields: ["city", "state"] },
+                    { name: "FlightAware", url: "https://flightaware.com/", badge: "freemium", fields: [], note: "Flight tracking" },
+                    { name: "FlightRadar24", url: "https://www.flightradar24.com/", badge: "freemium", fields: [], note: "Flight tracking" },
+                    { name: "ADS-B Exchange", url: "https://globe.adsbexchange.com/", badge: "free", fields: [], note: "Unfiltered flights" },
+                    { name: "MarineTraffic", url: "https://www.marinetraffic.com/", badge: "freemium", fields: [], note: "Ship tracking" },
+                    { name: "VesselFinder", url: "https://www.vesselfinder.com/", badge: "freemium", fields: [], note: "Ship tracking" },
+                    { name: "SunCalc", url: "https://www.suncalc.org/", badge: "free", fields: [], note: "Sun position analysis" },
+                    { name: "ShadowCalculator", url: "https://www.shadowcalculator.eu/", badge: "free", fields: [], note: "Shadow analysis" },
+                    { name: "Snap Map", url: "https://map.snapchat.com/", badge: "free", fields: [], note: "Snapchat locations" },
+                    { name: "Wikimapia", url: "https://wikimapia.org/", badge: "free", fields: [], note: "Crowdsourced maps" },
+                ]
+            }
+        };
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        
+        let generatedLinks = [];
+        let searchHistory = JSON.parse(localStorage.getItem('osintHistory') || '[]');
+        let currentFilter = 'all';
+
+        // ============================================
+        // INPUT HELPERS
+        // ============================================
+        
+        function getInputValues() {
+            return {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                first: document.getElementById('firstName').value.trim().toLowerCase(),
+                last: document.getElementById('lastName').value.trim().toLowerCase(),
+                First: capitalize(document.getElementById('firstName').value.trim()),
+                Last: capitalize(document.getElementById('lastName').value.trim()),
+                city: document.getElementById('city').value.trim(),
+                state: document.getElementById('state').value.trim().toUpperCase(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                phoneClean: document.getElementById('phone').value.replace(/\D/g, ''),
+                username: document.getElementById('username').value.trim().replace('@', ''),
+                domain: document.getElementById('domain').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, ''),
+                ip: document.getElementById('ip').value.trim(),
+                imageUrl: encodeURIComponent(document.getElementById('imageUrl').value.trim())
+            };
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        }
+
+        function hasRequiredFields(tool, values) {
+            return tool.fields.every(field => values[field] && values[field].length > 0);
+        }
+
+        function buildUrl(urlTemplate, values) {
+            let url = urlTemplate;
+            for (const [key, value] of Object.entries(values)) {
+                url = url.replace(new RegExp(`{${key}}`, 'g'), value);
+            }
+            return url;
+        }
+
+        function focusInput(inputId) {
+            document.getElementById(inputId).focus();
+        }
+
+        // ============================================
+        // MAIN SEARCH FUNCTION
+        // ============================================
+        
+        function generateResults() {
+            const values = getInputValues();
+            generatedLinks = [];
+            
+            // Check if any input is provided
+            const hasInput = Object.values(values).some(v => v && v.length > 0 && v !== 'undefined');
+            if (!hasInput) {
+                showToast('Please enter at least one search parameter', 'error');
+                return;
+            }
+
+            // Save to history
+            saveToHistory(values);
+
+            // Build results
+            const categoryGrid = document.getElementById('categoryGrid');
+            categoryGrid.innerHTML = '';
+            document.getElementById('emptyState').style.display = 'none';
+
+            let totalActive = 0;
+
+            for (const [categoryId, category] of Object.entries(toolsDatabase)) {
+                const activeTools = category.tools.filter(tool => hasRequiredFields(tool, values));
+                
+                if (activeTools.length === 0 && currentFilter !== 'all') continue;
+
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.dataset.category = categoryId;
+
+                const toolsHtml = category.tools.map(tool => {
+                    const isActive = hasRequiredFields(tool, values);
+                    const url = isActive ? buildUrl(tool.url, values) : '#';
+                    
+                    if (isActive) {
+                        generatedLinks.push({ category: category.name, name: tool.name, url });
+                        totalActive++;
+                    }
+
+                    return `
+                        <a href="${url}" target="_blank" class="tool-item ${isActive ? '' : 'disabled'}" 
+                           onclick="${isActive ? '' : 'return false;'}">
+                            <span class="tool-status ${isActive ? 'active' : 'inactive'}"></span>
+                            <span class="tool-name">${tool.name}</span>
+                            ${tool.note ? `<span style="font-size:0.65rem;color:var(--text-muted)">${tool.note}</span>` : ''}
+                            <span class="tool-badge ${tool.badge}">${tool.badge}</span>
+                            ${isActive ? '<span class="tool-arrow">→</span>' : ''}
+                        </a>
+                    `;
+                }).join('');
+
+                categoryCard.innerHTML = `
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <div class="category-info">
+                            <div class="category-icon ${category.iconClass}">${category.icon}</div>
+                            <div>
+                                <div class="category-name">${category.name}</div>
+                                <div class="category-count">${activeTools.length}/${category.tools.length} tools active</div>
+                            </div>
+                        </div>
+                        <div class="category-actions">
+                            <button class="btn btn-small" onclick="event.stopPropagation(); openCategoryLinks('${categoryId}')">
+                                Open All
+                            </button>
+                            <span class="collapse-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="category-body collapsible-content open">
+                        <div class="tool-list">
+                            ${toolsHtml}
+                        </div>
+                    </div>
+                `;
+
+                categoryGrid.appendChild(categoryCard);
+            }
+
+            document.getElementById('activeLinks').textContent = totalActive;
+            document.getElementById('resultsCount').textContent = `${totalActive} links generated`;
+            
+            showToast(`Generated ${totalActive} search links across ${Object.keys(toolsDatabase).length} categories`, 'success');
+        }
+
+        // ============================================
+        // CATEGORY ACTIONS
+        // ============================================
+        
+        function toggleCategory(header) {
+            const body = header.nextElementSibling;
+            const icon = header.querySelector('.collapse-icon');
+            body.classList.toggle('open');
+            icon.classList.toggle('open');
+        }
+
+        function openCategoryLinks(categoryId) {
+            const categoryLinks = generatedLinks.filter(link => 
+                link.category === toolsDatabase[categoryId].name
+            );
+            
+            if (categoryLinks.length === 0) {
+                showToast('No active links in this category', 'error');
+                return;
+            }
+
+            categoryLinks.forEach((link, index) => {
+                setTimeout(() => {
+                    window.open(link.url, '_blank');
+                }, index * 300); // Stagger to avoid popup blocking
+            });
+            
+            showToast(`Opening ${categoryLinks.length} links...`, 'info');
+        }
+
+        function openAllLinks() {
+            if (generatedLinks.length === 0) {
+                showToast('No links to open. Generate results first.', 'error');
+                return;
+            }
+
+            if (generatedLinks.length > 20) {
+                if (!confirm(`This will open ${generatedLinks.length} tabs. Continue?`)) return;
+            }
+
+            generatedLinks.forEach((link, index) => {
+                setTimeout(() => {
+                    window.open(link.url, '_blank');
+                }, index * 200);
+            });
+            
+            showToast(`Opening ${generatedLinks.length} links...`, 'info');
+        }
+
+        function copyAllLinks() {
+            if (generatedLinks.length === 0) {
+                showToast('No links to copy. Generate results first.', 'error');
+                return;
+            }
+
+            const text = generatedLinks.map(link => 
+                `[${link.category}] ${link.name}: ${link.url}`
+            ).join('\n');
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied ${generatedLinks.length} links to clipboard`, 'success');
+            });
+        }
+
+        function exportAllLinks() {
+            if (generatedLinks.length === 0) {
+                showToast('No links to export. Generate results first.', 'error');
+                return;
+            }
+
+            const data = {
+                generated: new Date().toISOString(),
+                totalLinks: generatedLinks.length,
+                links: generatedLinks
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `osint-links-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('Links exported to JSON file', 'success');
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.collapsible-content').forEach(el => {
+                el.classList.add('open');
+            });
+            document.querySelectorAll('.collapse-icon').forEach(el => {
+                el.classList.add('open');
+            });
+        }
+
+        // ============================================
+        // FILTERS
+        // ============================================
+        
+        function filterCategories(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.filter === filter);
+            });
+
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                let show = true;
+
+                switch(filter) {
+                    case 'people':
+                        show = ['people', 'records'].includes(category);
+                        break;
+                    case 'social':
+                        show = ['social', 'username'].includes(category);
+                        break;
+                    case 'technical':
+                        show = ['domain', 'breach', 'archive'].includes(category);
+                        break;
+                    case 'free':
+                        // Show all but could filter tools
+                        break;
+                }
+
+                card.style.display = show ? 'block' : 'none';
+            });
+        }
+
+        // ============================================
+        // HISTORY MANAGEMENT
+        // ============================================
+        
+        function saveToHistory(values) {
+            const entry = {
+                timestamp: Date.now(),
+                values: {}
+            };
+
+            // Only save non-empty values
+            for (const [key, value] of Object.entries(values)) {
+                if (value && !['first', 'last', 'First', 'Last', 'phoneClean', 'imageUrl'].includes(key)) {
+                    if (value.length > 0 && value !== 'undefined') {
+                        entry.values[key] = value;
+                    }
+                }
+            }
+
+            if (Object.keys(entry.values).length === 0) return;
+
+            // Add to history (max 10 items)
+            searchHistory = [entry, ...searchHistory.filter(h => 
+                JSON.stringify(h.values) !== JSON.stringify(entry.values)
+            )].slice(0, 10);
+
+            localStorage.setItem('osintHistory', JSON.stringify(searchHistory));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+
+            if (searchHistory.length === 0) {
+                historySection.style.display = 'none';
+                return;
+            }
+
+            historySection.style.display = 'block';
+            historyList.innerHTML = searchHistory.map((entry, index) => {
+                const preview = Object.entries(entry.values)
+                    .map(([k, v]) => `${k}: ${v}`)
+                    .join(', ');
+
+                return `
+                    <div class="history-item" onclick="loadHistory(${index})">
+                        <span class="history-type">#${index + 1}</span>
+                        <span class="history-value">${preview}</span>
+                        <span class="history-delete" onclick="event.stopPropagation(); deleteHistory(${index})">✕</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadHistory(index) {
+            const entry = searchHistory[index];
+            if (!entry) return;
+
+            for (const [key, value] of Object.entries(entry.values)) {
+                const input = document.getElementById(key);
+                if (input) input.value = value;
+            }
+
+            generateResults();
+        }
+
+        function deleteHistory(index) {
+            searchHistory.splice(index, 1);
+            localStorage.setItem('osintHistory', JSON.stringify(searchHistory));
+            renderHistory();
+        }
+
+        // ============================================
+        // UI HELPERS
+        // ============================================
+        
+        function clearAll() {
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.value = '';
+            });
+            generatedLinks = [];
+            document.getElementById('categoryGrid').innerHTML = '';
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('activeLinks').textContent = '0';
+            document.getElementById('resultsCount').textContent = 'Enter data to generate links';
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleDarkMode() {
+            // Already dark mode, could add light mode toggle
+            showToast('Dark mode is the only way 😎', 'info');
+        }
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHistory();
+            
+            // Calculate total tools
+            let total = 0;
+            for (const category of Object.values(toolsDatabase)) {
+                total += category.tools.length;
+            }
+            document.getElementById('totalTools').textContent = total + '+';
+
+            // Enter key triggers search
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') generateResults();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
