@@ -1166,10 +1166,6 @@ body.results-mode {
     background: var(--bg-tertiary);
 }
 
-.tool-item.inactive {
-    opacity: 0.4;
-}
-
 .tool-item.filter-hidden {
     display: none !important;
 }
@@ -1297,6 +1293,39 @@ body.results-mode {
 /* Dropdown */
 .dropdown {
     position: relative;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    max-width: 400px;
+    line-height: 1.5;
 }
 
 .dropdown-menu {
@@ -1781,8 +1810,6 @@ body.results-mode {
             <button class="filter-pill" data-filter="freemium" onclick="setFilter('freemium')" data-tooltip="Show tools with free tier but paid upgrades available" data-tooltip-pos="bottom">Freemium</button>
             <button class="filter-pill" data-filter="paid" onclick="setFilter('paid')" data-tooltip="Show tools that require payment to use" data-tooltip-pos="bottom">Paid</button>
             <button class="filter-pill" data-filter="cli" onclick="setFilter('cli')" data-tooltip="Show command-line tools (requires terminal/installation)" data-tooltip-pos="bottom">CLI</button>
-            <span class="divider"></span>
-            <button class="filter-pill" data-filter="active" onclick="setFilter('active')" data-tooltip="Show only tools that have valid URLs based on your current input" data-tooltip-pos="bottom">Active Only</button>
         </div>
     </div>
 
@@ -2316,39 +2343,42 @@ function renderAllTools(values = null, mode = 'normal') {
             totalTools++;
             
             const isActive = hasRequiredFields(tool, values);
-            const url = isActive ? buildUrl(tool.url, values) : '#';
             const toolId = `${categoryId}-${index}`;
             const isFavorited = favorites.some(f => f.name === tool.name);
+            
+            // Skip inactive tools entirely - don't render them
+            if (!isActive) {
+                return '';
+            }
+            
+            const url = buildUrl(tool.url, values);
             
             // Check badge filter
             const matchesFilter = state.filter === 'all' || 
                                   state.filter === tool.badge ||
-                                  (state.filter === 'active' && isActive);
+                                  state.filter === 'active';
             
-            if (isActive) {
-                totalActive++;
-                activeInCategory++;
-                state.generatedLinks.push({
-                    id: toolId,
-                    category: category.name,
-                    name: tool.name,
-                    url: url,
-                    badge: tool.badge
-                });
-            }
+            totalActive++;
+            activeInCategory++;
+            state.generatedLinks.push({
+                id: toolId,
+                category: category.name,
+                name: tool.name,
+                url: url,
+                badge: tool.badge
+            });
 
-            if (matchesFilter || (state.filter === 'active' && isActive)) {
+            if (matchesFilter) {
                 visibleInCategory++;
             }
 
             const hiddenClass = matchesFilter ? '' : 'filter-hidden';
-            const inactiveClass = isActive ? '' : 'inactive';
 
             return `
-                <div class="tool-item ${inactiveClass} ${hiddenClass}" 
+                <div class="tool-item ${hiddenClass}" 
                      data-tool-id="${toolId}" 
                      data-badge="${tool.badge}"
-                     data-active="${isActive}"
+                     data-active="true"
                      data-tooltip="${tool.desc || tool.name}">
                     <div class="tool-checkbox ${state.checkedTools.has(toolId) ? 'checked' : ''}" 
                          onclick="toggleCheck('${toolId}')"
@@ -2359,7 +2389,6 @@ function renderAllTools(values = null, mode = 'normal') {
                         <a href="${url}" 
                            target="_blank" 
                            class="tool-name" 
-                           ${isActive ? '' : 'onclick="return false;"'}
                            title="${tool.desc || 'Click to open this tool'}">
                             ${tool.name}
                         </a>
@@ -2387,8 +2416,13 @@ function renderAllTools(values = null, mode = 'normal') {
             `;
         }).join('');
 
-        // Check if category has visible tools
-        const hasVisibleTools = visibleInCategory > 0 || state.filter === 'all';
+        // Skip category entirely if no active tools
+        if (activeInCategory === 0) {
+            return;
+        }
+
+        // Check if category has visible tools after filter
+        const hasVisibleTools = visibleInCategory > 0;
         
         card.innerHTML = `
             <div class="category-header" 
@@ -2397,9 +2431,9 @@ function renderAllTools(values = null, mode = 'normal') {
                 <div class="category-title">
                     <span class="category-icon">${category.icon}</span>
                     <span class="category-name">${category.name}</span>
-                    <span class="category-count ${activeInCategory > 0 ? 'active' : ''}"
-                          data-tooltip="${activeInCategory} tools have valid URLs / ${category.tools.length} total">
-                        ${activeInCategory}/${category.tools.length}
+                    <span class="category-count active"
+                          data-tooltip="${activeInCategory} tools available">
+                        ${activeInCategory}
                     </span>
                 </div>
                 <span class="category-toggle" data-tooltip="Click to expand/collapse">▼</span>
@@ -2411,9 +2445,7 @@ function renderAllTools(values = null, mode = 'normal') {
             card.classList.add('filter-hidden');
         }
 
-        if (activeInCategory > 0) {
-            card.classList.add('has-results');
-        }
+        card.classList.add('has-results');
 
         grid.appendChild(card);
     });
@@ -2423,6 +2455,17 @@ function renderAllTools(values = null, mode = 'normal') {
     document.getElementById('checkedCount').textContent = state.checkedTools.size;
     updateVisibleCount();
     updateProgress();
+
+    // Show empty state if no active tools
+    if (totalActive === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <div class="empty-icon">🔍</div>
+                <div class="empty-title">No matching tools</div>
+                <div class="empty-text">Enter search criteria above to see available OSINT tools. Try adding a name, username, email, domain, or other parameters.</div>
+            </div>
+        `;
+    }
 
     // Lucky mode - open first result
     if (mode === 'lucky' && state.generatedLinks.length > 0) {
@@ -2470,7 +2513,6 @@ function applyFilters() {
 
     document.querySelectorAll('.tool-item').forEach(item => {
         const badge = item.dataset.badge;
-        const isActive = item.dataset.active === 'true';
         const nameMatch = state.textFilter === '' || 
                           item.querySelector('.tool-name').textContent.toLowerCase().includes(state.textFilter) ||
                           (item.querySelector('.tool-desc')?.textContent.toLowerCase().includes(state.textFilter));
@@ -2492,9 +2534,6 @@ function applyFilters() {
                 break;
             case 'cli':
                 showByBadge = badge === 'cli';
-                break;
-            case 'active':
-                showByBadge = isActive;
                 break;
             default:
                 showByBadge = true;
