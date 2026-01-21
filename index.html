@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPECTRE | OSINT Intelligence Platform</title>
+    <meta name="description" content="SPECTRE - Open Source Intelligence Platform with 500+ OSINT tools for researchers, investigators, and security professionals.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+/* ============================================
+   CSS VARIABLES & THEMES
+   ============================================ */
 :root {
     --bg-void: #08090a;
     --bg-primary: #0d0e10;
@@ -38,25 +42,73 @@
     --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
     --font-display: 'Space Grotesk', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    --tooltip-bg: #1f2937;
+    --tooltip-border: #374151;
 }
+
 [data-theme="light"] {
-    --bg-void: #f8fafc; --bg-primary: #ffffff; --bg-secondary: #f1f5f9;
-    --bg-tertiary: #e2e8f0; --bg-card: #ffffff; --bg-elevated: #ffffff;
-    --bg-hover: #f1f5f9; --border-subtle: #e2e8f0; --border-default: #cbd5e1;
-    --border-emphasis: #94a3b8; --text-primary: #0f172a; --text-secondary: #475569;
-    --text-muted: #64748b; --accent-primary: #2563eb; --glow-primary: rgba(37,99,235,0.1);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.08); --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+    --bg-void: #f8fafc;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e2e8f0;
+    --bg-card: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-hover: #f1f5f9;
+    --border-subtle: #e2e8f0;
+    --border-default: #cbd5e1;
+    --border-emphasis: #94a3b8;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-subtle: #94a3b8;
+    --accent-primary: #2563eb;
+    --glow-primary: rgba(37,99,235,0.1);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+    --tooltip-bg: #1e293b;
+    --tooltip-border: #334155;
 }
+
 [data-theme="hacker"] {
-    --bg-void: #000000; --bg-primary: #050505; --bg-secondary: #0a0a0a;
-    --bg-tertiary: #0f0f0f; --bg-card: #111111; --bg-elevated: #161616;
-    --border-subtle: #0d1f0d; --border-default: #1a3d1a; --border-active: #22c55e;
-    --text-primary: #22c55e; --text-secondary: #16a34a; --text-muted: #15803d;
-    --accent-primary: #22c55e; --accent-secondary: #4ade80; --glow-primary: rgba(34,197,94,0.15);
+    --bg-void: #000000;
+    --bg-primary: #050505;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #0f0f0f;
+    --bg-card: #111111;
+    --bg-elevated: #161616;
+    --bg-hover: #1a1a1a;
+    --border-subtle: #0d1f0d;
+    --border-default: #1a3d1a;
+    --border-emphasis: #2d5a2d;
+    --border-active: #22c55e;
+    --text-primary: #22c55e;
+    --text-secondary: #16a34a;
+    --text-muted: #15803d;
+    --text-subtle: #166534;
+    --accent-primary: #22c55e;
+    --accent-secondary: #4ade80;
+    --accent-green: #22c55e;
+    --accent-amber: #84cc16;
+    --accent-red: #ef4444;
+    --glow-primary: rgba(34,197,94,0.15);
     --gradient-primary: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+    --tooltip-bg: #0a1a0a;
+    --tooltip-border: #1a3d1a;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { height: 100%; }
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
 body {
     font-family: var(--font-display);
     background: var(--bg-void);
@@ -65,13 +117,119 @@ body {
     transition: background 0.3s, color 0.3s;
     font-size: 14px;
 }
-body.results-mode { overflow: hidden; height: 100vh; }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 4px; }
-.hidden { display: none !important; }
 
-/* Landing Page */
+body.results-mode {
+    overflow: hidden;
+    height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-emphasis);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   TOOLTIPS
+   ============================================ */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]::before,
+[data-tooltip]::after {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 0.75rem;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    white-space: nowrap;
+    max-width: 300px;
+    white-space: normal;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    line-height: 1.4;
+}
+
+[data-tooltip]::after {
+    content: '';
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--tooltip-border);
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Tooltip position variants */
+[data-tooltip-pos="bottom"]::before {
+    bottom: auto;
+    top: calc(100% + 8px);
+}
+
+[data-tooltip-pos="bottom"]::after {
+    bottom: auto;
+    top: calc(100% + 2px);
+    border-top-color: transparent;
+    border-bottom-color: var(--tooltip-border);
+}
+
+[data-tooltip-pos="left"]::before {
+    bottom: auto;
+    top: 50%;
+    left: auto;
+    right: calc(100% + 8px);
+    transform: translateY(-50%);
+}
+
+[data-tooltip-pos="right"]::before {
+    bottom: auto;
+    top: 50%;
+    left: calc(100% + 8px);
+    right: auto;
+    transform: translateY(-50%);
+}
+
+/* ============================================
+   LANDING PAGE
+   ============================================ */
 .landing-page {
     min-height: 100vh;
     display: flex;
@@ -80,15 +238,26 @@ body.results-mode { overflow: hidden; height: 100vh; }
     position: relative;
     overflow: hidden;
 }
+
 .landing-page::before {
     content: '';
     position: absolute;
-    top: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 1200px; height: 70vh;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+    height: 70vh;
     background: var(--gradient-glow);
     pointer-events: none;
 }
-.landing-page.fade-out { opacity: 0; transform: scale(0.98); transition: all 0.3s; }
+
+.landing-page.fade-out {
+    opacity: 0;
+    transform: scale(0.98);
+    transition: all 0.3s;
+}
+
 .landing-header {
     display: flex;
     justify-content: flex-end;
@@ -97,6 +266,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     position: relative;
     z-index: 10;
 }
+
 .header-link {
     font-size: 0.85rem;
     color: var(--text-muted);
@@ -105,7 +275,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     border-radius: 6px;
     transition: all 0.2s;
 }
-.header-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+
+.header-link:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
 .landing-main {
     flex: 1;
     display: flex;
@@ -117,9 +292,15 @@ body.results-mode { overflow: hidden; height: 100vh; }
     z-index: 10;
     margin-top: -80px;
 }
-.logo-container { margin-bottom: 3rem; text-align: center; }
+
+.logo-container {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
 .logo-icon {
-    width: 88px; height: 88px;
+    width: 88px;
+    height: 88px;
     margin: 0 auto 1.5rem;
     background: var(--gradient-primary);
     border-radius: 22px;
@@ -130,10 +311,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     box-shadow: var(--shadow-lg), 0 0 60px rgba(59,130,246,0.2);
     animation: float 5s ease-in-out infinite;
 }
+
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
 }
+
 .logo-text {
     font-size: 3.5rem;
     font-weight: 700;
@@ -143,6 +326,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
 .logo-tagline {
     font-size: 0.95rem;
     color: var(--text-muted);
@@ -152,7 +336,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
 }
 
 /* Search Container */
-.search-container { width: 100%; max-width: 640px; margin-bottom: 1.5rem; }
+.search-container {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 1.5rem;
+}
+
 .search-box {
     display: flex;
     align-items: center;
@@ -163,12 +352,23 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transition: all 0.25s;
     box-shadow: var(--shadow-md);
 }
-.search-box:hover { box-shadow: var(--shadow-lg); border-color: var(--border-emphasis); }
+
+.search-box:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-emphasis);
+}
+
 .search-box:focus-within {
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 4px var(--glow-primary), var(--shadow-lg);
 }
-.search-icon { font-size: 1.2rem; color: var(--text-muted); margin-right: 0.75rem; }
+
+.search-icon {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-right: 0.75rem;
+}
+
 .search-input {
     flex: 1;
     background: transparent;
@@ -179,9 +379,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     outline: none;
     font-family: var(--font-display);
 }
-.search-input::placeholder { color: var(--text-subtle); }
 
-/* Quick Inputs */
+.search-input::placeholder {
+    color: var(--text-subtle);
+}
+
+/* Quick Fields */
 .quick-fields {
     display: flex;
     flex-wrap: wrap;
@@ -190,6 +393,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     margin-bottom: 1.5rem;
     max-width: 700px;
 }
+
 .quick-field {
     display: flex;
     align-items: center;
@@ -200,8 +404,16 @@ body.results-mode { overflow: hidden; height: 100vh; }
     padding: 0.4rem 0.85rem;
     transition: all 0.2s;
 }
-.quick-field:focus-within { border-color: var(--accent-primary); background: var(--bg-secondary); }
-.quick-field.has-value { border-color: var(--accent-green); }
+
+.quick-field:focus-within {
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+}
+
+.quick-field.has-value {
+    border-color: var(--accent-green);
+}
+
 .quick-field label {
     font-size: 0.65rem;
     color: var(--text-muted);
@@ -209,6 +421,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     letter-spacing: 0.5px;
     font-weight: 500;
 }
+
 .quick-field input {
     background: transparent;
     border: none;
@@ -218,7 +431,11 @@ body.results-mode { overflow: hidden; height: 100vh; }
     outline: none;
     font-family: var(--font-mono);
 }
-.quick-field input::placeholder { color: var(--text-subtle); }
+
+.quick-field input::placeholder {
+    color: var(--text-subtle);
+}
+
 .quick-field input.w-sm { width: 55px; }
 .quick-field input.w-lg { width: 130px; }
 
@@ -238,8 +455,17 @@ body.results-mode { overflow: hidden; height: 100vh; }
     align-items: center;
     gap: 0.5rem;
 }
-.btn:hover { background: var(--bg-hover); border-color: var(--border-emphasis); color: var(--text-primary); }
-.btn:active { transform: scale(0.98); }
+
+.btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-emphasis);
+    color: var(--text-primary);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
 .btn-primary {
     background: var(--gradient-primary);
     border: none;
@@ -247,12 +473,40 @@ body.results-mode { overflow: hidden; height: 100vh; }
     font-weight: 600;
     padding: 0.8rem 2.5rem;
 }
-.btn-primary:hover { opacity: 0.9; box-shadow: var(--shadow-md); color: white; }
-.btn-sm { font-size: 0.75rem; padding: 0.45rem 0.85rem; }
-.btn-xs { font-size: 0.65rem; padding: 0.3rem 0.6rem; }
-.btn-icon { padding: 0.5rem; min-width: 36px; justify-content: center; }
-.btn-ghost { background: transparent; border-color: transparent; }
-.search-buttons { display: flex; gap: 0.75rem; justify-content: center; margin-bottom: 1.5rem; }
+
+.btn-primary:hover {
+    opacity: 0.9;
+    box-shadow: var(--shadow-md);
+    color: white;
+}
+
+.btn-sm {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.85rem;
+}
+
+.btn-xs {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    min-width: 36px;
+    justify-content: center;
+}
+
+.btn-ghost {
+    background: transparent;
+    border-color: transparent;
+}
+
+.search-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
 
 /* Advanced Toggle */
 .advanced-toggle {
@@ -266,11 +520,20 @@ body.results-mode { overflow: hidden; height: 100vh; }
     margin-bottom: 1rem;
     transition: color 0.2s;
 }
-.advanced-toggle:hover { color: var(--text-primary); }
-.advanced-toggle svg { transition: transform 0.3s; }
-.advanced-toggle.open svg { transform: rotate(180deg); }
 
-/* Advanced Options Panel */
+.advanced-toggle:hover {
+    color: var(--text-primary);
+}
+
+.advanced-toggle svg {
+    transition: transform 0.3s;
+}
+
+.advanced-toggle.open svg {
+    transform: rotate(180deg);
+}
+
+/* Advanced Panel */
 .advanced-panel {
     max-width: 780px;
     width: 100%;
@@ -282,19 +545,31 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transition: all 0.35s ease;
     margin-bottom: 1.5rem;
 }
-.advanced-panel.open { padding: 1.5rem; max-height: 400px; }
+
+.advanced-panel.open {
+    padding: 1.5rem;
+    max-height: 400px;
+}
+
 .advanced-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     gap: 1rem;
 }
-.adv-input { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.adv-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
 .adv-input label {
     font-size: 0.65rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
 .adv-input input {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-subtle);
@@ -305,8 +580,16 @@ body.results-mode { overflow: hidden; height: 100vh; }
     font-family: var(--font-mono);
     transition: all 0.2s;
 }
-.adv-input input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px var(--glow-primary); }
-.adv-input input::placeholder { color: var(--text-subtle); }
+
+.adv-input input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--glow-primary);
+}
+
+.adv-input input::placeholder {
+    color: var(--text-subtle);
+}
 
 /* Category Pills */
 .category-pills {
@@ -317,6 +600,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     max-width: 680px;
     margin-bottom: 2rem;
 }
+
 .cat-pill {
     font-size: 0.75rem;
     padding: 0.4rem 0.9rem;
@@ -327,8 +611,18 @@ body.results-mode { overflow: hidden; height: 100vh; }
     cursor: pointer;
     transition: all 0.2s;
 }
-.cat-pill:hover { background: var(--bg-hover); border-color: var(--border-default); color: var(--text-primary); }
-.cat-pill.active { background: var(--glow-primary); border-color: var(--accent-primary); color: var(--accent-primary); }
+
+.cat-pill:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-default);
+    color: var(--text-primary);
+}
+
+.cat-pill.active {
+    background: var(--glow-primary);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
 
 /* Landing Footer */
 .landing-footer {
@@ -342,15 +636,33 @@ body.results-mode { overflow: hidden; height: 100vh; }
     position: relative;
     z-index: 10;
 }
-.footer-section { display: flex; gap: 1.5rem; align-items: center; }
-.footer-link { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-.footer-link:hover { color: var(--text-primary); }
+
+.footer-section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.footer-link {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--text-primary);
+}
+
 .tool-count {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--text-muted);
 }
-.tool-count strong { color: var(--accent-primary); }
+
+.tool-count strong {
+    color: var(--accent-primary);
+}
 
 /* Select */
 .select {
@@ -367,10 +679,14 @@ body.results-mode { overflow: hidden; height: 100vh; }
     background-repeat: no-repeat;
     background-position: right 0.6rem center;
 }
-.select:focus { outline: none; border-color: var(--accent-primary); }
+
+.select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
 
 /* ============================================
-   RESULTS PAGE STYLES
+   RESULTS PAGE
    ============================================ */
 .results-page {
     display: none;
@@ -379,7 +695,11 @@ body.results-mode { overflow: hidden; height: 100vh; }
     opacity: 0;
     transition: opacity 0.3s;
 }
-.results-page.active { display: flex; opacity: 1; }
+
+.results-page.active {
+    display: flex;
+    opacity: 1;
+}
 
 .results-header {
     background: var(--bg-secondary);
@@ -391,6 +711,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     flex-shrink: 0;
     z-index: 100;
 }
+
 .results-logo {
     display: flex;
     align-items: center;
@@ -399,8 +720,10 @@ body.results-mode { overflow: hidden; height: 100vh; }
     text-decoration: none;
     flex-shrink: 0;
 }
+
 .results-logo-icon {
-    width: 34px; height: 34px;
+    width: 34px;
+    height: 34px;
     background: var(--gradient-primary);
     border-radius: 9px;
     display: flex;
@@ -408,6 +731,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     justify-content: center;
     font-size: 0.95rem;
 }
+
 .results-logo-text {
     font-size: 1rem;
     font-weight: 700;
@@ -416,6 +740,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .results-inputs {
     flex: 1;
     display: flex;
@@ -423,6 +748,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     gap: 0.4rem;
     align-items: center;
 }
+
 .input-pill {
     display: flex;
     align-items: center;
@@ -433,14 +759,23 @@ body.results-mode { overflow: hidden; height: 100vh; }
     padding: 0.3rem 0.5rem;
     transition: all 0.15s;
 }
-.input-pill:focus-within { border-color: var(--accent-primary); box-shadow: 0 0 0 2px var(--glow-primary); }
-.input-pill.has-value { border-color: var(--accent-green); }
+
+.input-pill:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px var(--glow-primary);
+}
+
+.input-pill.has-value {
+    border-color: var(--accent-green);
+}
+
 .input-pill label {
     font-size: 0.55rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
+
 .input-pill input {
     background: transparent;
     border: none;
@@ -450,11 +785,21 @@ body.results-mode { overflow: hidden; height: 100vh; }
     width: 75px;
     outline: none;
 }
-.input-pill input::placeholder { color: var(--text-subtle); }
+
+.input-pill input::placeholder {
+    color: var(--text-subtle);
+}
+
 .input-pill input.w-sm { width: 45px; }
 .input-pill input.w-lg { width: 110px; }
 .input-pill input.w-xl { width: 140px; }
-.header-actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
 
 /* Extended Inputs */
 .extended-bar {
@@ -466,7 +811,10 @@ body.results-mode { overflow: hidden; height: 100vh; }
     gap: 0.4rem;
     align-items: center;
 }
-.extended-bar.visible { display: flex; }
+
+.extended-bar.visible {
+    display: flex;
+}
 
 /* Controls Bar */
 .controls-bar {
@@ -479,9 +827,23 @@ body.results-mode { overflow: hidden; height: 100vh; }
     flex-wrap: wrap;
     flex-shrink: 0;
 }
-.controls-section { display: flex; align-items: center; gap: 0.35rem; }
-.divider { width: 1px; height: 18px; background: var(--border-subtle); }
-.filter-search { position: relative; }
+
+.controls-section {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border-subtle);
+}
+
+.filter-search {
+    position: relative;
+}
+
 .filter-search input {
     width: 180px;
     padding: 0.4rem 0.7rem 0.4rem 1.8rem;
@@ -492,7 +854,11 @@ body.results-mode { overflow: hidden; height: 100vh; }
     font-size: 0.75rem;
     outline: none;
 }
-.filter-search input:focus { border-color: var(--accent-primary); }
+
+.filter-search input:focus {
+    border-color: var(--accent-primary);
+}
+
 .filter-search::before {
     content: '🔍';
     position: absolute;
@@ -515,18 +881,52 @@ body.results-mode { overflow: hidden; height: 100vh; }
     gap: 0.75rem;
     flex-shrink: 0;
 }
-.stat-group { display: flex; align-items: center; gap: 1.25rem; }
-.stat { display: flex; align-items: baseline; gap: 0.3rem; }
+
+.stat-group {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
 .stat-value {
     font-family: var(--font-mono);
     font-size: 1.05rem;
     font-weight: 600;
     color: var(--accent-cyan);
 }
-.stat-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
-.progress-bar { width: 90px; height: 5px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; background: var(--gradient-primary); transition: width 0.3s; }
-.filter-pills { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+
+.stat-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.progress-bar {
+    width: 90px;
+    height: 5px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width 0.3s;
+}
+
+.filter-pills {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
 .filter-pill {
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -538,11 +938,25 @@ body.results-mode { overflow: hidden; height: 100vh; }
     cursor: pointer;
     transition: all 0.15s;
 }
-.filter-pill:hover { border-color: var(--border-default); color: var(--text-secondary); }
-.filter-pill.active { border-color: var(--accent-primary); background: var(--glow-primary); color: var(--accent-primary); }
+
+.filter-pill:hover {
+    border-color: var(--border-default);
+    color: var(--text-secondary);
+}
+
+.filter-pill.active {
+    border-color: var(--accent-primary);
+    background: var(--glow-primary);
+    color: var(--accent-primary);
+}
 
 /* Main Layout */
-.main-wrapper { display: flex; flex: 1; overflow: hidden; }
+.main-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
 .sidebar {
     width: 260px;
     background: var(--bg-secondary);
@@ -552,8 +966,18 @@ body.results-mode { overflow: hidden; height: 100vh; }
     flex-shrink: 0;
     transition: width 0.25s, margin 0.25s;
 }
-.sidebar.collapsed { width: 0; margin-left: -1px; overflow: hidden; }
-.sidebar-tabs { display: flex; border-bottom: 1px solid var(--border-subtle); }
+
+.sidebar.collapsed {
+    width: 0;
+    margin-left: -1px;
+    overflow: hidden;
+}
+
+.sidebar-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
 .sidebar-tab {
     flex: 1;
     padding: 0.6rem 0.4rem;
@@ -564,10 +988,27 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transition: all 0.15s;
     border-bottom: 2px solid transparent;
 }
-.sidebar-tab:hover { color: var(--text-secondary); background: var(--bg-tertiary); }
-.sidebar-tab.active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
-.sidebar-content { flex: 1; overflow-y: auto; padding: 0.75rem; }
-.sidebar-section { margin-bottom: 1rem; }
+
+.sidebar-tab:hover {
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+}
+
+.sidebar-tab.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+}
+
+.sidebar-section {
+    margin-bottom: 1rem;
+}
+
 .sidebar-title {
     font-size: 0.65rem;
     font-weight: 600;
@@ -579,6 +1020,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     justify-content: space-between;
     align-items: center;
 }
+
 .history-item, .fav-item {
     display: flex;
     align-items: center;
@@ -591,19 +1033,37 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transition: all 0.15s;
     margin-bottom: 0.2rem;
 }
-.history-item:hover, .fav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-.history-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.history-time { font-size: 0.55rem; color: var(--text-subtle); }
+
+.history-item:hover, .fav-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.history-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-time {
+    font-size: 0.55rem;
+    color: var(--text-subtle);
+}
 
 /* Main Content */
-.main-content { flex: 1; overflow-y: auto; padding: 1rem; background: var(--bg-primary); }
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background: var(--bg-primary);
+}
+
 .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1rem;
 }
-.results-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-.results-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 
 /* Category Card */
 .category-card {
@@ -613,8 +1073,19 @@ body.results-mode { overflow: hidden; height: 100vh; }
     overflow: hidden;
     transition: all 0.2s;
 }
-.category-card.has-results { border-color: var(--border-default); }
-.category-card:hover { border-color: var(--border-emphasis); }
+
+.category-card.has-results {
+    border-color: var(--border-default);
+}
+
+.category-card:hover {
+    border-color: var(--border-emphasis);
+}
+
+.category-card.filter-hidden {
+    display: none !important;
+}
+
 .category-header {
     display: flex;
     align-items: center;
@@ -624,10 +1095,26 @@ body.results-mode { overflow: hidden; height: 100vh; }
     cursor: pointer;
     user-select: none;
 }
-.category-header:hover { background: var(--bg-hover); }
-.category-title { display: flex; align-items: center; gap: 0.5rem; }
-.category-icon { font-size: 1.05rem; }
-.category-name { font-weight: 600; font-size: 0.85rem; }
+
+.category-header:hover {
+    background: var(--bg-hover);
+}
+
+.category-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.category-icon {
+    font-size: 1.05rem;
+}
+
+.category-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
 .category-count {
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -636,24 +1123,60 @@ body.results-mode { overflow: hidden; height: 100vh; }
     padding: 0.15rem 0.5rem;
     border-radius: 10px;
 }
-.category-count.active { background: var(--glow-primary); color: var(--accent-primary); }
-.category-toggle { font-size: 0.7rem; color: var(--text-muted); transition: transform 0.2s; }
-.category-card.collapsed .category-toggle { transform: rotate(-90deg); }
-.tool-list { max-height: 380px; overflow-y: auto; }
-.category-card.collapsed .tool-list { display: none; }
+
+.category-count.active {
+    background: var(--glow-primary);
+    color: var(--accent-primary);
+}
+
+.category-toggle {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+}
+
+.category-card.collapsed .category-toggle {
+    transform: rotate(-90deg);
+}
+
+.tool-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.category-card.collapsed .tool-list {
+    display: none;
+}
+
+/* Tool Item */
 .tool-item {
     display: flex;
     align-items: center;
-    padding: 0.55rem 1rem;
+    padding: 0.6rem 1rem;
     border-bottom: 1px solid var(--border-subtle);
     gap: 0.5rem;
     transition: background 0.15s;
 }
-.tool-item:last-child { border-bottom: none; }
-.tool-item:hover { background: var(--bg-tertiary); }
-.tool-item.inactive { opacity: 0.35; }
+
+.tool-item:last-child {
+    border-bottom: none;
+}
+
+.tool-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.tool-item.inactive {
+    opacity: 0.4;
+}
+
+.tool-item.filter-hidden {
+    display: none !important;
+}
+
 .tool-checkbox {
-    width: 16px; height: 16px;
+    width: 16px;
+    height: 16px;
     border: 2px solid var(--border-default);
     border-radius: 4px;
     cursor: pointer;
@@ -664,9 +1187,22 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transition: all 0.15s;
     flex-shrink: 0;
 }
-.tool-checkbox:hover { border-color: var(--accent-primary); }
-.tool-checkbox.checked { background: var(--accent-green); border-color: var(--accent-green); color: white; }
-.tool-info { flex: 1; min-width: 0; }
+
+.tool-checkbox:hover {
+    border-color: var(--accent-primary);
+}
+
+.tool-checkbox.checked {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+.tool-info {
+    flex: 1;
+    min-width: 0;
+}
+
 .tool-name {
     font-size: 0.8rem;
     font-weight: 500;
@@ -677,9 +1213,25 @@ body.results-mode { overflow: hidden; height: 100vh; }
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.tool-name:hover { color: var(--accent-primary); }
-.tool-desc { font-size: 0.65rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tool-badges { display: flex; gap: 0.25rem; flex-shrink: 0; }
+
+.tool-name:hover {
+    color: var(--accent-primary);
+}
+
+.tool-desc {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tool-badges {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
 .badge {
     font-family: var(--font-mono);
     font-size: 0.5rem;
@@ -688,14 +1240,41 @@ body.results-mode { overflow: hidden; height: 100vh; }
     text-transform: uppercase;
     font-weight: 600;
 }
-.badge-free { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-.badge-freemium { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
-.badge-paid { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-.badge-cli { background: rgba(139,92,246,0.15); color: var(--accent-secondary); }
-.tool-actions { display: flex; gap: 0.2rem; opacity: 0; transition: opacity 0.15s; }
-.tool-item:hover .tool-actions { opacity: 1; }
+
+.badge-free {
+    background: rgba(16,185,129,0.15);
+    color: var(--accent-green);
+}
+
+.badge-freemium {
+    background: rgba(245,158,11,0.15);
+    color: var(--accent-amber);
+}
+
+.badge-paid {
+    background: rgba(239,68,68,0.15);
+    color: var(--accent-red);
+}
+
+.badge-cli {
+    background: rgba(139,92,246,0.15);
+    color: var(--accent-secondary);
+}
+
+.tool-actions {
+    display: flex;
+    gap: 0.2rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.tool-item:hover .tool-actions {
+    opacity: 1;
+}
+
 .tool-action {
-    width: 22px; height: 22px;
+    width: 22px;
+    height: 22px;
     border: none;
     background: var(--bg-elevated);
     border-radius: 4px;
@@ -706,24 +1285,20 @@ body.results-mode { overflow: hidden; height: 100vh; }
     justify-content: center;
     transition: all 0.15s;
 }
-.tool-action:hover { background: var(--bg-hover); }
-.tool-action.favorited { color: var(--accent-amber); }
 
-/* Empty State */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 2rem;
-    text-align: center;
+.tool-action:hover {
+    background: var(--bg-hover);
 }
-.empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
-.empty-title { font-size: 1.25rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
-.empty-text { font-size: 0.85rem; color: var(--text-muted); max-width: 350px; }
+
+.tool-action.favorited {
+    color: var(--accent-amber);
+}
 
 /* Dropdown */
-.dropdown { position: relative; }
+.dropdown {
+    position: relative;
+}
+
 .dropdown-menu {
     position: absolute;
     top: calc(100% + 4px);
@@ -732,13 +1307,21 @@ body.results-mode { overflow: hidden; height: 100vh; }
     border: 1px solid var(--border-default);
     border-radius: 8px;
     padding: 0.4rem;
-    min-width: 170px;
+    min-width: 180px;
     z-index: 1000;
     display: none;
     box-shadow: var(--shadow-lg);
 }
-.dropdown-menu.right { left: auto; right: 0; }
-.dropdown.open .dropdown-menu { display: block; }
+
+.dropdown-menu.right {
+    left: auto;
+    right: 0;
+}
+
+.dropdown.open .dropdown-menu {
+    display: block;
+}
+
 .dropdown-item {
     display: flex;
     align-items: center;
@@ -749,9 +1332,18 @@ body.results-mode { overflow: hidden; height: 100vh; }
     font-size: 0.75rem;
     transition: all 0.1s;
 }
-.dropdown-item:hover { background: var(--bg-tertiary); }
-.dropdown-divider { height: 1px; background: var(--border-subtle); margin: 0.4rem 0; }
-.dropdown-header { font-size: 0.55rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; padding: 0.3rem 0.7rem; }
+
+.dropdown-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.dropdown-header {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+}
 
 /* Toast */
 .toast-container {
@@ -763,6 +1355,7 @@ body.results-mode { overflow: hidden; height: 100vh; }
     flex-direction: column;
     gap: 0.5rem;
 }
+
 .toast {
     background: var(--bg-elevated);
     border: 1px solid var(--border-default);
@@ -775,9 +1368,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     animation: slideIn 0.2s ease;
     box-shadow: var(--shadow-lg);
 }
+
 .toast.success { border-left: 4px solid var(--accent-green); }
 .toast.error { border-left: 4px solid var(--accent-red); }
 .toast.info { border-left: 4px solid var(--accent-primary); }
+.toast.warning { border-left: 4px solid var(--accent-amber); }
+
 @keyframes slideIn {
     from { opacity: 0; transform: translateX(100px); }
     to { opacity: 1; transform: translateX(0); }
@@ -796,7 +1392,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     pointer-events: none;
     transition: opacity 0.2s;
 }
-.modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 .modal {
     background: var(--bg-secondary);
     border: 1px solid var(--border-default);
@@ -810,7 +1411,11 @@ body.results-mode { overflow: hidden; height: 100vh; }
     transform: scale(0.95);
     transition: transform 0.2s;
 }
-.modal-backdrop.open .modal { transform: scale(1); }
+
+.modal-backdrop.open .modal {
+    transform: scale(1);
+}
+
 .modal-header {
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--border-subtle);
@@ -818,7 +1423,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
     justify-content: space-between;
     align-items: center;
 }
-.modal-title { font-weight: 600; font-size: 1rem; }
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
 .modal-close {
     background: none;
     border: none;
@@ -827,8 +1437,16 @@ body.results-mode { overflow: hidden; height: 100vh; }
     cursor: pointer;
     padding: 0.25rem;
 }
-.modal-close:hover { color: var(--text-primary); }
-.modal-body { padding: 1.25rem; overflow-y: auto; }
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+}
+
 .modal-footer {
     padding: 1rem 1.25rem;
     border-top: 1px solid var(--border-subtle);
@@ -836,8 +1454,19 @@ body.results-mode { overflow: hidden; height: 100vh; }
     justify-content: flex-end;
     gap: 0.5rem;
 }
-.form-group { margin-bottom: 1rem; }
-.form-label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.35rem; }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+}
+
 .form-input {
     width: 100%;
     padding: 0.6rem 0.75rem;
@@ -846,9 +1475,15 @@ body.results-mode { overflow: hidden; height: 100vh; }
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 0.85rem;
+    font-family: var(--font-display);
     transition: all 0.15s;
 }
-.form-input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px var(--glow-primary); }
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--glow-primary);
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -861,16 +1496,20 @@ body.results-mode { overflow: hidden; height: 100vh; }
     .sidebar.open { transform: translateX(0); }
     .results-grid { grid-template-columns: 1fr; }
     .results-inputs { display: none; }
+    [data-tooltip]::before, [data-tooltip]::after { display: none; }
 }
 </style>
 </head>
 <body>
-<!-- Landing Page -->
+
+<!-- ============================================
+     LANDING PAGE
+     ============================================ -->
 <div class="landing-page" id="landingPage">
     <header class="landing-header">
-        <a href="#" class="header-link" onclick="showAboutModal(); return false;">About</a>
-        <a href="#" class="header-link" onclick="showSettingsModal(); return false;">Settings</a>
-        <select class="select" id="themeSelectLanding" onchange="setTheme(this.value)">
+        <a href="#" class="header-link" data-tooltip="Learn about SPECTRE and its capabilities" onclick="showAboutModal(); return false;">About</a>
+        <a href="#" class="header-link" data-tooltip="Configure application preferences and export data" onclick="showSettingsModal(); return false;">Settings</a>
+        <select class="select" id="themeSelectLanding" data-tooltip="Change the visual theme of the interface" onchange="setTheme(this.value)">
             <option value="dark">🌙 Dark</option>
             <option value="light">☀️ Light</option>
             <option value="hacker">💻 Hacker</option>
@@ -879,44 +1518,50 @@ body.results-mode { overflow: hidden; height: 100vh; }
 
     <main class="landing-main">
         <div class="logo-container">
-            <div class="logo-icon">👁️</div>
+            <div class="logo-icon" data-tooltip="SPECTRE - Systematic Platform for Efficient Collection, Tracking, and Research of Evidence">👁️</div>
             <div class="logo-text">SPECTRE</div>
             <div class="logo-tagline">Open Source Intelligence</div>
         </div>
 
-        <div class="search-container">
+        <div class="search-container" data-tooltip="Smart search: Auto-detects emails (@), phones (numbers), usernames, domains (.com), or names (First Last)">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
                 <input type="text" class="search-input" id="mainSearchInput" 
-                    placeholder="Search by name, username, email, phone, domain..." autocomplete="off">
+                    placeholder="Search by name, username, email, phone, domain..." 
+                    autocomplete="off"
+                    title="Type anything - SPECTRE auto-detects the input type. Press Enter to search.">
             </div>
         </div>
 
         <div class="quick-fields" id="quickFields">
-            <div class="quick-field">
+            <div class="quick-field" data-tooltip="Person's first/given name for people search databases">
                 <label>First</label>
-                <input type="text" id="qFirst" placeholder="John">
+                <input type="text" id="qFirst" placeholder="John" title="Enter first name">
             </div>
-            <div class="quick-field">
+            <div class="quick-field" data-tooltip="Person's last/family name for people search databases">
                 <label>Last</label>
-                <input type="text" id="qLast" placeholder="Doe">
+                <input type="text" id="qLast" placeholder="Doe" title="Enter last name">
             </div>
-            <div class="quick-field">
+            <div class="quick-field" data-tooltip="Social media handle or account name (without @) for cross-platform searches">
                 <label>Username</label>
-                <input type="text" id="qUsername" class="w-lg" placeholder="johndoe123">
+                <input type="text" id="qUsername" class="w-lg" placeholder="johndoe123" title="Enter username/handle">
             </div>
-            <div class="quick-field">
+            <div class="quick-field" data-tooltip="Email address for breach checks, account discovery, and email intelligence">
                 <label>Email</label>
-                <input type="email" id="qEmail" class="w-lg" placeholder="john@example.com">
+                <input type="email" id="qEmail" class="w-lg" placeholder="john@example.com" title="Enter email address">
             </div>
         </div>
 
         <div class="search-buttons">
-            <button class="btn btn-primary" onclick="runSearch()">🔍 Search OSINT</button>
-            <button class="btn" onclick="runSearch('lucky')">⚡ I'm Feeling Lucky</button>
+            <button class="btn btn-primary" onclick="runSearch()" data-tooltip="Generate links to all matching OSINT tools based on your input parameters">
+                🔍 Search OSINT
+            </button>
+            <button class="btn" onclick="runSearch('lucky')" data-tooltip="Immediately open the first matching tool - great for quick lookups">
+                ⚡ I'm Feeling Lucky
+            </button>
         </div>
 
-        <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
+        <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()" data-tooltip="Show additional search fields like phone, address, domain, IP, and more">
             <span>Advanced Options</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M6 9l6 6 6-6"/>
@@ -925,195 +1570,235 @@ body.results-mode { overflow: hidden; height: 100vh; }
 
         <div class="advanced-panel" id="advancedPanel">
             <div class="advanced-grid">
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Phone number for reverse phone lookups and caller ID services">
                     <label>Phone</label>
-                    <input type="tel" id="qPhone" placeholder="555-123-4567">
+                    <input type="tel" id="qPhone" placeholder="555-123-4567" title="Enter phone number (any format)">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="City name to narrow down people search results">
                     <label>City</label>
-                    <input type="text" id="qCity" placeholder="New York">
+                    <input type="text" id="qCity" placeholder="New York" title="Enter city name">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="US state abbreviation (2 letters) for location-based searches">
                     <label>State</label>
-                    <input type="text" id="qState" placeholder="NY" maxlength="2">
+                    <input type="text" id="qState" placeholder="NY" maxlength="2" title="Enter 2-letter state code">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Website domain for WHOIS, DNS, certificate, and technology lookups">
                     <label>Domain</label>
-                    <input type="text" id="qDomain" placeholder="example.com">
+                    <input type="text" id="qDomain" placeholder="example.com" title="Enter domain (without http://)">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="IP address (IPv4/IPv6) for geolocation, reputation, and network analysis">
                     <label>IP Address</label>
-                    <input type="text" id="qIP" placeholder="192.168.1.1">
+                    <input type="text" id="qIP" placeholder="192.168.1.1" title="Enter IP address">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Business/company name for corporate filings, SEC records, and business intel">
                     <label>Company</label>
-                    <input type="text" id="qCompany" placeholder="Acme Inc">
+                    <input type="text" id="qCompany" placeholder="Acme Inc" title="Enter company name">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Street address for property records, mapping, and geolocation tools">
                     <label>Street</label>
-                    <input type="text" id="qStreet" placeholder="123 Main St">
+                    <input type="text" id="qStreet" placeholder="123 Main St" title="Enter street address">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="ZIP/postal code for location-based searches">
                     <label>ZIP</label>
-                    <input type="text" id="qZip" placeholder="10001">
+                    <input type="text" id="qZip" placeholder="10001" title="Enter ZIP code">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Direct URL to an image for reverse image search and facial recognition">
                     <label>Image URL</label>
-                    <input type="url" id="qImageUrl" placeholder="https://...">
+                    <input type="url" id="qImageUrl" placeholder="https://..." title="Enter direct image URL">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Vehicle Identification Number (17 chars) for vehicle history and recalls">
                     <label>VIN</label>
-                    <input type="text" id="qVIN" placeholder="1HGBH41JXMN...">
+                    <input type="text" id="qVIN" placeholder="1HGBH41JXMN..." maxlength="17" title="Enter 17-character VIN">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Cryptocurrency wallet address (BTC, ETH, etc.) for blockchain analysis">
                     <label>Crypto</label>
-                    <input type="text" id="qCrypto" placeholder="0x...">
+                    <input type="text" id="qCrypto" placeholder="0x..." title="Enter crypto wallet address">
                 </div>
-                <div class="adv-input">
+                <div class="adv-input" data-tooltip="Country code for international searches (default: US)">
                     <label>Country</label>
-                    <input type="text" id="qCountry" placeholder="US" value="US">
+                    <input type="text" id="qCountry" placeholder="US" value="US" title="Enter country code">
                 </div>
             </div>
         </div>
 
         <div class="category-pills">
-            <span class="cat-pill active" data-cat="all" onclick="selectCategory('all')">All Tools</span>
-            <span class="cat-pill" data-cat="people" onclick="selectCategory('people')">👤 People</span>
-            <span class="cat-pill" data-cat="social" onclick="selectCategory('social')">💬 Social</span>
-            <span class="cat-pill" data-cat="username" onclick="selectCategory('username')">🔎 Username</span>
-            <span class="cat-pill" data-cat="email" onclick="selectCategory('email')">📧 Email</span>
-            <span class="cat-pill" data-cat="phone" onclick="selectCategory('phone')">📱 Phone</span>
-            <span class="cat-pill" data-cat="domain" onclick="selectCategory('domain')">🌐 Domain</span>
-            <span class="cat-pill" data-cat="business" onclick="selectCategory('business')">🏢 Business</span>
+            <span class="cat-pill active" data-cat="all" onclick="selectCategory('all')" data-tooltip="Search across all OSINT tool categories">All Tools</span>
+            <span class="cat-pill" data-cat="people" onclick="selectCategory('people')" data-tooltip="People search engines, background checks, public records">👤 People</span>
+            <span class="cat-pill" data-cat="social" onclick="selectCategory('social')" data-tooltip="Social media profiles and cross-platform searches">💬 Social</span>
+            <span class="cat-pill" data-cat="username" onclick="selectCategory('username')" data-tooltip="Username enumeration across 400+ platforms">🔎 Username</span>
+            <span class="cat-pill" data-cat="email" onclick="selectCategory('email')" data-tooltip="Email intelligence, breach checks, account discovery">📧 Email</span>
+            <span class="cat-pill" data-cat="phone" onclick="selectCategory('phone')" data-tooltip="Reverse phone lookups and caller identification">📱 Phone</span>
+            <span class="cat-pill" data-cat="domain" onclick="selectCategory('domain')" data-tooltip="Domain WHOIS, DNS, SSL certificates, technology profiling">🌐 Domain</span>
+            <span class="cat-pill" data-cat="business" onclick="selectCategory('business')" data-tooltip="Corporate filings, SEC records, business intelligence">🏢 Business</span>
         </div>
     </main>
 
     <footer class="landing-footer">
         <div class="footer-section">
-            <span class="tool-count">Powered by <strong id="totalToolCount">0</strong> OSINT sources</span>
+            <span class="tool-count" data-tooltip="Total number of OSINT tools available in the database">Powered by <strong id="totalToolCount">0</strong> OSINT sources</span>
         </div>
         <div class="footer-section">
-            <a href="#" class="footer-link" onclick="showHelpModal(); return false;">Help</a>
-            <a href="#" class="footer-link" onclick="showShortcutsModal(); return false;">Shortcuts</a>
+            <a href="#" class="footer-link" onclick="showHelpModal(); return false;" data-tooltip="View the getting started guide and usage tips">Help</a>
+            <a href="#" class="footer-link" onclick="showShortcutsModal(); return false;" data-tooltip="View keyboard shortcuts for power users">Shortcuts</a>
         </div>
     </footer>
 </div>
 
-<!-- Results Page -->
+<!-- ============================================
+     RESULTS PAGE  
+     ============================================ -->
 <div class="results-page" id="resultsPage">
     <header class="results-header">
-        <a class="results-logo" onclick="goHome()">
+        <a class="results-logo" onclick="goHome()" data-tooltip="Return to the main search page">
             <div class="results-logo-icon">👁️</div>
             <span class="results-logo-text">SPECTRE</span>
         </a>
 
         <div class="results-inputs" id="resultsInputs">
-            <div class="input-pill"><label>First</label><input type="text" id="firstName" placeholder="John"></div>
-            <div class="input-pill"><label>Last</label><input type="text" id="lastName" placeholder="Doe"></div>
-            <div class="input-pill"><label>User</label><input type="text" id="username" class="w-lg" placeholder="username"></div>
-            <div class="input-pill"><label>Email</label><input type="email" id="email" class="w-xl" placeholder="email@example.com"></div>
-            <div class="input-pill"><label>Phone</label><input type="tel" id="phone" placeholder="555-1234"></div>
-            <button class="btn btn-icon btn-sm" onclick="toggleExtended()" title="More fields">⚙️</button>
-            <button class="btn btn-primary btn-sm" onclick="runSearch()">🔍</button>
+            <div class="input-pill" data-tooltip="Person's first name">
+                <label>First</label>
+                <input type="text" id="firstName" placeholder="John" title="First name">
+            </div>
+            <div class="input-pill" data-tooltip="Person's last name">
+                <label>Last</label>
+                <input type="text" id="lastName" placeholder="Doe" title="Last name">
+            </div>
+            <div class="input-pill" data-tooltip="Social media username">
+                <label>User</label>
+                <input type="text" id="username" class="w-lg" placeholder="username" title="Username">
+            </div>
+            <div class="input-pill" data-tooltip="Email address for lookups">
+                <label>Email</label>
+                <input type="email" id="email" class="w-xl" placeholder="email@example.com" title="Email">
+            </div>
+            <div class="input-pill" data-tooltip="Phone number">
+                <label>Phone</label>
+                <input type="tel" id="phone" placeholder="555-1234" title="Phone">
+            </div>
+            <button class="btn btn-icon btn-sm" onclick="toggleExtended()" data-tooltip="Show/hide additional input fields like domain, IP, company, address" title="More fields">⚙️</button>
+            <button class="btn btn-primary btn-sm" onclick="runSearch()" data-tooltip="Re-run search with current parameters" title="Search">🔍</button>
         </div>
 
         <div class="header-actions">
-            <select class="select" id="themeSelectResults" onchange="setTheme(this.value)">
+            <select class="select" id="themeSelectResults" onchange="setTheme(this.value)" data-tooltip="Change visual theme" title="Theme">
                 <option value="dark">🌙</option>
                 <option value="light">☀️</option>
                 <option value="hacker">💻</option>
             </select>
-            <button class="btn btn-icon btn-sm" onclick="toggleSidebar()" title="Sidebar">📋</button>
-            <button class="btn btn-icon btn-sm" onclick="showSettingsModal()" title="Settings">⚙️</button>
+            <button class="btn btn-icon btn-sm" onclick="toggleSidebar()" data-tooltip="Show/hide the sidebar with history and favorites" title="Toggle sidebar">📋</button>
+            <button class="btn btn-icon btn-sm" onclick="showSettingsModal()" data-tooltip="Open application settings" title="Settings">⚙️</button>
         </div>
     </header>
 
     <div class="extended-bar" id="extendedBar">
-        <div class="input-pill"><label>City</label><input type="text" id="city" placeholder="Denver"></div>
-        <div class="input-pill"><label>ST</label><input type="text" id="state" class="w-sm" maxlength="2" placeholder="CO"></div>
-        <div class="input-pill"><label>Domain</label><input type="text" id="domain" class="w-lg" placeholder="example.com"></div>
-        <div class="input-pill"><label>IP</label><input type="text" id="ip" placeholder="192.168.1.1"></div>
-        <div class="input-pill"><label>Company</label><input type="text" id="company" class="w-lg" placeholder="Acme Inc"></div>
-        <div class="input-pill"><label>Street</label><input type="text" id="streetAddress" class="w-xl" placeholder="123 Main St"></div>
-        <div class="input-pill"><label>ZIP</label><input type="text" id="zip" class="w-sm" placeholder="80014"></div>
-        <div class="input-pill"><label>Country</label><input type="text" id="country" class="w-sm" value="US"></div>
-        <div class="input-pill"><label>Image</label><input type="url" id="imageUrl" class="w-xl" placeholder="https://..."></div>
-        <div class="input-pill"><label>VIN</label><input type="text" id="vin" class="w-xl" placeholder="1HGBH41JXMN..."></div>
-        <div class="input-pill"><label>Plate</label><input type="text" id="licensePlate" placeholder="ABC123"></div>
-        <div class="input-pill"><label>Crypto</label><input type="text" id="cryptoAddress" class="w-xl" placeholder="0x..."></div>
+        <div class="input-pill" data-tooltip="City name"><label>City</label><input type="text" id="city" placeholder="Denver" title="City"></div>
+        <div class="input-pill" data-tooltip="State code (2 letters)"><label>ST</label><input type="text" id="state" class="w-sm" maxlength="2" placeholder="CO" title="State"></div>
+        <div class="input-pill" data-tooltip="Website domain"><label>Domain</label><input type="text" id="domain" class="w-lg" placeholder="example.com" title="Domain"></div>
+        <div class="input-pill" data-tooltip="IP address"><label>IP</label><input type="text" id="ip" placeholder="192.168.1.1" title="IP"></div>
+        <div class="input-pill" data-tooltip="Company name"><label>Company</label><input type="text" id="company" class="w-lg" placeholder="Acme Inc" title="Company"></div>
+        <div class="input-pill" data-tooltip="Street address"><label>Street</label><input type="text" id="streetAddress" class="w-xl" placeholder="123 Main St" title="Street"></div>
+        <div class="input-pill" data-tooltip="ZIP/Postal code"><label>ZIP</label><input type="text" id="zip" class="w-sm" placeholder="80014" title="ZIP"></div>
+        <div class="input-pill" data-tooltip="Country code"><label>Country</label><input type="text" id="country" class="w-sm" value="US" title="Country"></div>
+        <div class="input-pill" data-tooltip="Direct image URL for reverse search"><label>Image</label><input type="url" id="imageUrl" class="w-xl" placeholder="https://..." title="Image URL"></div>
+        <div class="input-pill" data-tooltip="Vehicle Identification Number"><label>VIN</label><input type="text" id="vin" class="w-xl" placeholder="1HGBH41JXMN..." title="VIN"></div>
+        <div class="input-pill" data-tooltip="License plate number"><label>Plate</label><input type="text" id="licensePlate" placeholder="ABC123" title="License Plate"></div>
+        <div class="input-pill" data-tooltip="Crypto wallet address"><label>Crypto</label><input type="text" id="cryptoAddress" class="w-xl" placeholder="0x..." title="Crypto Address"></div>
     </div>
 
     <div class="controls-bar">
         <div class="controls-section">
             <div class="dropdown" id="presetsDropdown">
-                <button class="btn btn-sm" onclick="toggleDropdown('presetsDropdown')">⚡ Presets</button>
+                <button class="btn btn-sm" onclick="toggleDropdown('presetsDropdown')" data-tooltip="Load pre-configured search presets for common investigation types">⚡ Presets</button>
                 <div class="dropdown-menu">
                     <div class="dropdown-header">Quick Presets</div>
-                    <div class="dropdown-item" onclick="applyPreset('person')">👤 Person Dossier</div>
-                    <div class="dropdown-item" onclick="applyPreset('social')">📱 Social Sweep</div>
-                    <div class="dropdown-item" onclick="applyPreset('technical')">🔧 Technical Recon</div>
-                    <div class="dropdown-item" onclick="applyPreset('business')">🏢 Business Intel</div>
+                    <div class="dropdown-item" onclick="applyPreset('person')" data-tooltip="Focus on people search, public records, and background checks">👤 Person Dossier</div>
+                    <div class="dropdown-item" onclick="applyPreset('social')" data-tooltip="Focus on social media profiles and username searches">📱 Social Sweep</div>
+                    <div class="dropdown-item" onclick="applyPreset('technical')" data-tooltip="Focus on domain, IP, DNS, and network tools">🔧 Technical Recon</div>
+                    <div class="dropdown-item" onclick="applyPreset('business')" data-tooltip="Focus on corporate filings and business intelligence">🏢 Business Intel</div>
                 </div>
             </div>
         </div>
+        
         <div class="divider"></div>
+        
         <div class="controls-section">
-            <div class="filter-search">
-                <input type="text" id="toolSearch" placeholder="Filter tools..." oninput="filterTools(this.value)">
+            <div class="filter-search" data-tooltip="Type to filter tools by name - matches are highlighted instantly">
+                <input type="text" id="toolSearch" placeholder="Filter tools..." oninput="filterToolsByText(this.value)" title="Type to filter tools by name">
             </div>
         </div>
+        
         <div class="divider"></div>
+        
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="expandAll()">⬇️ Expand</button>
-            <button class="btn btn-sm" onclick="collapseAll()">⬆️ Collapse</button>
+            <button class="btn btn-sm" onclick="expandAll()" data-tooltip="Expand all category cards to show all tools">⬇️ Expand</button>
+            <button class="btn btn-sm" onclick="collapseAll()" data-tooltip="Collapse all category cards to show only headers">⬆️ Collapse</button>
         </div>
+        
         <div class="divider"></div>
+        
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="openAllLinks()">🚀 Open All</button>
-            <button class="btn btn-sm" onclick="copyAllLinks()">📋 Copy</button>
+            <button class="btn btn-sm" onclick="openAllLinks()" data-tooltip="Open all active/visible tools in new browser tabs (with 200ms delay between each)">🚀 Open All</button>
+            <button class="btn btn-sm" onclick="copyAllLinks()" data-tooltip="Copy all generated URLs to clipboard as a formatted list">📋 Copy</button>
             <div class="dropdown" id="exportDropdown">
-                <button class="btn btn-sm" onclick="toggleDropdown('exportDropdown')">💾 Export</button>
+                <button class="btn btn-sm" onclick="toggleDropdown('exportDropdown')" data-tooltip="Export search results in various formats for documentation">💾 Export</button>
                 <div class="dropdown-menu right">
-                    <div class="dropdown-item" onclick="exportAs('json')">📄 JSON</div>
-                    <div class="dropdown-item" onclick="exportAs('csv')">📊 CSV</div>
-                    <div class="dropdown-item" onclick="exportAs('markdown')">📝 Markdown</div>
+                    <div class="dropdown-item" onclick="exportAs('json')" data-tooltip="Export as JSON file for programmatic use">📄 JSON</div>
+                    <div class="dropdown-item" onclick="exportAs('csv')" data-tooltip="Export as CSV spreadsheet for Excel/Sheets">📊 CSV</div>
+                    <div class="dropdown-item" onclick="exportAs('markdown')" data-tooltip="Export as Markdown for reports and documentation">📝 Markdown</div>
                 </div>
             </div>
         </div>
+        
         <div class="divider"></div>
+        
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="clearAll()">✕ Clear</button>
+            <button class="btn btn-sm" onclick="clearAll()" data-tooltip="Clear all input fields and reset the search">✕ Clear</button>
         </div>
     </div>
 
     <div class="stats-bar">
         <div class="stat-group">
-            <div class="stat"><span class="stat-value" id="activeCount">0</span><span class="stat-label">Active</span></div>
-            <div class="stat"><span class="stat-value" id="checkedCount">0</span><span class="stat-label">Checked</span></div>
-            <div class="stat"><span class="stat-value" id="totalCount">0</span><span class="stat-label">Total</span></div>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+            <div class="stat" data-tooltip="Number of tools that have valid URLs based on your input parameters">
+                <span class="stat-value" id="activeCount">0</span>
+                <span class="stat-label">Active</span>
+            </div>
+            <div class="stat" data-tooltip="Number of tools you've marked as visited/checked">
+                <span class="stat-value" id="checkedCount">0</span>
+                <span class="stat-label">Checked</span>
+            </div>
+            <div class="stat" data-tooltip="Total number of tools currently visible (filtered)">
+                <span class="stat-value" id="visibleCount">0</span>
+                <span class="stat-label">Visible</span>
+            </div>
+            <div class="progress-bar" data-tooltip="Progress: percentage of active tools you've checked">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
         </div>
+        
         <div class="filter-pills">
-            <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
-            <button class="filter-pill" data-filter="free" onclick="setFilter('free')">Free</button>
-            <button class="filter-pill" data-filter="active" onclick="setFilter('active')">Active</button>
+            <button class="filter-pill" data-filter="all" onclick="setFilter('all')" data-tooltip="Show all tools regardless of pricing model">All</button>
+            <button class="filter-pill active" data-filter="free" onclick="setFilter('free')" data-tooltip="Show only completely free tools (no payment required)">Free Only</button>
+            <button class="filter-pill" data-filter="freemium" onclick="setFilter('freemium')" data-tooltip="Show tools with free tier but paid upgrades available">Freemium</button>
+            <button class="filter-pill" data-filter="paid" onclick="setFilter('paid')" data-tooltip="Show tools that require payment to use">Paid</button>
+            <button class="filter-pill" data-filter="cli" onclick="setFilter('cli')" data-tooltip="Show command-line tools (requires terminal/installation)">CLI</button>
             <span class="divider"></span>
-            <button class="filter-pill" data-filter="people" onclick="setFilter('people')">People</button>
-            <button class="filter-pill" data-filter="social" onclick="setFilter('social')">Social</button>
-            <button class="filter-pill" data-filter="technical" onclick="setFilter('technical')">Technical</button>
+            <button class="filter-pill" data-filter="active" onclick="setFilter('active')" data-tooltip="Show only tools that have valid URLs based on your current input">Active Only</button>
         </div>
     </div>
 
     <div class="main-wrapper">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-tabs">
-                <div class="sidebar-tab active" data-tab="history" onclick="switchTab('history')">📜 History</div>
-                <div class="sidebar-tab" data-tab="favorites" onclick="switchTab('favorites')">⭐ Favorites</div>
+                <div class="sidebar-tab active" data-tab="history" onclick="switchTab('history')" data-tooltip="View your recent searches">📜 History</div>
+                <div class="sidebar-tab" data-tab="favorites" onclick="switchTab('favorites')" data-tooltip="View your favorited tools">⭐ Favorites</div>
             </div>
             <div class="sidebar-content">
                 <div class="tab-panel" id="panel-history">
                     <div class="sidebar-section">
-                        <div class="sidebar-title"><span>Recent Searches</span><button class="btn btn-xs" onclick="clearHistory()">Clear</button></div>
+                        <div class="sidebar-title">
+                            <span>Recent Searches</span>
+                            <button class="btn btn-xs" onclick="clearHistory()" data-tooltip="Delete all search history">Clear</button>
+                        </div>
                         <div id="historyList"></div>
                     </div>
                 </div>
@@ -1128,11 +1813,6 @@ body.results-mode { overflow: hidden; height: 100vh; }
 
         <main class="main-content" id="mainContent">
             <div class="results-grid" id="resultsGrid"></div>
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">🔎</div>
-                <div class="empty-title">Ready to Search</div>
-                <div class="empty-text">Enter search parameters above to query 500+ OSINT sources.</div>
-            </div>
         </main>
     </div>
 </div>
@@ -1142,302 +1822,337 @@ body.results-mode { overflow: hidden; height: 100vh; }
 
 <script>
 // ============================================
-// STATE
+// STATE MANAGEMENT
 // ============================================
 const state = {
     mode: 'landing',
-    filter: 'all',
-    searchTerm: '',
+    filter: 'free',  // DEFAULT TO FREE FILTER
+    textFilter: '',
     selectedCategory: 'all',
     checkedTools: new Set(),
-    generatedLinks: []
+    generatedLinks: [],
+    allToolElements: []
 };
 
 let favorites = JSON.parse(localStorage.getItem('spectre-fav') || '[]');
 let searchHistory = JSON.parse(localStorage.getItem('spectre-hist') || '[]');
 
 // ============================================
-// TOOLS DATABASE (500+ tools)
+// COMPREHENSIVE TOOLS DATABASE
 // ============================================
 const toolsDB = {
     people: {
-        name: "People Search", icon: "👤", group: "people",
+        name: "People Search",
+        icon: "👤",
+        desc: "Search public records, background checks, and people databases",
         tools: [
-            { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Comprehensive free people search" },
-            { name: "TruePeopleSearch+Loc", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}&citystatezip={city}%20{state}", badge: "free", fields: ["firstName", "lastName", "city", "state"] },
-            { name: "FastPeopleSearch", url: "https://www.fastpeoplesearch.com/name/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "ThatsThem", url: "https://thatsthem.com/name/{First}-{Last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "ThatsThem+State", url: "https://thatsthem.com/name/{First}-{Last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
-            { name: "USPhonebook", url: "https://www.usphonebook.com/{first}-{last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"] },
-            { name: "FamilyTreeNow", url: "https://www.familytreenow.com/search/people/results?first={first}&last={last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Nuwber", url: "https://nuwber.com/search?name={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "CyberBackgroundChecks", url: "https://www.cyberbackgroundchecks.com/people/{first}-{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "ZabaSearch", url: "https://www.zabasearch.com/people/{first}+{last}/", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "AnyWho", url: "https://www.anywho.com/people/{first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "411.com", url: "https://www.411.com/name/{First}-{Last}/", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Webmii", url: "https://webmii.com/people?n=%22{first}+{last}%22", badge: "free", fields: ["firstName", "lastName"], desc: "Global people search" },
-            { name: "PeekYou", url: "https://www.peekyou.com/{first}_{last}", badge: "freemium", fields: ["firstName", "lastName"] },
-            { name: "WhitePages", url: "https://www.whitepages.com/name/{First}-{Last}/{city}-{state}", badge: "freemium", fields: ["firstName", "lastName", "city", "state"] },
-            { name: "Spokeo", url: "https://www.spokeo.com/{First}-{Last}/{state}/{city}", badge: "freemium", fields: ["firstName", "lastName", "state", "city"] },
-            { name: "BeenVerified", url: "https://www.beenverified.com/people/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"] },
-            { name: "Intelius", url: "https://www.intelius.com/people-search/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"] },
-            { name: "Radaris", url: "https://radaris.com/p/{First}/{Last}/", badge: "freemium", fields: ["firstName", "lastName"] },
-            { name: "Pipl", url: "https://pipl.com/search/?q={first}+{last}", badge: "paid", fields: ["firstName", "lastName"], desc: "Professional deep search" },
+            { name: "TruePeopleSearch", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Free comprehensive US people search with addresses, phones, relatives" },
+            { name: "TruePeopleSearch+Loc", url: "https://www.truepeoplesearch.com/results?name={first}%20{last}&citystatezip={city}%20{state}", badge: "free", fields: ["firstName", "lastName", "city", "state"], desc: "Location-refined people search" },
+            { name: "FastPeopleSearch", url: "https://www.fastpeoplesearch.com/name/{first}-{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Quick US people lookup with contact info" },
+            { name: "ThatsThem", url: "https://thatsthem.com/name/{First}-{Last}", badge: "free", fields: ["firstName", "lastName"], desc: "Free people search with IP & address history" },
+            { name: "ThatsThem+State", url: "https://thatsthem.com/name/{First}-{Last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"], desc: "State-filtered people search" },
+            { name: "USPhonebook", url: "https://www.usphonebook.com/{first}-{last}/{state}", badge: "free", fields: ["firstName", "lastName", "state"], desc: "Free phone and address directory" },
+            { name: "FamilyTreeNow", url: "https://www.familytreenow.com/search/people/results?first={first}&last={last}", badge: "free", fields: ["firstName", "lastName"], desc: "Genealogy-based people search with family connections" },
+            { name: "Nuwber", url: "https://nuwber.com/search?name={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "People search with social profiles" },
+            { name: "CyberBackgroundChecks", url: "https://www.cyberbackgroundchecks.com/people/{first}-{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Free background check previews" },
+            { name: "ZabaSearch", url: "https://www.zabasearch.com/people/{first}+{last}/", badge: "free", fields: ["firstName", "lastName"], desc: "Classic free people finder" },
+            { name: "AnyWho", url: "https://www.anywho.com/people/{first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "White pages style people search" },
+            { name: "411.com", url: "https://www.411.com/name/{First}-{Last}/", badge: "free", fields: ["firstName", "lastName"], desc: "Directory-style people lookup" },
+            { name: "Webmii", url: "https://webmii.com/people?n=%22{first}+{last}%22", badge: "free", fields: ["firstName", "lastName"], desc: "Global web presence search" },
+            { name: "PeekYou", url: "https://www.peekyou.com/{first}_{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "Social profile aggregator" },
+            { name: "WhitePages", url: "https://www.whitepages.com/name/{First}-{Last}/{city}-{state}", badge: "freemium", fields: ["firstName", "lastName", "city", "state"], desc: "Premium people search with full reports" },
+            { name: "Spokeo", url: "https://www.spokeo.com/{First}-{Last}/{state}/{city}", badge: "freemium", fields: ["firstName", "lastName", "state", "city"], desc: "Aggregated people search engine" },
+            { name: "BeenVerified", url: "https://www.beenverified.com/people/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "Background check service" },
+            { name: "Intelius", url: "https://www.intelius.com/people-search/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "Comprehensive background reports" },
+            { name: "Radaris", url: "https://radaris.com/p/{First}/{Last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "People search with property records" },
+            { name: "Pipl", url: "https://pipl.com/search/?q={first}+{last}", badge: "paid", fields: ["firstName", "lastName"], desc: "Professional-grade identity resolution" },
         ]
     },
     social: {
-        name: "Social Media", icon: "💬", group: "social",
+        name: "Social Media",
+        icon: "💬", 
+        desc: "Direct links to social media profiles and search pages",
         tools: [
-            { name: "Twitter/X", url: "https://twitter.com/{username}", badge: "free", fields: ["username"] },
-            { name: "X Search", url: "https://twitter.com/search?q={first}+{last}&f=user", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Instagram", url: "https://www.instagram.com/{username}/", badge: "free", fields: ["username"] },
-            { name: "Facebook", url: "https://www.facebook.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Facebook Search", url: "https://www.facebook.com/search/people/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "LinkedIn", url: "https://www.linkedin.com/in/{username}/", badge: "free", fields: ["username"] },
-            { name: "LinkedIn Search", url: "https://www.linkedin.com/search/results/people/?keywords={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "TikTok", url: "https://www.tiktok.com/@{username}", badge: "free", fields: ["username"] },
-            { name: "Reddit", url: "https://www.reddit.com/user/{username}", badge: "free", fields: ["username"] },
-            { name: "YouTube", url: "https://www.youtube.com/@{username}", badge: "free", fields: ["username"] },
-            { name: "Pinterest", url: "https://www.pinterest.com/{username}/", badge: "free", fields: ["username"] },
-            { name: "Snapchat", url: "https://www.snapchat.com/add/{username}", badge: "free", fields: ["username"] },
-            { name: "Tumblr", url: "https://{username}.tumblr.com", badge: "free", fields: ["username"] },
-            { name: "Medium", url: "https://medium.com/@{username}", badge: "free", fields: ["username"] },
-            { name: "Threads", url: "https://www.threads.net/@{username}", badge: "free", fields: ["username"] },
-            { name: "Bluesky", url: "https://bsky.app/profile/{username}.bsky.social", badge: "free", fields: ["username"] },
-            { name: "Mastodon", url: "https://mastodon.social/@{username}", badge: "free", fields: ["username"] },
-            { name: "GitHub", url: "https://github.com/{username}", badge: "free", fields: ["username"] },
-            { name: "GitLab", url: "https://gitlab.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Twitch", url: "https://www.twitch.tv/{username}", badge: "free", fields: ["username"] },
-            { name: "SoundCloud", url: "https://soundcloud.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Spotify", url: "https://open.spotify.com/user/{username}", badge: "free", fields: ["username"] },
-            { name: "DeviantArt", url: "https://www.deviantart.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Behance", url: "https://www.behance.net/{username}", badge: "free", fields: ["username"] },
-            { name: "Dribbble", url: "https://dribbble.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Flickr", url: "https://www.flickr.com/people/{username}", badge: "free", fields: ["username"] },
-            { name: "Telegram", url: "https://t.me/{username}", badge: "free", fields: ["username"] },
-            { name: "VK", url: "https://vk.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Patreon", url: "https://www.patreon.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Linktree", url: "https://linktr.ee/{username}", badge: "free", fields: ["username"] },
-            { name: "Keybase", url: "https://keybase.io/{username}", badge: "free", fields: ["username"] },
-            { name: "Steam", url: "https://steamcommunity.com/id/{username}", badge: "free", fields: ["username"] },
-            { name: "Venmo", url: "https://venmo.com/{username}", badge: "free", fields: ["username"] },
-            { name: "Cash App", url: "https://cash.app/${username}", badge: "free", fields: ["username"] },
+            { name: "Twitter/X Profile", url: "https://twitter.com/{username}", badge: "free", fields: ["username"], desc: "View Twitter/X profile directly" },
+            { name: "X User Search", url: "https://twitter.com/search?q={first}+{last}&f=user", badge: "free", fields: ["firstName", "lastName"], desc: "Search X for users by name" },
+            { name: "Instagram", url: "https://www.instagram.com/{username}/", badge: "free", fields: ["username"], desc: "View Instagram profile" },
+            { name: "Facebook Profile", url: "https://www.facebook.com/{username}", badge: "free", fields: ["username"], desc: "Direct Facebook profile link" },
+            { name: "Facebook Search", url: "https://www.facebook.com/search/people/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Search Facebook for people" },
+            { name: "LinkedIn Profile", url: "https://www.linkedin.com/in/{username}/", badge: "free", fields: ["username"], desc: "Direct LinkedIn profile" },
+            { name: "LinkedIn Search", url: "https://www.linkedin.com/search/results/people/?keywords={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Search LinkedIn by name" },
+            { name: "TikTok", url: "https://www.tiktok.com/@{username}", badge: "free", fields: ["username"], desc: "View TikTok profile" },
+            { name: "Reddit", url: "https://www.reddit.com/user/{username}", badge: "free", fields: ["username"], desc: "View Reddit user profile and posts" },
+            { name: "YouTube", url: "https://www.youtube.com/@{username}", badge: "free", fields: ["username"], desc: "View YouTube channel" },
+            { name: "Pinterest", url: "https://www.pinterest.com/{username}/", badge: "free", fields: ["username"], desc: "View Pinterest profile and boards" },
+            { name: "Snapchat", url: "https://www.snapchat.com/add/{username}", badge: "free", fields: ["username"], desc: "Snapchat add friend link" },
+            { name: "Tumblr", url: "https://{username}.tumblr.com", badge: "free", fields: ["username"], desc: "View Tumblr blog" },
+            { name: "Medium", url: "https://medium.com/@{username}", badge: "free", fields: ["username"], desc: "View Medium author profile" },
+            { name: "Threads", url: "https://www.threads.net/@{username}", badge: "free", fields: ["username"], desc: "View Threads profile (Meta)" },
+            { name: "Bluesky", url: "https://bsky.app/profile/{username}.bsky.social", badge: "free", fields: ["username"], desc: "View Bluesky profile" },
+            { name: "Mastodon", url: "https://mastodon.social/@{username}", badge: "free", fields: ["username"], desc: "View Mastodon profile (main instance)" },
+            { name: "GitHub", url: "https://github.com/{username}", badge: "free", fields: ["username"], desc: "View GitHub developer profile" },
+            { name: "GitLab", url: "https://gitlab.com/{username}", badge: "free", fields: ["username"], desc: "View GitLab profile" },
+            { name: "Twitch", url: "https://www.twitch.tv/{username}", badge: "free", fields: ["username"], desc: "View Twitch streamer profile" },
+            { name: "SoundCloud", url: "https://soundcloud.com/{username}", badge: "free", fields: ["username"], desc: "View SoundCloud artist profile" },
+            { name: "Spotify", url: "https://open.spotify.com/user/{username}", badge: "free", fields: ["username"], desc: "View Spotify user profile" },
+            { name: "DeviantArt", url: "https://www.deviantart.com/{username}", badge: "free", fields: ["username"], desc: "View DeviantArt gallery" },
+            { name: "Behance", url: "https://www.behance.net/{username}", badge: "free", fields: ["username"], desc: "View Behance design portfolio" },
+            { name: "Dribbble", url: "https://dribbble.com/{username}", badge: "free", fields: ["username"], desc: "View Dribbble design portfolio" },
+            { name: "Flickr", url: "https://www.flickr.com/people/{username}", badge: "free", fields: ["username"], desc: "View Flickr photo profile" },
+            { name: "Telegram", url: "https://t.me/{username}", badge: "free", fields: ["username"], desc: "Telegram user/channel link" },
+            { name: "VK", url: "https://vk.com/{username}", badge: "free", fields: ["username"], desc: "View VK profile (Russian social network)" },
+            { name: "Patreon", url: "https://www.patreon.com/{username}", badge: "free", fields: ["username"], desc: "View Patreon creator page" },
+            { name: "Linktree", url: "https://linktr.ee/{username}", badge: "free", fields: ["username"], desc: "View Linktree bio links" },
+            { name: "Keybase", url: "https://keybase.io/{username}", badge: "free", fields: ["username"], desc: "View Keybase cryptographic identity" },
+            { name: "Steam", url: "https://steamcommunity.com/id/{username}", badge: "free", fields: ["username"], desc: "View Steam gaming profile" },
+            { name: "Discord (via search)", url: "https://discord.id/?prefill={username}", badge: "free", fields: ["username"], desc: "Discord ID lookup tool" },
+            { name: "Venmo", url: "https://venmo.com/{username}", badge: "free", fields: ["username"], desc: "View Venmo payment profile" },
+            { name: "Cash App", url: "https://cash.app/${username}", badge: "free", fields: ["username"], desc: "Cash App profile link" },
         ]
     },
     username: {
-        name: "Username OSINT", icon: "🔎", group: "social",
+        name: "Username OSINT",
+        icon: "🔎",
+        desc: "Check username availability and existence across platforms",
         tools: [
-            { name: "Namechk", url: "https://namechk.com/", badge: "free", fields: ["username"], desc: "Check 100+ sites" },
-            { name: "KnowEm", url: "https://knowem.com/checkusernames.php?u={username}", badge: "free", fields: ["username"] },
-            { name: "WhatsMyName", url: "https://whatsmyname.app/", badge: "free", fields: ["username"], desc: "OSINT username enumeration" },
-            { name: "UserSearch", url: "https://usersearch.org/results_normal.php?URL_username={username}", badge: "free", fields: ["username"] },
-            { name: "Instant Username", url: "https://instantusername.com/#/{username}", badge: "free", fields: ["username"] },
-            { name: "Social Searcher", url: "https://www.social-searcher.com/search-users/?q={username}", badge: "free", fields: ["username"] },
-            { name: "NameCheckup", url: "https://namecheckup.com/", badge: "free", fields: ["username"] },
-            { name: "Sherlock (CLI)", url: "https://github.com/sherlock-project/sherlock", badge: "cli", fields: ["username"], desc: "Hunt 400+ networks" },
-            { name: "Maigret (CLI)", url: "https://github.com/soxoj/maigret", badge: "cli", fields: ["username"], desc: "Collect dossier" },
-            { name: "IDCrawl", url: "https://www.idcrawl.com/{username}", badge: "free", fields: ["username"] },
+            { name: "Namechk", url: "https://namechk.com/", badge: "free", fields: ["username"], desc: "Check username on 100+ social networks" },
+            { name: "KnowEm", url: "https://knowem.com/checkusernames.php?u={username}", badge: "free", fields: ["username"], desc: "Username search across 500+ sites" },
+            { name: "WhatsMyName", url: "https://whatsmyname.app/", badge: "free", fields: ["username"], desc: "OSINT username enumeration tool" },
+            { name: "UserSearch", url: "https://usersearch.org/results_normal.php?URL_username={username}", badge: "free", fields: ["username"], desc: "Search usernames across social sites" },
+            { name: "Instant Username", url: "https://instantusername.com/#/{username}", badge: "free", fields: ["username"], desc: "Real-time username availability checker" },
+            { name: "Social Searcher", url: "https://www.social-searcher.com/search-users/?q={username}", badge: "free", fields: ["username"], desc: "Free social media search engine" },
+            { name: "NameCheckup", url: "https://namecheckup.com/", badge: "free", fields: ["username"], desc: "Domain and social username checker" },
+            { name: "IDCrawl", url: "https://www.idcrawl.com/{username}", badge: "free", fields: ["username"], desc: "Free people search by username" },
+            { name: "Sherlock", url: "https://github.com/sherlock-project/sherlock", badge: "cli", fields: ["username"], desc: "CLI tool: Hunt usernames across 400+ social networks" },
+            { name: "Maigret", url: "https://github.com/soxoj/maigret", badge: "cli", fields: ["username"], desc: "CLI tool: Collect dossier on person by username" },
         ]
     },
     email: {
-        name: "Email Intelligence", icon: "📧", group: "technical",
+        name: "Email Intelligence",
+        icon: "📧",
+        desc: "Email verification, breach checking, and account discovery",
         tools: [
-            { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"], desc: "Check for breaches" },
-            { name: "EmailRep.io", url: "https://emailrep.io/{email}", badge: "free", fields: ["email"], desc: "Email reputation" },
-            { name: "Hunter.io Verify", url: "https://hunter.io/email-verifier/{email}", badge: "freemium", fields: ["email"] },
-            { name: "Hunter.io Domain", url: "https://hunter.io/try/search/{domain}", badge: "freemium", fields: ["domain"], desc: "Find emails by domain" },
-            { name: "ThatsThem Email", url: "https://thatsthem.com/email/{email}", badge: "free", fields: ["email"] },
-            { name: "Epieos", url: "https://epieos.com/?q={email}", badge: "free", fields: ["email"], desc: "Google account discovery" },
-            { name: "GHunt (CLI)", url: "https://github.com/mxrch/GHunt", badge: "cli", fields: ["email"], desc: "Google account OSINT" },
-            { name: "Skymem", url: "http://www.skymem.info/srch?q={email}", badge: "free", fields: ["email"] },
-            { name: "Holehe (CLI)", url: "https://github.com/megadose/holehe", badge: "cli", fields: ["email"], desc: "Check email on sites" },
-            { name: "Clearbit", url: "https://connect.clearbit.com/", badge: "freemium", fields: ["email"] },
-            { name: "Phonebook.cz", url: "https://phonebook.cz/", badge: "free", fields: ["email"], desc: "Breach data search" },
-            { name: "Email-Format", url: "https://www.email-format.com/d/{domain}/", badge: "free", fields: ["domain"], desc: "Company email formats" },
+            { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"], desc: "Check if email was in data breaches" },
+            { name: "EmailRep.io", url: "https://emailrep.io/{email}", badge: "free", fields: ["email"], desc: "Email reputation and risk scoring" },
+            { name: "Hunter.io Verify", url: "https://hunter.io/email-verifier/{email}", badge: "freemium", fields: ["email"], desc: "Verify email deliverability" },
+            { name: "Hunter.io Domain", url: "https://hunter.io/try/search/{domain}", badge: "freemium", fields: ["domain"], desc: "Find email addresses by company domain" },
+            { name: "ThatsThem Email", url: "https://thatsthem.com/email/{email}", badge: "free", fields: ["email"], desc: "Reverse email lookup" },
+            { name: "Epieos", url: "https://epieos.com/?q={email}", badge: "free", fields: ["email"], desc: "Google account and social media discovery" },
+            { name: "Skymem", url: "http://www.skymem.info/srch?q={email}", badge: "free", fields: ["email"], desc: "Email breach search" },
+            { name: "Phonebook.cz", url: "https://phonebook.cz/", badge: "free", fields: ["email"], desc: "Breach data email search" },
+            { name: "Email-Format", url: "https://www.email-format.com/d/{domain}/", badge: "free", fields: ["domain"], desc: "Find company email address formats" },
+            { name: "GHunt", url: "https://github.com/mxrch/GHunt", badge: "cli", fields: ["email"], desc: "CLI tool: Extract Google account info from email" },
+            { name: "Holehe", url: "https://github.com/megadose/holehe", badge: "cli", fields: ["email"], desc: "CLI tool: Check which sites email is registered on" },
+            { name: "Clearbit", url: "https://connect.clearbit.com/", badge: "freemium", fields: ["email"], desc: "Business email enrichment" },
         ]
     },
     phone: {
-        name: "Phone Lookup", icon: "📱", group: "people",
+        name: "Phone Lookup",
+        icon: "📱",
+        desc: "Reverse phone lookups, carrier info, and caller ID",
         tools: [
-            { name: "TrueCaller", url: "https://www.truecaller.com/search/{country}/{phoneClean}", badge: "freemium", fields: ["phone", "country"] },
-            { name: "ThatsThem Phone", url: "https://thatsthem.com/phone/{phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "Spy Dialer", url: "https://spydialer.com/default.aspx?rp={phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "FastPeopleSearch Phone", url: "https://www.fastpeoplesearch.com/phone/{phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "USPhonebook Phone", url: "https://www.usphonebook.com/phone/{phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "Carrier Lookup", url: "https://freecarrierlookup.com/", badge: "free", fields: ["phone"] },
-            { name: "NumVerify", url: "https://numverify.com/", badge: "freemium", fields: ["phone"] },
-            { name: "Phone Validator", url: "https://www.phonevalidator.com/index.aspx?p={phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "Sync.me", url: "https://sync.me/search/?number={phoneClean}", badge: "freemium", fields: ["phone"] },
-            { name: "411 Phone", url: "https://www.411.com/phone/{phoneClean}", badge: "free", fields: ["phone"] },
-            { name: "PhoneInfoga (CLI)", url: "https://github.com/sundowndev/phoneinfoga", badge: "cli", fields: ["phone"], desc: "Phone OSINT framework" },
+            { name: "TrueCaller", url: "https://www.truecaller.com/search/{country}/{phoneClean}", badge: "freemium", fields: ["phone", "country"], desc: "Global caller ID and spam detection" },
+            { name: "ThatsThem Phone", url: "https://thatsthem.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Free reverse phone lookup" },
+            { name: "Spy Dialer", url: "https://spydialer.com/default.aspx?rp={phoneClean}", badge: "free", fields: ["phone"], desc: "Free reverse phone with voicemail" },
+            { name: "FastPeopleSearch Phone", url: "https://www.fastpeoplesearch.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Free phone number lookup" },
+            { name: "USPhonebook Phone", url: "https://www.usphonebook.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "US phone directory search" },
+            { name: "Carrier Lookup", url: "https://freecarrierlookup.com/", badge: "free", fields: ["phone"], desc: "Identify phone carrier/provider" },
+            { name: "NumVerify", url: "https://numverify.com/", badge: "freemium", fields: ["phone"], desc: "Phone number validation API" },
+            { name: "Phone Validator", url: "https://www.phonevalidator.com/index.aspx?p={phoneClean}", badge: "free", fields: ["phone"], desc: "Validate US phone numbers" },
+            { name: "Sync.me", url: "https://sync.me/search/?number={phoneClean}", badge: "freemium", fields: ["phone"], desc: "Caller ID and spam blocking" },
+            { name: "411 Phone", url: "https://www.411.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Reverse phone directory" },
+            { name: "PhoneInfoga", url: "https://github.com/sundowndev/phoneinfoga", badge: "cli", fields: ["phone"], desc: "CLI tool: Advanced phone number OSINT" },
         ]
     },
     domain: {
-        name: "Domain & DNS", icon: "🌐", group: "technical",
+        name: "Domain & DNS",
+        icon: "🌐",
+        desc: "WHOIS, DNS records, SSL certificates, and web technology",
         tools: [
-            { name: "WHOIS", url: "https://www.whois.com/whois/{domain}", badge: "free", fields: ["domain"] },
-            { name: "ViewDNS WHOIS", url: "https://viewdns.info/whois/?domain={domain}", badge: "free", fields: ["domain"] },
-            { name: "DNSdumpster", url: "https://dnsdumpster.com/", badge: "free", fields: ["domain"], desc: "DNS recon" },
-            { name: "SecurityTrails", url: "https://securitytrails.com/domain/{domain}/dns", badge: "freemium", fields: ["domain"] },
-            { name: "crt.sh", url: "https://crt.sh/?q={domain}", badge: "free", fields: ["domain"], desc: "Certificate transparency" },
-            { name: "VirusTotal Domain", url: "https://www.virustotal.com/gui/domain/{domain}", badge: "free", fields: ["domain"] },
-            { name: "Shodan Domain", url: "https://www.shodan.io/search?query={domain}", badge: "freemium", fields: ["domain"] },
-            { name: "Censys", url: "https://search.censys.io/hosts?q={domain}", badge: "freemium", fields: ["domain"] },
-            { name: "BuiltWith", url: "https://builtwith.com/{domain}", badge: "freemium", fields: ["domain"], desc: "Technology profiler" },
-            { name: "Wappalyzer", url: "https://www.wappalyzer.com/lookup/{domain}", badge: "freemium", fields: ["domain"] },
-            { name: "Netcraft", url: "https://sitereport.netcraft.com/?url={domain}", badge: "free", fields: ["domain"] },
-            { name: "URLScan.io", url: "https://urlscan.io/search/#domain:{domain}", badge: "free", fields: ["domain"] },
-            { name: "MXToolbox", url: "https://mxtoolbox.com/SuperTool.aspx?action=dns:{domain}", badge: "free", fields: ["domain"] },
-            { name: "Robtex", url: "https://www.robtex.com/dns-lookup/{domain}", badge: "free", fields: ["domain"] },
-            { name: "DNSlytics", url: "https://dnslytics.com/domain/{domain}", badge: "freemium", fields: ["domain"] },
+            { name: "WHOIS Lookup", url: "https://www.whois.com/whois/{domain}", badge: "free", fields: ["domain"], desc: "Domain registration information" },
+            { name: "ViewDNS WHOIS", url: "https://viewdns.info/whois/?domain={domain}", badge: "free", fields: ["domain"], desc: "WHOIS with additional DNS tools" },
+            { name: "DNSdumpster", url: "https://dnsdumpster.com/", badge: "free", fields: ["domain"], desc: "DNS reconnaissance and mapping" },
+            { name: "SecurityTrails", url: "https://securitytrails.com/domain/{domain}/dns", badge: "freemium", fields: ["domain"], desc: "Historical DNS and WHOIS data" },
+            { name: "crt.sh", url: "https://crt.sh/?q={domain}", badge: "free", fields: ["domain"], desc: "Certificate transparency log search" },
+            { name: "VirusTotal Domain", url: "https://www.virustotal.com/gui/domain/{domain}", badge: "free", fields: ["domain"], desc: "Domain security analysis" },
+            { name: "Shodan Domain", url: "https://www.shodan.io/search?query={domain}", badge: "freemium", fields: ["domain"], desc: "Internet-connected device search" },
+            { name: "Censys Search", url: "https://search.censys.io/hosts?q={domain}", badge: "freemium", fields: ["domain"], desc: "Internet-wide security scanning" },
+            { name: "BuiltWith", url: "https://builtwith.com/{domain}", badge: "freemium", fields: ["domain"], desc: "Website technology profiler" },
+            { name: "Wappalyzer", url: "https://www.wappalyzer.com/lookup/{domain}", badge: "freemium", fields: ["domain"], desc: "Identify web technologies" },
+            { name: "Netcraft", url: "https://sitereport.netcraft.com/?url={domain}", badge: "free", fields: ["domain"], desc: "Site report and risk rating" },
+            { name: "URLScan.io", url: "https://urlscan.io/search/#domain:{domain}", badge: "free", fields: ["domain"], desc: "URL and website scanner" },
+            { name: "MXToolbox", url: "https://mxtoolbox.com/SuperTool.aspx?action=dns:{domain}", badge: "free", fields: ["domain"], desc: "DNS and mail server diagnostics" },
+            { name: "Robtex", url: "https://www.robtex.com/dns-lookup/{domain}", badge: "free", fields: ["domain"], desc: "DNS and network intelligence" },
+            { name: "DNSlytics", url: "https://dnslytics.com/domain/{domain}", badge: "freemium", fields: ["domain"], desc: "DNS intelligence and analytics" },
         ]
     },
     ip: {
-        name: "IP & Network", icon: "🔌", group: "technical",
+        name: "IP & Network",
+        icon: "🔌",
+        desc: "IP geolocation, reputation, BGP, and network analysis",
         tools: [
-            { name: "Shodan IP", url: "https://www.shodan.io/host/{ip}", badge: "freemium", fields: ["ip"] },
-            { name: "Censys IP", url: "https://search.censys.io/hosts/{ip}", badge: "freemium", fields: ["ip"] },
-            { name: "VirusTotal IP", url: "https://www.virustotal.com/gui/ip-address/{ip}", badge: "free", fields: ["ip"] },
-            { name: "IPinfo.io", url: "https://ipinfo.io/{ip}", badge: "freemium", fields: ["ip"] },
-            { name: "AbuseIPDB", url: "https://www.abuseipdb.com/check/{ip}", badge: "free", fields: ["ip"] },
-            { name: "GreyNoise", url: "https://viz.greynoise.io/ip/{ip}", badge: "freemium", fields: ["ip"] },
-            { name: "BGP Toolkit", url: "https://bgp.he.net/ip/{ip}", badge: "free", fields: ["ip"] },
-            { name: "BGPView", url: "https://bgpview.io/ip/{ip}", badge: "free", fields: ["ip"] },
-            { name: "IP Location", url: "https://www.iplocation.net/ip-lookup/{ip}", badge: "free", fields: ["ip"] },
-            { name: "ViewDNS Reverse", url: "https://viewdns.info/reverseip/?host={ip}", badge: "free", fields: ["ip"] },
-            { name: "Talos Intelligence", url: "https://talosintelligence.com/reputation_center/lookup?search={ip}", badge: "free", fields: ["ip"] },
+            { name: "Shodan IP", url: "https://www.shodan.io/host/{ip}", badge: "freemium", fields: ["ip"], desc: "Open ports and services on IP" },
+            { name: "Censys IP", url: "https://search.censys.io/hosts/{ip}", badge: "freemium", fields: ["ip"], desc: "IP security scanning data" },
+            { name: "VirusTotal IP", url: "https://www.virustotal.com/gui/ip-address/{ip}", badge: "free", fields: ["ip"], desc: "IP reputation and malware analysis" },
+            { name: "IPinfo.io", url: "https://ipinfo.io/{ip}", badge: "freemium", fields: ["ip"], desc: "IP geolocation and ASN data" },
+            { name: "AbuseIPDB", url: "https://www.abuseipdb.com/check/{ip}", badge: "free", fields: ["ip"], desc: "IP abuse reports and blacklist check" },
+            { name: "GreyNoise", url: "https://viz.greynoise.io/ip/{ip}", badge: "freemium", fields: ["ip"], desc: "Internet background noise analysis" },
+            { name: "BGP Toolkit", url: "https://bgp.he.net/ip/{ip}", badge: "free", fields: ["ip"], desc: "BGP routing and ASN information" },
+            { name: "BGPView", url: "https://bgpview.io/ip/{ip}", badge: "free", fields: ["ip"], desc: "BGP prefix and ASN lookup" },
+            { name: "IP Location", url: "https://www.iplocation.net/ip-lookup/{ip}", badge: "free", fields: ["ip"], desc: "IP geolocation lookup" },
+            { name: "ViewDNS Reverse", url: "https://viewdns.info/reverseip/?host={ip}", badge: "free", fields: ["ip"], desc: "Find domains hosted on IP" },
+            { name: "Talos Intelligence", url: "https://talosintelligence.com/reputation_center/lookup?search={ip}", badge: "free", fields: ["ip"], desc: "Cisco Talos IP reputation" },
         ]
     },
     breach: {
-        name: "Breach & Leaks", icon: "🔓", group: "technical",
+        name: "Breach & Leaks",
+        icon: "🔓",
+        desc: "Data breach search and leaked credentials",
         tools: [
-            { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"] },
-            { name: "Firefox Monitor", url: "https://monitor.firefox.com/", badge: "free", fields: ["email"] },
-            { name: "DeHashed", url: "https://dehashed.com/search?query={email}", badge: "paid", fields: ["email"], desc: "Breach database" },
-            { name: "LeakCheck", url: "https://leakcheck.io/", badge: "freemium", fields: ["email"] },
-            { name: "IntelligenceX", url: "https://intelx.io/?s={email}", badge: "freemium", fields: ["email"], desc: "Historical data" },
-            { name: "LeakPeek", url: "https://leakpeek.com/", badge: "freemium", fields: ["email"] },
-            { name: "BreachDirectory", url: "https://breachdirectory.org/", badge: "free", fields: ["email"] },
-            { name: "Snusbase", url: "https://snusbase.com/", badge: "paid", fields: ["email"] },
-            { name: "0t.rocks", url: "https://search.0t.rocks/", badge: "freemium", fields: ["email"], desc: "14B+ records" },
+            { name: "Have I Been Pwned", url: "https://haveibeenpwned.com/account/{email}", badge: "free", fields: ["email"], desc: "Check email in known data breaches" },
+            { name: "Firefox Monitor", url: "https://monitor.firefox.com/", badge: "free", fields: ["email"], desc: "Mozilla's breach notification service" },
+            { name: "DeHashed", url: "https://dehashed.com/search?query={email}", badge: "paid", fields: ["email"], desc: "Leaked credentials database search" },
+            { name: "LeakCheck", url: "https://leakcheck.io/", badge: "freemium", fields: ["email"], desc: "Email breach lookup" },
+            { name: "IntelligenceX", url: "https://intelx.io/?s={email}", badge: "freemium", fields: ["email"], desc: "Historical data and breach search" },
+            { name: "LeakPeek", url: "https://leakpeek.com/", badge: "freemium", fields: ["email"], desc: "Breach database search" },
+            { name: "BreachDirectory", url: "https://breachdirectory.org/", badge: "free", fields: ["email"], desc: "Free breach search" },
+            { name: "Snusbase", url: "https://snusbase.com/", badge: "paid", fields: ["email"], desc: "Leaked database search engine" },
+            { name: "0t.rocks", url: "https://search.0t.rocks/", badge: "freemium", fields: ["email"], desc: "Search 14B+ leaked records" },
         ]
     },
     archive: {
-        name: "Web Archives", icon: "🗄️", group: "technical",
+        name: "Web Archives",
+        icon: "🗄️",
+        desc: "Historical snapshots and cached versions of websites",
         tools: [
-            { name: "Wayback Machine", url: "https://web.archive.org/web/*/{domain}", badge: "free", fields: ["domain"] },
-            { name: "Google Cache", url: "https://webcache.googleusercontent.com/search?q=cache:{domain}", badge: "free", fields: ["domain"] },
-            { name: "Archive.today", url: "https://archive.today/{domain}", badge: "free", fields: ["domain"] },
-            { name: "Archive.is", url: "https://archive.is/{domain}", badge: "free", fields: ["domain"] },
-            { name: "CachedView", url: "https://cachedview.com/#{domain}", badge: "free", fields: ["domain"] },
-            { name: "Memento", url: "https://timetravel.mementoweb.org/list/20200101000000/{domain}", badge: "free", fields: ["domain"] },
+            { name: "Wayback Machine", url: "https://web.archive.org/web/*/{domain}", badge: "free", fields: ["domain"], desc: "Internet Archive's website history" },
+            { name: "Google Cache", url: "https://webcache.googleusercontent.com/search?q=cache:{domain}", badge: "free", fields: ["domain"], desc: "Google's cached page version" },
+            { name: "Archive.today", url: "https://archive.today/{domain}", badge: "free", fields: ["domain"], desc: "Webpage snapshot service" },
+            { name: "Archive.is", url: "https://archive.is/{domain}", badge: "free", fields: ["domain"], desc: "Alternative archive service" },
+            { name: "CachedView", url: "https://cachedview.com/#{domain}", badge: "free", fields: ["domain"], desc: "Multi-source cache finder" },
+            { name: "Memento", url: "https://timetravel.mementoweb.org/list/20200101000000/{domain}", badge: "free", fields: ["domain"], desc: "Aggregated web archive search" },
         ]
     },
     image: {
-        name: "Image Search", icon: "🖼️", group: "technical",
+        name: "Image Search",
+        icon: "🖼️",
+        desc: "Reverse image search and facial recognition tools",
         tools: [
-            { name: "Google Lens", url: "https://lens.google.com/uploadbyurl?url={imageUrl}", badge: "free", fields: ["imageUrl"] },
-            { name: "TinEye", url: "https://tineye.com/search?url={imageUrl}", badge: "free", fields: ["imageUrl"] },
-            { name: "Yandex Images", url: "https://yandex.com/images/search?rpt=imageview&url={imageUrl}", badge: "free", fields: ["imageUrl"] },
-            { name: "Bing Visual", url: "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:{imageUrl}", badge: "free", fields: ["imageUrl"] },
-            { name: "PimEyes", url: "https://pimeyes.com/en", badge: "paid", fields: ["imageUrl"], desc: "Face recognition" },
-            { name: "FaceCheck.ID", url: "https://facecheck.id/", badge: "freemium", fields: ["imageUrl"], desc: "Facial recognition" },
-            { name: "Search4faces", url: "https://search4faces.com/", badge: "free", fields: ["imageUrl"], desc: "VK/OK face search" },
-            { name: "SauceNAO", url: "https://saucenao.com/search.php?url={imageUrl}", badge: "free", fields: ["imageUrl"] },
-            { name: "ImgOps", url: "https://imgops.com/{imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Multi-engine search" },
-            { name: "FotoForensics", url: "https://fotoforensics.com/", badge: "free", fields: ["imageUrl"], desc: "Error level analysis" },
+            { name: "Google Lens", url: "https://lens.google.com/uploadbyurl?url={imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Google's visual search engine" },
+            { name: "TinEye", url: "https://tineye.com/search?url={imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Reverse image search pioneer" },
+            { name: "Yandex Images", url: "https://yandex.com/images/search?rpt=imageview&url={imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Excellent for faces and Eastern European content" },
+            { name: "Bing Visual", url: "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:{imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Microsoft's visual search" },
+            { name: "PimEyes", url: "https://pimeyes.com/en", badge: "paid", fields: ["imageUrl"], desc: "Facial recognition search engine" },
+            { name: "FaceCheck.ID", url: "https://facecheck.id/", badge: "freemium", fields: ["imageUrl"], desc: "Reverse face search" },
+            { name: "Search4faces", url: "https://search4faces.com/", badge: "free", fields: ["imageUrl"], desc: "VK and OK.ru face search" },
+            { name: "SauceNAO", url: "https://saucenao.com/search.php?url={imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Anime and artwork source finder" },
+            { name: "ImgOps", url: "https://imgops.com/{imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Multi-engine image search tool" },
+            { name: "FotoForensics", url: "https://fotoforensics.com/", badge: "free", fields: ["imageUrl"], desc: "Image manipulation analysis (ELA)" },
         ]
     },
     business: {
-        name: "Business Intel", icon: "🏢", group: "records",
+        name: "Business Intel",
+        icon: "🏢",
+        desc: "Corporate filings, SEC records, and business intelligence",
         tools: [
-            { name: "OpenCorporates", url: "https://opencorporates.com/companies?q={company}", badge: "freemium", fields: ["company"], desc: "135M+ companies" },
-            { name: "SEC EDGAR", url: "https://www.sec.gov/cgi-bin/browse-edgar?company={company}&action=getcompany", badge: "free", fields: ["company"] },
-            { name: "Crunchbase", url: "https://www.crunchbase.com/textsearch?q={company}", badge: "freemium", fields: ["company"] },
-            { name: "LinkedIn Company", url: "https://www.linkedin.com/company/{company}/", badge: "free", fields: ["company"] },
-            { name: "Glassdoor", url: "https://www.glassdoor.com/Search/results.htm?keyword={company}", badge: "free", fields: ["company"] },
-            { name: "BBB", url: "https://www.bbb.org/search?find_text={company}", badge: "free", fields: ["company"] },
-            { name: "Companies House", url: "https://find-and-update.company-information.service.gov.uk/search/companies?q={company}", badge: "free", fields: ["company"] },
-            { name: "ICIJ Offshore", url: "https://offshoreleaks.icij.org/search?q={company}", badge: "free", fields: ["company"], desc: "Offshore leaks" },
-            { name: "Google Finance", url: "https://www.google.com/finance?q={company}", badge: "free", fields: ["company"] },
-            { name: "Yahoo Finance", url: "https://finance.yahoo.com/lookup?s={company}", badge: "free", fields: ["company"] },
-            { name: "OpenSanctions", url: "https://www.opensanctions.org/search/?q={company}", badge: "free", fields: ["company"], desc: "Sanctions database" },
+            { name: "OpenCorporates", url: "https://opencorporates.com/companies?q={company}", badge: "freemium", fields: ["company"], desc: "Search 200M+ company records globally" },
+            { name: "SEC EDGAR", url: "https://www.sec.gov/cgi-bin/browse-edgar?company={company}&action=getcompany", badge: "free", fields: ["company"], desc: "US public company SEC filings" },
+            { name: "Crunchbase", url: "https://www.crunchbase.com/textsearch?q={company}", badge: "freemium", fields: ["company"], desc: "Startup and company database" },
+            { name: "LinkedIn Company", url: "https://www.linkedin.com/company/{company}/", badge: "free", fields: ["company"], desc: "Company LinkedIn page" },
+            { name: "Glassdoor", url: "https://www.glassdoor.com/Search/results.htm?keyword={company}", badge: "free", fields: ["company"], desc: "Company reviews and salaries" },
+            { name: "BBB", url: "https://www.bbb.org/search?find_text={company}", badge: "free", fields: ["company"], desc: "Better Business Bureau ratings" },
+            { name: "Companies House", url: "https://find-and-update.company-information.service.gov.uk/search/companies?q={company}", badge: "free", fields: ["company"], desc: "UK company registry" },
+            { name: "ICIJ Offshore", url: "https://offshoreleaks.icij.org/search?q={company}", badge: "free", fields: ["company"], desc: "Panama/Paradise Papers search" },
+            { name: "Google Finance", url: "https://www.google.com/finance?q={company}", badge: "free", fields: ["company"], desc: "Stock and company financials" },
+            { name: "Yahoo Finance", url: "https://finance.yahoo.com/lookup?s={company}", badge: "free", fields: ["company"], desc: "Financial data and news" },
+            { name: "OpenSanctions", url: "https://www.opensanctions.org/search/?q={company}", badge: "free", fields: ["company"], desc: "Global sanctions database" },
         ]
     },
     geo: {
-        name: "Geolocation", icon: "📍", group: "records",
+        name: "Geolocation",
+        icon: "📍",
+        desc: "Maps, satellite imagery, and location analysis tools",
         tools: [
-            { name: "Google Maps", url: "https://www.google.com/maps/search/{streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "Google Street View", url: "https://www.google.com/maps/@?api=1&map_action=pano&query={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "Bing Maps", url: "https://www.bing.com/maps?q={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "OpenStreetMap", url: "https://www.openstreetmap.org/search?query={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "Zillow", url: "https://www.zillow.com/homes/{streetAddress}-{city},-{state}_rb/", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "Redfin", url: "https://www.redfin.com/search?search_term={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"] },
-            { name: "SunCalc", url: "https://www.suncalc.org/", badge: "free", fields: [], desc: "Sun position calculator" },
-            { name: "Sentinel Hub", url: "https://apps.sentinel-hub.com/eo-browser/", badge: "freemium", fields: [], desc: "Satellite imagery" },
-            { name: "Google Earth", url: "https://earth.google.com/web/", badge: "free", fields: [] },
+            { name: "Google Maps", url: "https://www.google.com/maps/search/{streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Google Maps location search" },
+            { name: "Google Street View", url: "https://www.google.com/maps/@?api=1&map_action=pano&query={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Street-level imagery" },
+            { name: "Bing Maps", url: "https://www.bing.com/maps?q={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Microsoft's mapping service" },
+            { name: "OpenStreetMap", url: "https://www.openstreetmap.org/search?query={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Open-source collaborative maps" },
+            { name: "Zillow", url: "https://www.zillow.com/homes/{streetAddress}-{city},-{state}_rb/", badge: "free", fields: ["streetAddress", "city", "state"], desc: "US property records and values" },
+            { name: "Redfin", url: "https://www.redfin.com/search?search_term={streetAddress}+{city}+{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Real estate property search" },
+            { name: "SunCalc", url: "https://www.suncalc.org/", badge: "free", fields: [], desc: "Sun position calculator for image analysis" },
+            { name: "Sentinel Hub", url: "https://apps.sentinel-hub.com/eo-browser/", badge: "freemium", fields: [], desc: "Free satellite imagery browser" },
+            { name: "Google Earth Web", url: "https://earth.google.com/web/", badge: "free", fields: [], desc: "3D satellite and aerial imagery" },
         ]
     },
     vehicle: {
-        name: "Vehicle Search", icon: "🚗", group: "records",
+        name: "Vehicle Search",
+        icon: "🚗",
+        desc: "VIN decoding, vehicle history, and license plate lookup",
         tools: [
-            { name: "NHTSA VIN", url: "https://vpic.nhtsa.dot.gov/decoder/Decoder?VIN={vin}", badge: "free", fields: ["vin"] },
-            { name: "VINCheck NICB", url: "https://www.nicb.org/vincheck", badge: "free", fields: ["vin"] },
-            { name: "CarFax", url: "https://www.carfax.com/vehicle-history-reports/?vin={vin}", badge: "paid", fields: ["vin"] },
-            { name: "AutoCheck", url: "https://www.autocheck.com/vehiclehistory/?vin={vin}", badge: "paid", fields: ["vin"] },
-            { name: "VehicleHistory", url: "https://www.vehiclehistory.com/vin-report/{vin}", badge: "freemium", fields: ["vin"] },
-            { name: "FindByPlate", url: "https://findbyplate.com/", badge: "freemium", fields: ["licensePlate"] },
-            { name: "VINDecoder", url: "https://www.vindecoder.net/{vin}", badge: "free", fields: ["vin"] },
+            { name: "NHTSA VIN Decoder", url: "https://vpic.nhtsa.dot.gov/decoder/Decoder?VIN={vin}", badge: "free", fields: ["vin"], desc: "Official US VIN decoder" },
+            { name: "VINCheck NICB", url: "https://www.nicb.org/vincheck", badge: "free", fields: ["vin"], desc: "Check if vehicle was reported stolen" },
+            { name: "CarFax", url: "https://www.carfax.com/vehicle-history-reports/?vin={vin}", badge: "paid", fields: ["vin"], desc: "Comprehensive vehicle history" },
+            { name: "AutoCheck", url: "https://www.autocheck.com/vehiclehistory/?vin={vin}", badge: "paid", fields: ["vin"], desc: "Experian vehicle history reports" },
+            { name: "VehicleHistory", url: "https://www.vehiclehistory.com/vin-report/{vin}", badge: "freemium", fields: ["vin"], desc: "Free VIN check with basic info" },
+            { name: "FindByPlate", url: "https://findbyplate.com/", badge: "freemium", fields: ["licensePlate"], desc: "License plate lookup" },
+            { name: "VINDecoder.net", url: "https://www.vindecoder.net/{vin}", badge: "free", fields: ["vin"], desc: "Free VIN decoding service" },
         ]
     },
     crypto: {
-        name: "Cryptocurrency", icon: "₿", group: "technical",
+        name: "Cryptocurrency",
+        icon: "₿",
+        desc: "Blockchain explorers and crypto wallet analysis",
         tools: [
-            { name: "Blockchain.com", url: "https://www.blockchain.com/explorer/search?search={cryptoAddress}", badge: "free", fields: ["cryptoAddress"] },
-            { name: "Etherscan", url: "https://etherscan.io/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"] },
-            { name: "BscScan", url: "https://bscscan.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"] },
-            { name: "Blockchair", url: "https://blockchair.com/search?q={cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Multi-chain explorer" },
-            { name: "Wallet Explorer", url: "https://www.walletexplorer.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"] },
-            { name: "OXT.me", url: "https://oxt.me/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"] },
-            { name: "Bitcoin Abuse", url: "https://www.bitcoinabuse.com/", badge: "free", fields: ["cryptoAddress"], desc: "Scam reports" },
+            { name: "Blockchain.com", url: "https://www.blockchain.com/explorer/search?search={cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Bitcoin blockchain explorer" },
+            { name: "Etherscan", url: "https://etherscan.io/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Ethereum blockchain explorer" },
+            { name: "BscScan", url: "https://bscscan.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Binance Smart Chain explorer" },
+            { name: "Blockchair", url: "https://blockchair.com/search?q={cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Multi-blockchain search engine" },
+            { name: "Wallet Explorer", url: "https://www.walletexplorer.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Bitcoin wallet clustering" },
+            { name: "OXT.me", url: "https://oxt.me/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Bitcoin transaction analysis" },
+            { name: "Bitcoin Abuse", url: "https://www.bitcoinabuse.com/", badge: "free", fields: ["cryptoAddress"], desc: "Report and track Bitcoin scams" },
         ]
     },
     search: {
-        name: "Search Engines", icon: "🔍", group: "general",
+        name: "Search Engines",
+        icon: "🔍",
+        desc: "General and specialized search engines",
         tools: [
-            { name: "Google", url: "https://www.google.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Google Exact", url: "https://www.google.com/search?q=%22{first}+{last}%22", badge: "free", fields: ["firstName", "lastName"], desc: "Exact match" },
-            { name: "Bing", url: "https://www.bing.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Yandex", url: "https://yandex.com/search/?text={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Brave Search", url: "https://search.brave.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"] },
-            { name: "Carrot2", url: "https://search.carrot2.org/#/search/web/{first}+{last}/folders", badge: "free", fields: ["firstName", "lastName"], desc: "Clustered results" },
+            { name: "Google", url: "https://www.google.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Standard Google search" },
+            { name: "Google Exact", url: "https://www.google.com/search?q=%22{first}+{last}%22", badge: "free", fields: ["firstName", "lastName"], desc: "Google exact phrase match" },
+            { name: "Bing", url: "https://www.bing.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Microsoft Bing search" },
+            { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Privacy-focused search engine" },
+            { name: "Yandex", url: "https://yandex.com/search/?text={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Russian search engine" },
+            { name: "Brave Search", url: "https://search.brave.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Independent privacy search" },
+            { name: "Carrot2", url: "https://search.carrot2.org/#/search/web/{first}+{last}/folders", badge: "free", fields: ["firstName", "lastName"], desc: "Clustered search results" },
         ]
     },
     frameworks: {
-        name: "OSINT Frameworks", icon: "🔧", group: "tools",
+        name: "OSINT Frameworks",
+        icon: "🔧",
+        desc: "OSINT tool collections and methodology resources",
         tools: [
-            { name: "OSINT Framework", url: "https://osintframework.com/", badge: "free", fields: [], desc: "Tool directory" },
-            { name: "IntelTechniques", url: "https://inteltechniques.com/tools/", badge: "free", fields: [], desc: "Bazzell's tools" },
-            { name: "Bellingcat Toolkit", url: "https://bellingcat.gitbook.io/toolkit/", badge: "free", fields: [], desc: "Investigative journalism" },
-            { name: "Awesome OSINT", url: "https://github.com/jivoi/awesome-osint", badge: "free", fields: [], desc: "Curated list" },
-            { name: "cipher387 Collection", url: "https://github.com/cipher387/osint_stuff_tool_collection", badge: "free", fields: [], desc: "1000+ tools" },
+            { name: "OSINT Framework", url: "https://osintframework.com/", badge: "free", fields: [], desc: "Comprehensive OSINT tool directory tree" },
+            { name: "IntelTechniques", url: "https://inteltechniques.com/tools/", badge: "free", fields: [], desc: "Michael Bazzell's OSINT tools" },
+            { name: "Bellingcat Toolkit", url: "https://bellingcat.gitbook.io/toolkit/", badge: "free", fields: [], desc: "Investigative journalism toolkit" },
+            { name: "Awesome OSINT", url: "https://github.com/jivoi/awesome-osint", badge: "free", fields: [], desc: "Curated OSINT resources list" },
+            { name: "cipher387 Collection", url: "https://github.com/cipher387/osint_stuff_tool_collection", badge: "free", fields: [], desc: "1000+ OSINT tools collection" },
         ]
     }
 };
 
 // ============================================
-// THEME
+// THEME MANAGEMENT
 // ============================================
-function setTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('spectre-theme', t);
-    document.getElementById('themeSelectLanding').value = t;
-    document.getElementById('themeSelectResults').value = t;
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('spectre-theme', theme);
+    document.getElementById('themeSelectLanding').value = theme;
+    document.getElementById('themeSelectResults').value = theme;
 }
+
 function initTheme() {
-    const t = localStorage.getItem('spectre-theme') || 'dark';
-    setTheme(t);
+    const theme = localStorage.getItem('spectre-theme') || 'dark';
+    setTheme(theme);
 }
 
 // ============================================
@@ -1449,6 +2164,7 @@ function goHome() {
     document.body.classList.remove('results-mode');
     state.mode = 'landing';
 }
+
 function showResults() {
     document.getElementById('landingPage').classList.add('fade-out');
     setTimeout(() => {
@@ -1460,206 +2176,486 @@ function showResults() {
 }
 
 // ============================================
-// INPUT HANDLING
+// INPUT VALUE HANDLING
 // ============================================
 function getInputValues() {
-    const gv = (lid, rid) => state.mode === 'landing' 
-        ? (document.getElementById(lid)?.value || '').trim()
-        : (document.getElementById(rid)?.value || '').trim();
-    const first = gv('qFirst', 'firstName'), last = gv('qLast', 'lastName'), phone = gv('qPhone', 'phone');
+    const getValue = (landingId, resultsId) => {
+        if (state.mode === 'landing') {
+            return (document.getElementById(landingId)?.value || '').trim();
+        }
+        return (document.getElementById(resultsId)?.value || '').trim();
+    };
+
+    const first = getValue('qFirst', 'firstName');
+    const last = getValue('qLast', 'lastName');
+    const phone = getValue('qPhone', 'phone');
+
     return {
-        first: first.toLowerCase(), last: last.toLowerCase(),
+        first: first.toLowerCase(),
+        last: last.toLowerCase(),
         First: first.charAt(0).toUpperCase() + first.slice(1).toLowerCase(),
         Last: last.charAt(0).toUpperCase() + last.slice(1).toLowerCase(),
-        firstName: first.toLowerCase(), lastName: last.toLowerCase(),
-        city: gv('qCity', 'city'), state: gv('qState', 'state').toUpperCase(),
-        email: gv('qEmail', 'email').toLowerCase(), username: gv('qUsername', 'username'),
-        phone, phoneClean: phone.replace(/\D/g, ''),
-        streetAddress: gv('qStreet', 'streetAddress'), zip: gv('qZip', 'zip'),
-        country: gv('qCountry', 'country') || 'us', company: gv('qCompany', 'company'),
-        domain: gv('qDomain', 'domain').toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, ''),
-        ip: gv('qIP', 'ip'), imageUrl: encodeURIComponent(gv('qImageUrl', 'imageUrl')),
-        vin: gv('qVIN', 'vin').toUpperCase(), licensePlate: gv('', 'licensePlate').toUpperCase(),
-        cryptoAddress: gv('qCrypto', 'cryptoAddress')
+        firstName: first.toLowerCase(),
+        lastName: last.toLowerCase(),
+        city: getValue('qCity', 'city'),
+        state: getValue('qState', 'state').toUpperCase(),
+        email: getValue('qEmail', 'email').toLowerCase(),
+        username: getValue('qUsername', 'username'),
+        phone: phone,
+        phoneClean: phone.replace(/\D/g, ''),
+        streetAddress: getValue('qStreet', 'streetAddress'),
+        zip: getValue('qZip', 'zip'),
+        country: getValue('qCountry', 'country') || 'us',
+        company: getValue('qCompany', 'company'),
+        domain: getValue('qDomain', 'domain').toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, ''),
+        ip: getValue('qIP', 'ip'),
+        imageUrl: encodeURIComponent(getValue('qImageUrl', 'imageUrl')),
+        vin: getValue('qVIN', 'vin').toUpperCase(),
+        licensePlate: getValue('', 'licensePlate').toUpperCase(),
+        cryptoAddress: getValue('qCrypto', 'cryptoAddress')
     };
 }
-function syncInputs(v) {
-    document.getElementById('firstName').value = v.first;
-    document.getElementById('lastName').value = v.last;
-    document.getElementById('username').value = v.username;
-    document.getElementById('email').value = v.email;
-    document.getElementById('phone').value = v.phone;
-    document.getElementById('city').value = v.city;
-    document.getElementById('state').value = v.state;
-    document.getElementById('domain').value = v.domain;
-    document.getElementById('ip').value = v.ip;
-    document.getElementById('company').value = v.company;
-    document.getElementById('streetAddress').value = v.streetAddress;
-    document.getElementById('zip').value = v.zip;
-    document.getElementById('country').value = v.country;
-    document.getElementById('vin').value = v.vin;
-    document.getElementById('cryptoAddress').value = v.cryptoAddress;
+
+function syncInputsToResults(values) {
+    document.getElementById('firstName').value = values.first;
+    document.getElementById('lastName').value = values.last;
+    document.getElementById('username').value = values.username;
+    document.getElementById('email').value = values.email;
+    document.getElementById('phone').value = values.phone;
+    document.getElementById('city').value = values.city;
+    document.getElementById('state').value = values.state;
+    document.getElementById('domain').value = values.domain;
+    document.getElementById('ip').value = values.ip;
+    document.getElementById('company').value = values.company;
+    document.getElementById('streetAddress').value = values.streetAddress;
+    document.getElementById('zip').value = values.zip;
+    document.getElementById('country').value = values.country;
+    document.getElementById('vin').value = values.vin;
+    document.getElementById('cryptoAddress').value = values.cryptoAddress;
 }
-function hasFields(t, v) { return !t.fields?.length || t.fields.every(f => v[f]?.length > 0); }
-function buildUrl(tpl, v) {
-    let u = tpl;
-    Object.entries(v).forEach(([k, val]) => u = u.replace(new RegExp(`{${k}}`, 'g'), val));
-    return u;
+
+function hasRequiredFields(tool, values) {
+    if (!tool.fields || tool.fields.length === 0) return true;
+    return tool.fields.every(field => {
+        const val = values[field];
+        return val && val.length > 0;
+    });
 }
-function validateInputs() {
-    document.querySelectorAll('.input-pill, .quick-field').forEach(g => {
-        const i = g.querySelector('input');
-        g.classList.toggle('has-value', i?.value.trim().length > 0);
+
+function buildUrl(template, values) {
+    let url = template;
+    Object.entries(values).forEach(([key, value]) => {
+        url = url.replace(new RegExp(`{${key}}`, 'g'), value || '');
+    });
+    return url;
+}
+
+function validateInputHighlight() {
+    document.querySelectorAll('.input-pill, .quick-field').forEach(group => {
+        const input = group.querySelector('input');
+        group.classList.toggle('has-value', input?.value.trim().length > 0);
     });
 }
 
 // ============================================
-// SEARCH
+// MAIN SEARCH FUNCTION
 // ============================================
 function runSearch(mode = 'normal') {
-    const v = getInputValues();
-    const has = Object.entries(v).some(([k, val]) => !['first','last','First','Last','phoneClean'].includes(k) && val?.length > 0);
-    if (!has) { toast('Enter at least one parameter', 'error'); return; }
-    saveHistory(v);
-    syncInputs(v);
-    showResults();
-    setTimeout(() => renderResults(v, mode), 300);
+    const values = getInputValues();
+    
+    // Check if any input has value
+    const hasAnyInput = Object.entries(values).some(([key, val]) => {
+        return !['first', 'last', 'First', 'Last', 'phoneClean', 'country'].includes(key) && val && val.length > 0;
+    });
+
+    if (state.mode === 'landing') {
+        syncInputsToResults(values);
+        showResults();
+        
+        if (hasAnyInput) {
+            saveHistory(values);
+        }
+    }
+
+    setTimeout(() => {
+        renderAllTools(values, mode);
+    }, state.mode === 'landing' ? 300 : 0);
 }
-function renderResults(v, mode) {
+
+// ============================================
+// RENDER ALL TOOLS (Fixed)
+// ============================================
+function renderAllTools(values = null, mode = 'normal') {
+    if (!values) {
+        values = getInputValues();
+    }
+
     const grid = document.getElementById('resultsGrid');
     grid.innerHTML = '';
-    document.getElementById('emptyState').style.display = 'none';
+    
     state.generatedLinks = [];
-    state.checkedTools = new Set();
-    let totalActive = 0, totalTools = 0;
+    state.allToolElements = [];
+    
+    let totalTools = 0;
+    let totalActive = 0;
 
-    Object.entries(toolsDB).forEach(([catId, cat]) => {
-        if (!cat.tools?.length) return;
-        if (state.selectedCategory !== 'all' && catId !== state.selectedCategory) return;
-        const active = cat.tools.filter(t => hasFields(t, v));
-        totalTools += cat.tools.length;
-        totalActive += active.length;
+    Object.entries(toolsDB).forEach(([categoryId, category]) => {
+        if (!category.tools || category.tools.length === 0) return;
+        
+        // Category filter from landing page
+        if (state.selectedCategory !== 'all' && categoryId !== state.selectedCategory) return;
 
         const card = document.createElement('div');
-        card.className = `category-card ${active.length > 0 ? 'has-results' : ''}`;
-        card.dataset.category = catId;
-        card.dataset.group = cat.group;
+        card.className = 'category-card';
+        card.dataset.category = categoryId;
 
-        const toolsHtml = cat.tools.map((t, idx) => {
-            const isActive = hasFields(t, v);
-            const url = isActive ? buildUrl(t.url, v) : '#';
-            const isFav = favorites.some(f => f.name === t.name);
-            const tid = `${catId}-${idx}`;
-            if (isActive) state.generatedLinks.push({ id: tid, category: cat.name, name: t.name, url });
-            return `<div class="tool-item ${isActive ? '' : 'inactive'}" data-tid="${tid}">
-                <div class="tool-checkbox ${state.checkedTools.has(tid) ? 'checked' : ''}" onclick="toggleCheck('${tid}')">${state.checkedTools.has(tid) ? '✓' : ''}</div>
-                <div class="tool-info">
-                    <a href="${url}" target="_blank" class="tool-name" ${isActive ? '' : 'onclick="return false;"'}>${t.name}</a>
-                    ${t.desc ? `<div class="tool-desc">${t.desc}</div>` : ''}
+        let activeInCategory = 0;
+        let visibleInCategory = 0;
+
+        const toolsHtml = category.tools.map((tool, index) => {
+            totalTools++;
+            
+            const isActive = hasRequiredFields(tool, values);
+            const url = isActive ? buildUrl(tool.url, values) : '#';
+            const toolId = `${categoryId}-${index}`;
+            const isFavorited = favorites.some(f => f.name === tool.name);
+            
+            // Check badge filter
+            const matchesFilter = state.filter === 'all' || 
+                                  state.filter === tool.badge ||
+                                  (state.filter === 'active' && isActive);
+            
+            if (isActive) {
+                totalActive++;
+                activeInCategory++;
+                state.generatedLinks.push({
+                    id: toolId,
+                    category: category.name,
+                    name: tool.name,
+                    url: url,
+                    badge: tool.badge
+                });
+            }
+
+            if (matchesFilter || (state.filter === 'active' && isActive)) {
+                visibleInCategory++;
+            }
+
+            const hiddenClass = matchesFilter ? '' : 'filter-hidden';
+            const inactiveClass = isActive ? '' : 'inactive';
+
+            return `
+                <div class="tool-item ${inactiveClass} ${hiddenClass}" 
+                     data-tool-id="${toolId}" 
+                     data-badge="${tool.badge}"
+                     data-active="${isActive}"
+                     data-tooltip="${tool.desc || tool.name}">
+                    <div class="tool-checkbox ${state.checkedTools.has(toolId) ? 'checked' : ''}" 
+                         onclick="toggleCheck('${toolId}')"
+                         data-tooltip="Mark this tool as checked/visited">
+                        ${state.checkedTools.has(toolId) ? '✓' : ''}
+                    </div>
+                    <div class="tool-info">
+                        <a href="${url}" 
+                           target="_blank" 
+                           class="tool-name" 
+                           ${isActive ? '' : 'onclick="return false;"'}
+                           title="${tool.desc || 'Click to open this tool'}">
+                            ${tool.name}
+                        </a>
+                        ${tool.desc ? `<div class="tool-desc">${tool.desc}</div>` : ''}
+                    </div>
+                    <div class="tool-badges">
+                        <span class="badge badge-${tool.badge}" 
+                              data-tooltip="${getBadgeTooltip(tool.badge)}">
+                            ${tool.badge}
+                        </span>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-action ${isFavorited ? 'favorited' : ''}" 
+                                onclick="toggleFavorite('${categoryId}', ${index})"
+                                data-tooltip="${isFavorited ? 'Remove from favorites' : 'Add to favorites'}">
+                            ⭐
+                        </button>
+                        <button class="tool-action" 
+                                onclick="copyToolUrl('${url}')"
+                                data-tooltip="Copy URL to clipboard">
+                            📋
+                        </button>
+                    </div>
                 </div>
-                <div class="tool-badges"><span class="badge badge-${t.badge}">${t.badge}</span></div>
-                <div class="tool-actions">
-                    <button class="tool-action ${isFav ? 'favorited' : ''}" onclick="toggleFav('${catId}',${idx})" title="Favorite">⭐</button>
-                    <button class="tool-action" onclick="copyUrl('${url}')" title="Copy">📋</button>
-                </div>
-            </div>`;
+            `;
         }).join('');
 
-        card.innerHTML = `<div class="category-header" onclick="toggleCat(this)">
-            <div class="category-title">
-                <span class="category-icon">${cat.icon}</span>
-                <span class="category-name">${cat.name}</span>
-                <span class="category-count ${active.length > 0 ? 'active' : ''}">${active.length}/${cat.tools.length}</span>
+        // Check if category has visible tools
+        const hasVisibleTools = visibleInCategory > 0 || state.filter === 'all';
+        
+        card.innerHTML = `
+            <div class="category-header" 
+                 onclick="toggleCategory(this)"
+                 data-tooltip="${category.desc || category.name}">
+                <div class="category-title">
+                    <span class="category-icon">${category.icon}</span>
+                    <span class="category-name">${category.name}</span>
+                    <span class="category-count ${activeInCategory > 0 ? 'active' : ''}"
+                          data-tooltip="${activeInCategory} tools have valid URLs / ${category.tools.length} total">
+                        ${activeInCategory}/${category.tools.length}
+                    </span>
+                </div>
+                <span class="category-toggle" data-tooltip="Click to expand/collapse">▼</span>
             </div>
-            <span class="category-toggle">▼</span>
-        </div>
-        <div class="tool-list">${toolsHtml}</div>`;
+            <div class="tool-list">${toolsHtml}</div>
+        `;
+
+        if (!hasVisibleTools) {
+            card.classList.add('filter-hidden');
+        }
+
+        if (activeInCategory > 0) {
+            card.classList.add('has-results');
+        }
+
         grid.appendChild(card);
     });
 
+    // Update stats
     document.getElementById('activeCount').textContent = totalActive;
-    document.getElementById('totalCount').textContent = totalTools;
+    document.getElementById('checkedCount').textContent = state.checkedTools.size;
+    updateVisibleCount();
     updateProgress();
+
+    // Lucky mode - open first result
     if (mode === 'lucky' && state.generatedLinks.length > 0) {
-        window.open(state.generatedLinks[0].url, '_blank');
-        toast(`Opening ${state.generatedLinks[0].name}`, 'success');
+        const firstActive = state.generatedLinks.find(l => {
+            if (state.filter === 'all') return true;
+            return l.badge === state.filter;
+        });
+        if (firstActive) {
+            window.open(firstActive.url, '_blank');
+            toast(`Opening ${firstActive.name}`, 'success');
+        }
     }
+
+    // Store tool elements for filtering
+    state.allToolElements = document.querySelectorAll('.tool-item');
+}
+
+function getBadgeTooltip(badge) {
+    const tooltips = {
+        'free': 'Completely free to use, no payment required',
+        'freemium': 'Free tier available, premium features require payment',
+        'paid': 'Requires payment or subscription to use',
+        'cli': 'Command-line tool - requires terminal and installation'
+    };
+    return tooltips[badge] || badge;
+}
+
+// ============================================
+// FILTER SYSTEM (Fixed)
+// ============================================
+function setFilter(filter) {
+    state.filter = filter;
+    
+    // Update filter pill active states
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.dataset.filter === filter);
+    });
+
+    // Apply filter to all tools
+    applyFilters();
+}
+
+function applyFilters() {
+    let visibleCount = 0;
+
+    document.querySelectorAll('.tool-item').forEach(item => {
+        const badge = item.dataset.badge;
+        const isActive = item.dataset.active === 'true';
+        const nameMatch = state.textFilter === '' || 
+                          item.querySelector('.tool-name').textContent.toLowerCase().includes(state.textFilter) ||
+                          (item.querySelector('.tool-desc')?.textContent.toLowerCase().includes(state.textFilter));
+
+        let showByBadge = false;
+        
+        switch (state.filter) {
+            case 'all':
+                showByBadge = true;
+                break;
+            case 'free':
+                showByBadge = badge === 'free';
+                break;
+            case 'freemium':
+                showByBadge = badge === 'freemium';
+                break;
+            case 'paid':
+                showByBadge = badge === 'paid';
+                break;
+            case 'cli':
+                showByBadge = badge === 'cli';
+                break;
+            case 'active':
+                showByBadge = isActive;
+                break;
+            default:
+                showByBadge = true;
+        }
+
+        const shouldShow = showByBadge && nameMatch;
+        item.classList.toggle('filter-hidden', !shouldShow);
+        
+        if (shouldShow) visibleCount++;
+    });
+
+    // Hide empty categories
+    document.querySelectorAll('.category-card').forEach(card => {
+        const visibleTools = card.querySelectorAll('.tool-item:not(.filter-hidden)');
+        card.classList.toggle('filter-hidden', visibleTools.length === 0);
+    });
+
+    document.getElementById('visibleCount').textContent = visibleCount;
+}
+
+function filterToolsByText(text) {
+    state.textFilter = text.toLowerCase();
+    applyFilters();
 }
 
 // ============================================
 // TOOL ACTIONS
 // ============================================
-function toggleCat(h) { h.closest('.category-card').classList.toggle('collapsed'); }
-function toggleCheck(tid) {
-    state.checkedTools.has(tid) ? state.checkedTools.delete(tid) : state.checkedTools.add(tid);
-    const cb = document.querySelector(`[data-tid="${tid}"] .tool-checkbox`);
-    if (cb) { cb.classList.toggle('checked'); cb.textContent = state.checkedTools.has(tid) ? '✓' : ''; }
+function toggleCategory(header) {
+    header.closest('.category-card').classList.toggle('collapsed');
+}
+
+function toggleCheck(toolId) {
+    if (state.checkedTools.has(toolId)) {
+        state.checkedTools.delete(toolId);
+    } else {
+        state.checkedTools.add(toolId);
+    }
+    
+    const checkbox = document.querySelector(`[data-tool-id="${toolId}"] .tool-checkbox`);
+    if (checkbox) {
+        checkbox.classList.toggle('checked');
+        checkbox.textContent = state.checkedTools.has(toolId) ? '✓' : '';
+    }
+    
     document.getElementById('checkedCount').textContent = state.checkedTools.size;
     updateProgress();
 }
+
 function updateProgress() {
-    const a = parseInt(document.getElementById('activeCount').textContent);
-    const c = state.checkedTools.size;
-    document.getElementById('progressFill').style.width = `${a > 0 ? Math.round(c/a*100) : 0}%`;
+    const active = parseInt(document.getElementById('activeCount').textContent) || 0;
+    const checked = state.checkedTools.size;
+    const percent = active > 0 ? Math.round((checked / active) * 100) : 0;
+    document.getElementById('progressFill').style.width = `${percent}%`;
 }
-function toggleFav(catId, idx) {
-    const t = toolsDB[catId].tools[idx];
-    const i = favorites.findIndex(f => f.name === t.name);
-    if (i >= 0) { favorites.splice(i, 1); toast(`Removed ${t.name}`, 'info'); }
-    else { favorites.push({...t, src: catId}); toast(`Added ${t.name} to favorites`, 'success'); }
+
+function updateVisibleCount() {
+    const visible = document.querySelectorAll('.tool-item:not(.filter-hidden)').length;
+    document.getElementById('visibleCount').textContent = visible;
+}
+
+function toggleFavorite(categoryId, index) {
+    const tool = toolsDB[categoryId].tools[index];
+    const existingIndex = favorites.findIndex(f => f.name === tool.name);
+    
+    if (existingIndex >= 0) {
+        favorites.splice(existingIndex, 1);
+        toast(`Removed ${tool.name} from favorites`, 'info');
+    } else {
+        favorites.push({ ...tool, categoryId });
+        toast(`Added ${tool.name} to favorites`, 'success');
+    }
+    
     localStorage.setItem('spectre-fav', JSON.stringify(favorites));
     renderFavorites();
+    
+    // Update button state
+    const btn = document.querySelector(`[data-tool-id="${categoryId}-${index}"] .tool-action`);
+    if (btn) btn.classList.toggle('favorited');
 }
-function copyUrl(u) { navigator.clipboard.writeText(u); toast('URL copied', 'success'); }
+
+function copyToolUrl(url) {
+    navigator.clipboard.writeText(url);
+    toast('URL copied to clipboard', 'success');
+}
+
 function openAllLinks() {
-    const links = state.generatedLinks.filter(l => !state.checkedTools.has(l.id));
-    if (!links.length) { toast('No links to open', 'warning'); return; }
-    if (links.length > 10 && !confirm(`Open ${links.length} links?`)) return;
-    links.forEach((l, i) => setTimeout(() => { window.open(l.url, '_blank'); toggleCheck(l.id); }, i * 200));
-    toast(`Opening ${links.length} links...`, 'info');
+    const links = state.generatedLinks.filter(link => {
+        if (state.filter === 'all') return !state.checkedTools.has(link.id);
+        if (state.filter === 'active') return !state.checkedTools.has(link.id);
+        return link.badge === state.filter && !state.checkedTools.has(link.id);
+    });
+    
+    if (links.length === 0) {
+        toast('No links to open', 'warning');
+        return;
+    }
+    
+    if (links.length > 10 && !confirm(`Open ${links.length} tabs? This may be resource intensive.`)) {
+        return;
+    }
+    
+    links.forEach((link, index) => {
+        setTimeout(() => {
+            window.open(link.url, '_blank');
+            toggleCheck(link.id);
+        }, index * 200);
+    });
+    
+    toast(`Opening ${links.length} tools...`, 'info');
 }
+
 function copyAllLinks() {
-    navigator.clipboard.writeText(state.generatedLinks.map(l => `${l.name}: ${l.url}`).join('\n'));
-    toast(`Copied ${state.generatedLinks.length} links`, 'success');
+    const links = state.generatedLinks.filter(link => {
+        if (state.filter === 'all') return true;
+        if (state.filter === 'active') return true;
+        return link.badge === state.filter;
+    });
+    
+    const text = links.map(l => `${l.name}: ${l.url}`).join('\n');
+    navigator.clipboard.writeText(text);
+    toast(`Copied ${links.length} URLs`, 'success');
 }
-function expandAll() { document.querySelectorAll('.category-card').forEach(c => c.classList.remove('collapsed')); }
-function collapseAll() { document.querySelectorAll('.category-card').forEach(c => c.classList.add('collapsed')); }
+
+function expandAll() {
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.remove('collapsed');
+    });
+}
+
+function collapseAll() {
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.add('collapsed');
+    });
+}
+
 function clearAll() {
-    document.querySelectorAll('input').forEach(i => { if (!['country','qCountry'].includes(i.id)) i.value = ''; });
-    state.checkedTools.clear(); state.generatedLinks = [];
-    document.getElementById('resultsGrid').innerHTML = '';
-    document.getElementById('emptyState').style.display = '';
-    document.getElementById('activeCount').textContent = '0';
-    document.getElementById('checkedCount').textContent = '0';
-    validateInputs();
-    toast('Cleared', 'info');
+    document.querySelectorAll('input').forEach(input => {
+        if (!['country', 'qCountry'].includes(input.id)) {
+            input.value = '';
+        }
+    });
+    
+    state.checkedTools.clear();
+    state.generatedLinks = [];
+    state.textFilter = '';
+    document.getElementById('toolSearch').value = '';
+    
+    validateInputHighlight();
+    renderAllTools();
+    toast('All fields cleared', 'info');
 }
 
 // ============================================
-// FILTERS
+// CATEGORY SELECTION
 // ============================================
-function setFilter(f) {
-    state.filter = f;
-    document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === f));
-    document.querySelectorAll('.category-card').forEach(c => {
-        const g = c.dataset.group;
-        let show = true;
-        if (f === 'active') show = c.classList.contains('has-results');
-        else if (['people','social','technical','records'].includes(f)) show = g === f;
-        c.style.display = show ? '' : 'none';
+function selectCategory(category) {
+    state.selectedCategory = category;
+    document.querySelectorAll('.cat-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.dataset.cat === category);
     });
-}
-function filterTools(term) {
-    const t = term.toLowerCase();
-    document.querySelectorAll('.tool-item').forEach(i => {
-        const n = i.querySelector('.tool-name')?.textContent.toLowerCase() || '';
-        const d = i.querySelector('.tool-desc')?.textContent.toLowerCase() || '';
-        i.style.display = n.includes(t) || d.includes(t) ? '' : 'none';
-    });
-}
-function selectCategory(cat) {
-    state.selectedCategory = cat;
-    document.querySelectorAll('.cat-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
 }
 
 // ============================================
@@ -1669,47 +2665,113 @@ function toggleAdvanced() {
     document.getElementById('advancedToggle').classList.toggle('open');
     document.getElementById('advancedPanel').classList.toggle('open');
 }
-function toggleExtended() { document.getElementById('extendedBar').classList.toggle('visible'); }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+
+function toggleExtended() {
+    document.getElementById('extendedBar').classList.toggle('visible');
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
 function switchTab(tab) {
-    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== `panel-${tab}`));
+    document.querySelectorAll('.sidebar-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `panel-${tab}`);
+    });
+}
+
+// ============================================
+// PRESETS
+// ============================================
+function applyPreset(preset) {
+    const presetMap = {
+        'person': 'people',
+        'social': 'social',
+        'technical': 'domain',
+        'business': 'business'
+    };
+    
+    state.selectedCategory = presetMap[preset] || 'all';
+    closeDropdowns();
+    renderAllTools();
+    toast(`Applied ${preset} preset`, 'info');
 }
 
 // ============================================
 // HISTORY
 // ============================================
-function saveHistory(v) {
+function saveHistory(values) {
     const parts = [];
-    if (v.first && v.last) parts.push(`${v.First} ${v.Last}`);
-    if (v.username) parts.push(`@${v.username}`);
-    if (v.email) parts.push(v.email);
-    if (v.domain) parts.push(v.domain);
-    const entry = { values: {...v}, display: parts.join(' • ') || 'Search', ts: Date.now() };
+    if (values.first && values.last) parts.push(`${values.First} ${values.Last}`);
+    else if (values.first) parts.push(values.First);
+    if (values.username) parts.push(`@${values.username}`);
+    if (values.email) parts.push(values.email);
+    if (values.domain) parts.push(values.domain);
+    
+    if (parts.length === 0) return;
+    
+    const entry = {
+        values: { ...values },
+        display: parts.join(' • '),
+        timestamp: Date.now()
+    };
+    
     searchHistory.unshift(entry);
     searchHistory = searchHistory.slice(0, 30);
     localStorage.setItem('spectre-hist', JSON.stringify(searchHistory));
     renderHistory();
 }
+
 function renderHistory() {
     const list = document.getElementById('historyList');
     if (!list) return;
-    if (!searchHistory.length) { list.innerHTML = '<div style="padding:0.5rem;color:var(--text-muted);font-size:0.75rem;">No recent searches</div>'; return; }
-    list.innerHTML = searchHistory.slice(0, 15).map((e, i) => `<div class="history-item" onclick="loadHistory(${i})">
-        <span>🔍</span><span class="history-text">${e.display}</span>
-        <span class="history-time">${new Date(e.ts).toLocaleDateString()}</span>
-    </div>`).join('');
+    
+    if (searchHistory.length === 0) {
+        list.innerHTML = '<div style="padding: 0.5rem; color: var(--text-muted); font-size: 0.75rem;">No recent searches</div>';
+        return;
+    }
+    
+    list.innerHTML = searchHistory.slice(0, 15).map((entry, index) => `
+        <div class="history-item" 
+             onclick="loadHistoryEntry(${index})"
+             data-tooltip="Click to load this search">
+            <span>🔍</span>
+            <span class="history-text">${entry.display}</span>
+            <span class="history-time">${new Date(entry.timestamp).toLocaleDateString()}</span>
+        </div>
+    `).join('');
 }
-function loadHistory(i) {
-    const e = searchHistory[i]; if (!e) return;
-    const v = e.values;
-    document.getElementById('qFirst').value = v.first || '';
-    document.getElementById('qLast').value = v.last || '';
-    document.getElementById('qUsername').value = v.username || '';
-    document.getElementById('qEmail').value = v.email || '';
-    runSearch();
+
+function loadHistoryEntry(index) {
+    const entry = searchHistory[index];
+    if (!entry) return;
+    
+    const v = entry.values;
+    document.getElementById('firstName').value = v.first || '';
+    document.getElementById('lastName').value = v.last || '';
+    document.getElementById('username').value = v.username || '';
+    document.getElementById('email').value = v.email || '';
+    document.getElementById('phone').value = v.phone || '';
+    document.getElementById('city').value = v.city || '';
+    document.getElementById('state').value = v.state || '';
+    document.getElementById('domain').value = v.domain || '';
+    document.getElementById('ip').value = v.ip || '';
+    document.getElementById('company').value = v.company || '';
+    
+    validateInputHighlight();
+    renderAllTools();
+    toast('Search loaded', 'info');
 }
-function clearHistory() { searchHistory = []; localStorage.removeItem('spectre-hist'); renderHistory(); toast('History cleared', 'info'); }
+
+function clearHistory() {
+    searchHistory = [];
+    localStorage.removeItem('spectre-hist');
+    renderHistory();
+    toast('History cleared', 'info');
+}
 
 // ============================================
 // FAVORITES
@@ -1717,182 +2779,373 @@ function clearHistory() { searchHistory = []; localStorage.removeItem('spectre-h
 function renderFavorites() {
     const list = document.getElementById('favoritesList');
     if (!list) return;
-    if (!favorites.length) { list.innerHTML = '<div style="padding:0.5rem;color:var(--text-muted);font-size:0.75rem;">No favorites</div>'; return; }
-    list.innerHTML = favorites.map((f, i) => `<div class="fav-item">
-        <span>⭐</span><span class="history-text">${f.name}</span>
-        <button class="btn btn-xs" onclick="removeFav(${i})">✕</button>
-    </div>`).join('');
+    
+    if (favorites.length === 0) {
+        list.innerHTML = '<div style="padding: 0.5rem; color: var(--text-muted); font-size: 0.75rem;">No favorites yet. Click ⭐ on any tool to add it.</div>';
+        return;
+    }
+    
+    list.innerHTML = favorites.map((fav, index) => `
+        <div class="fav-item" data-tooltip="${fav.desc || fav.name}">
+            <span>⭐</span>
+            <span class="history-text">${fav.name}</span>
+            <button class="btn btn-xs" 
+                    onclick="removeFavorite(${index})"
+                    data-tooltip="Remove from favorites">✕</button>
+        </div>
+    `).join('');
 }
-function removeFav(i) { favorites.splice(i, 1); localStorage.setItem('spectre-fav', JSON.stringify(favorites)); renderFavorites(); toast('Removed', 'info'); }
 
-// ============================================
-// PRESETS
-// ============================================
-function applyPreset(p) {
-    const map = { person: 'people', social: 'social', technical: 'domain', business: 'business' };
-    state.selectedCategory = map[p] || 'all';
-    closeDropdowns();
-    runSearch();
+function removeFavorite(index) {
+    const removed = favorites.splice(index, 1)[0];
+    localStorage.setItem('spectre-fav', JSON.stringify(favorites));
+    renderFavorites();
+    toast(`Removed ${removed.name}`, 'info');
 }
 
 // ============================================
 // EXPORT
 // ============================================
-function exportAs(fmt) {
-    const d = state.generatedLinks;
-    if (!d.length) { toast('No results', 'warning'); return; }
+function exportAs(format) {
+    const data = state.generatedLinks.filter(link => {
+        if (state.filter === 'all' || state.filter === 'active') return true;
+        return link.badge === state.filter;
+    });
+    
+    if (data.length === 0) {
+        toast('No results to export', 'warning');
+        return;
+    }
+    
     let content, filename, type;
-    if (fmt === 'json') { content = JSON.stringify(d, null, 2); filename = 'spectre.json'; type = 'application/json'; }
-    else if (fmt === 'csv') { content = 'Category,Name,URL\n' + d.map(x => `"${x.category}","${x.name}","${x.url}"`).join('\n'); filename = 'spectre.csv'; type = 'text/csv'; }
-    else if (fmt === 'markdown') { content = '# SPECTRE Results\n\n' + d.map(x => `- [${x.name}](${x.url}) - ${x.category}`).join('\n'); filename = 'spectre.md'; type = 'text/markdown'; }
+    
+    switch (format) {
+        case 'json':
+            content = JSON.stringify(data, null, 2);
+            filename = 'spectre-results.json';
+            type = 'application/json';
+            break;
+        case 'csv':
+            content = 'Category,Name,URL,Type\n' + data.map(d => 
+                `"${d.category}","${d.name}","${d.url}","${d.badge}"`
+            ).join('\n');
+            filename = 'spectre-results.csv';
+            type = 'text/csv';
+            break;
+        case 'markdown':
+            content = '# SPECTRE OSINT Results\n\n' + 
+                      `Generated: ${new Date().toLocaleString()}\n\n` +
+                      data.map(d => `- [${d.name}](${d.url}) - ${d.category} (${d.badge})`).join('\n');
+            filename = 'spectre-results.md';
+            type = 'text/markdown';
+            break;
+    }
+    
     const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = url;
     a.download = filename;
     a.click();
+    URL.revokeObjectURL(url);
+    
     closeDropdowns();
-    toast(`Exported ${fmt.toUpperCase()}`, 'success');
+    toast(`Exported ${data.length} tools as ${format.toUpperCase()}`, 'success');
 }
 
 // ============================================
 // DROPDOWNS
 // ============================================
 function toggleDropdown(id) {
-    const dd = document.getElementById(id);
-    const open = dd.classList.contains('open');
+    const dropdown = document.getElementById(id);
+    const isOpen = dropdown.classList.contains('open');
     closeDropdowns();
-    if (!open) dd.classList.add('open');
+    if (!isOpen) dropdown.classList.add('open');
 }
-function closeDropdowns() { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); }
-document.addEventListener('click', e => { if (!e.target.closest('.dropdown')) closeDropdowns(); });
+
+function closeDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+}
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+        closeDropdowns();
+    }
+});
 
 // ============================================
 // MODALS
 // ============================================
 function showModal(title, content, buttons = []) {
-    document.getElementById('modalContainer').innerHTML = `<div class="modal-backdrop open" id="activeModal" onclick="if(event.target===this)closeModal()">
-        <div class="modal">
-            <div class="modal-header"><span class="modal-title">${title}</span><button class="modal-close" onclick="closeModal()">&times;</button></div>
-            <div class="modal-body">${content}</div>
-            ${buttons.length ? `<div class="modal-footer">${buttons.map(b => `<button class="btn ${b.class||''}" onclick="${b.action}">${b.text}</button>`).join('')}</div>` : ''}
-        </div>
-    </div>`;
-}
-function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
-function showSettingsModal() {
-    showModal('Settings', `<div class="form-group"><label class="form-label">Theme</label>
-        <select class="form-input" id="setTheme" onchange="setTheme(this.value)">
-            <option value="dark">🌙 Dark</option><option value="light">☀️ Light</option><option value="hacker">💻 Hacker</option>
-        </select></div>
-        <hr style="border-color:var(--border-subtle);margin:1rem 0">
-        <div class="form-group"><label class="form-label">Data</label>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-                <button class="btn btn-sm" onclick="exportData()">📤 Export</button>
-                <button class="btn btn-sm" onclick="clearData()">🗑️ Clear All</button>
+    document.getElementById('modalContainer').innerHTML = `
+        <div class="modal-backdrop open" id="activeModal" onclick="if(event.target===this)closeModal()">
+            <div class="modal">
+                <div class="modal-header">
+                    <span class="modal-title">${title}</span>
+                    <button class="modal-close" onclick="closeModal()" data-tooltip="Close this dialog">&times;</button>
+                </div>
+                <div class="modal-body">${content}</div>
+                ${buttons.length ? `
+                    <div class="modal-footer">
+                        ${buttons.map(b => `<button class="btn ${b.class || ''}" onclick="${b.action}">${b.text}</button>`).join('')}
+                    </div>
+                ` : ''}
             </div>
-        </div>`, [{text:'Close',action:'closeModal()'}]);
-    document.getElementById('setTheme').value = localStorage.getItem('spectre-theme') || 'dark';
+        </div>
+    `;
 }
+
+function closeModal() {
+    document.getElementById('modalContainer').innerHTML = '';
+}
+
+function showSettingsModal() {
+    showModal('Settings', `
+        <div class="form-group">
+            <label class="form-label">Theme</label>
+            <select class="form-input" id="settingsTheme" onchange="setTheme(this.value)">
+                <option value="dark">🌙 Dark - Default dark theme</option>
+                <option value="light">☀️ Light - Bright mode for daytime</option>
+                <option value="hacker">💻 Hacker - Matrix green terminal style</option>
+            </select>
+        </div>
+        <hr style="border-color: var(--border-subtle); margin: 1rem 0;">
+        <div class="form-group">
+            <label class="form-label">Data Management</label>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <button class="btn btn-sm" onclick="exportAllData()" data-tooltip="Download all your saved data as JSON">📤 Export All Data</button>
+                <button class="btn btn-sm" onclick="clearAllData()" data-tooltip="Delete all saved data (history, favorites)">🗑️ Clear All Data</button>
+            </div>
+        </div>
+    `, [{ text: 'Close', action: 'closeModal()' }]);
+    
+    document.getElementById('settingsTheme').value = localStorage.getItem('spectre-theme') || 'dark';
+}
+
 function showAboutModal() {
-    showModal('About SPECTRE', `<div style="text-align:center;margin-bottom:1rem;">
-        <div style="font-size:2.5rem;margin-bottom:0.5rem;">👁️</div>
-        <h2 style="margin:0;">SPECTRE</h2>
-        <p style="color:var(--text-muted);">Open Source Intelligence Platform</p>
-    </div>
-    <p style="color:var(--text-secondary);font-size:0.9rem;">SPECTRE aggregates 500+ OSINT tools for efficient intelligence gathering. Built for researchers, investigators, and security professionals.</p>`, [{text:'Close',action:'closeModal()'}]);
+    const toolCount = Object.values(toolsDB).reduce((sum, cat) => sum + (cat.tools?.length || 0), 0);
+    
+    showModal('About SPECTRE', `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">👁️</div>
+            <h2 style="margin: 0; font-size: 1.5rem;">SPECTRE</h2>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">Open Source Intelligence Platform</p>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">
+            SPECTRE is a comprehensive OSINT aggregation tool designed to streamline intelligence gathering across <strong>${toolCount}+</strong> sources. Built for researchers, investigators, journalists, and security professionals.
+        </p>
+        <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem; font-size: 0.8rem; font-weight: 600;">Key Features:</p>
+            <ul style="margin: 0; padding-left: 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6;">
+                <li>${toolCount}+ OSINT tools across ${Object.keys(toolsDB).length} categories</li>
+                <li>Smart URL generation with multiple input fields</li>
+                <li>Filter by pricing: Free, Freemium, Paid, CLI</li>
+                <li>Search history and favorites</li>
+                <li>Export results in JSON, CSV, Markdown</li>
+                <li>Dark, Light, and Hacker themes</li>
+            </ul>
+        </div>
+    `, [{ text: 'Close', action: 'closeModal()' }]);
 }
+
 function showHelpModal() {
-    showModal('Help', `<h3 style="margin-bottom:0.75rem;">Getting Started</h3>
-    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem;">Enter any combination of search parameters and click Search. SPECTRE generates links to all relevant OSINT tools.</p>
-    <h3 style="margin-bottom:0.75rem;">Tips</h3>
-    <ul style="color:var(--text-secondary);font-size:0.85rem;margin-left:1rem;">
-        <li>Use checkboxes to track visited tools</li>
-        <li>Star tools to add to favorites</li>
-        <li>Use filters to focus on specific categories</li>
-        <li>Export results for documentation</li>
-    </ul>`, [{text:'Close',action:'closeModal()'}]);
+    showModal('Help & Getting Started', `
+        <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Quick Start</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem;">
+            Enter any combination of search parameters (name, username, email, etc.) and click <strong>Search OSINT</strong>. SPECTRE will generate direct links to all relevant tools that support your input.
+        </p>
+        
+        <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Input Fields</h3>
+        <ul style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.8; padding-left: 1.25rem; margin-bottom: 1rem;">
+            <li><strong>Name:</strong> First and last name for people search databases</li>
+            <li><strong>Username:</strong> Social media handle for cross-platform searches</li>
+            <li><strong>Email:</strong> For breach checks and account discovery</li>
+            <li><strong>Phone:</strong> For reverse phone lookups</li>
+            <li><strong>Domain/IP:</strong> For technical reconnaissance</li>
+            <li><strong>Company:</strong> For business intelligence</li>
+        </ul>
+        
+        <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Tips</h3>
+        <ul style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.8; padding-left: 1.25rem;">
+            <li>✅ Use checkboxes to track which tools you've visited</li>
+            <li>⭐ Star tools to add them to favorites for quick access</li>
+            <li>🎯 Use filters to show only Free, Paid, or Active tools</li>
+            <li>💾 Export results for documentation and reports</li>
+            <li>🔍 Use the text filter to find specific tools by name</li>
+        </ul>
+    `, [{ text: 'Got it!', action: 'closeModal()' }]);
 }
+
 function showShortcutsModal() {
-    showModal('Keyboard Shortcuts', `<div style="display:grid;gap:0.5rem;">
-        <div style="display:flex;justify-content:space-between;padding:0.5rem;background:var(--bg-tertiary);border-radius:6px;">
-            <span>Search</span><code style="background:var(--bg-elevated);padding:0.2rem 0.5rem;border-radius:4px;">Ctrl+Enter</code>
+    showModal('Keyboard Shortcuts', `
+        <div style="display: grid; gap: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.6rem; background: var(--bg-tertiary); border-radius: 6px;">
+                <span>Run search</span>
+                <code style="background: var(--bg-elevated); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono);">Ctrl + Enter</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.6rem; background: var(--bg-tertiary); border-radius: 6px;">
+                <span>Filter tools by name</span>
+                <code style="background: var(--bg-elevated); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono);">Ctrl + K</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.6rem; background: var(--bg-tertiary); border-radius: 6px;">
+                <span>Close modal / dropdown</span>
+                <code style="background: var(--bg-elevated); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono);">Escape</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.6rem; background: var(--bg-tertiary); border-radius: 6px;">
+                <span>Return to home</span>
+                <code style="background: var(--bg-elevated); padding: 0.2rem 0.5rem; border-radius: 4px; font-family: var(--font-mono);">Alt + H</code>
+            </div>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:0.5rem;background:var(--bg-tertiary);border-radius:6px;">
-            <span>Filter tools</span><code style="background:var(--bg-elevated);padding:0.2rem 0.5rem;border-radius:4px;">Ctrl+K</code>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:0.5rem;background:var(--bg-tertiary);border-radius:6px;">
-            <span>Go home</span><code style="background:var(--bg-elevated);padding:0.2rem 0.5rem;border-radius:4px;">Alt+H</code>
-        </div>
-    </div>`, [{text:'Close',action:'closeModal()'}]);
+    `, [{ text: 'Close', action: 'closeModal()' }]);
 }
-function exportData() {
-    const data = { favorites, searchHistory, settings: { theme: localStorage.getItem('spectre-theme') } };
+
+function exportAllData() {
+    const data = {
+        favorites,
+        searchHistory,
+        settings: {
+            theme: localStorage.getItem('spectre-theme'),
+            filter: state.filter
+        },
+        exportedAt: new Date().toISOString()
+    };
+    
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = url;
     a.download = 'spectre-backup.json';
     a.click();
-    toast('Data exported', 'success');
+    URL.revokeObjectURL(url);
+    
+    toast('Data exported successfully', 'success');
 }
-function clearData() { if (confirm('Delete ALL data?')) { localStorage.clear(); location.reload(); } }
 
-// ============================================
-// TOAST
-// ============================================
-function toast(msg, type = 'info') {
-    const c = document.getElementById('toastContainer');
-    const t = document.createElement('div');
-    t.className = `toast ${type}`;
-    t.innerHTML = `<span>${{success:'✓',error:'✕',warning:'⚠',info:'ℹ'}[type]||'ℹ'}</span><span>${msg}</span>`;
-    c.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 200); }, 3000);
+function clearAllData() {
+    if (!confirm('This will delete all your saved history, favorites, and settings. Continue?')) {
+        return;
+    }
+    
+    localStorage.clear();
+    location.reload();
 }
 
 // ============================================
-// KEYBOARD
+// TOAST NOTIFICATIONS
 // ============================================
-document.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); runSearch(); }
-    if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('toolSearch')?.focus(); }
-    if (e.key === 'Escape') { closeModal(); closeDropdowns(); }
-    if (e.altKey && e.key === 'h') { e.preventDefault(); goHome(); }
+function toast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast ${type}`;
+    
+    const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+    toastEl.innerHTML = `<span>${icons[type] || 'ℹ'}</span><span>${message}</span>`;
+    
+    container.appendChild(toastEl);
+    
+    setTimeout(() => {
+        toastEl.style.opacity = '0';
+        toastEl.style.transform = 'translateX(100px)';
+        setTimeout(() => toastEl.remove(), 200);
+    }, 3000);
+}
+
+// ============================================
+// KEYBOARD SHORTCUTS
+// ============================================
+document.addEventListener('keydown', (e) => {
+    // Ctrl+Enter - Run search
+    if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        runSearch();
+    }
+    
+    // Ctrl+K - Focus filter
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        const filter = document.getElementById('toolSearch');
+        if (filter) filter.focus();
+    }
+    
+    // Escape - Close modals/dropdowns
+    if (e.key === 'Escape') {
+        closeModal();
+        closeDropdowns();
+    }
+    
+    // Alt+H - Go home
+    if (e.altKey && e.key === 'h') {
+        e.preventDefault();
+        goHome();
+    }
 });
 
 // ============================================
-// MAIN SEARCH INPUT
+// MAIN SEARCH INPUT (Smart Detection)
 // ============================================
-document.getElementById('mainSearchInput')?.addEventListener('keypress', e => {
+document.getElementById('mainSearchInput')?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        const v = e.target.value.trim();
-        if (v.includes('@')) document.getElementById('qEmail').value = v;
-        else if (v.match(/^\d{10,}$/)) document.getElementById('qPhone').value = v;
-        else if (v.match(/^[a-z0-9_]+$/i) && !v.includes(' ')) document.getElementById('qUsername').value = v;
-        else if (v.includes('.') && !v.includes(' ')) document.getElementById('qDomain').value = v;
-        else {
-            const p = v.split(/\s+/);
-            document.getElementById('qFirst').value = p[0] || '';
-            document.getElementById('qLast').value = p.slice(1).join(' ') || '';
+        const value = e.target.value.trim();
+        
+        if (value.includes('@') && value.includes('.')) {
+            // Email
+            document.getElementById('qEmail').value = value;
+        } else if (value.match(/^\d{7,}$/)) {
+            // Phone number
+            document.getElementById('qPhone').value = value;
+        } else if (value.match(/^[a-z0-9_.-]+$/i) && !value.includes(' ') && !value.includes('.')) {
+            // Username
+            document.getElementById('qUsername').value = value;
+        } else if (value.includes('.') && !value.includes(' ') && !value.includes('@')) {
+            // Domain
+            document.getElementById('qDomain').value = value;
+        } else {
+            // Name (split by space)
+            const parts = value.split(/\s+/);
+            document.getElementById('qFirst').value = parts[0] || '';
+            document.getElementById('qLast').value = parts.slice(1).join(' ') || '';
         }
+        
         runSearch();
     }
 });
-document.querySelectorAll('.input-pill input, .quick-field input, .adv-input input').forEach(i => {
-    i.addEventListener('input', validateInputs);
-    i.addEventListener('keypress', e => { if (e.key === 'Enter') runSearch(); });
+
+// Input validation highlighting
+document.querySelectorAll('.input-pill input, .quick-field input, .adv-input input').forEach(input => {
+    input.addEventListener('input', validateInputHighlight);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') runSearch();
+    });
 });
 
 // ============================================
-// INIT
+// INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme
     initTheme();
+    
+    // Render sidebar content
     renderHistory();
     renderFavorites();
-    let total = 0;
-    Object.values(toolsDB).forEach(c => total += c.tools?.length || 0);
-    document.getElementById('totalToolCount').textContent = total;
-    document.getElementById('totalCount').textContent = total;
+    
+    // Count total tools
+    let totalTools = 0;
+    Object.values(toolsDB).forEach(category => {
+        totalTools += category.tools?.length || 0;
+    });
+    document.getElementById('totalToolCount').textContent = totalTools;
+    
+    // Set default filter to FREE and update UI
+    state.filter = 'free';
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.dataset.filter === 'free');
+    });
+    
+    // Focus main search on landing page
     document.getElementById('mainSearchInput')?.focus();
+    
+    console.log(`SPECTRE initialized with ${totalTools} OSINT tools`);
 });
 </script>
 </body>
