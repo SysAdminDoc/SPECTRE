@@ -200,15 +200,15 @@ body.results-mode {
 
 /* Tooltip position variants */
 [data-tooltip-pos="bottom"]::before {
-    bottom: auto;
-    top: calc(100% + 8px);
+    bottom: auto !important;
+    top: calc(100% + 8px) !important;
 }
 
 [data-tooltip-pos="bottom"]::after {
-    bottom: auto;
-    top: calc(100% + 2px);
-    border-top-color: transparent;
-    border-bottom-color: var(--tooltip-border);
+    bottom: auto !important;
+    top: calc(100% + 2px) !important;
+    border-top-color: transparent !important;
+    border-bottom-color: var(--tooltip-border) !important;
 }
 
 [data-tooltip-pos="left"]::before {
@@ -1507,9 +1507,9 @@ body.results-mode {
      ============================================ -->
 <div class="landing-page" id="landingPage">
     <header class="landing-header">
-        <a href="#" class="header-link" data-tooltip="Learn about SPECTRE and its capabilities" onclick="showAboutModal(); return false;">About</a>
-        <a href="#" class="header-link" data-tooltip="Configure application preferences and export data" onclick="showSettingsModal(); return false;">Settings</a>
-        <select class="select" id="themeSelectLanding" data-tooltip="Change the visual theme of the interface" onchange="setTheme(this.value)">
+        <a href="#" class="header-link" data-tooltip="Learn about SPECTRE and its capabilities" data-tooltip-pos="bottom" onclick="showAboutModal(); return false;">About</a>
+        <a href="#" class="header-link" data-tooltip="Configure application preferences and export data" data-tooltip-pos="bottom" onclick="showSettingsModal(); return false;">Settings</a>
+        <select class="select" id="themeSelectLanding" data-tooltip="Change the visual theme of the interface" data-tooltip-pos="bottom" onchange="setTheme(this.value)">
             <option value="dark">🌙 Dark</option>
             <option value="light">☀️ Light</option>
             <option value="hacker">💻 Hacker</option>
@@ -1649,66 +1649,66 @@ body.results-mode {
      ============================================ -->
 <div class="results-page" id="resultsPage">
     <header class="results-header">
-        <a class="results-logo" onclick="goHome()" data-tooltip="Return to the main search page">
+        <a class="results-logo" onclick="goHome()" data-tooltip="Return to the main search page" data-tooltip-pos="bottom">
             <div class="results-logo-icon">👁️</div>
             <span class="results-logo-text">SPECTRE</span>
         </a>
 
         <div class="results-inputs" id="resultsInputs">
-            <div class="input-pill" data-tooltip="Person's first name">
+            <div class="input-pill" data-tooltip="Person's first name" data-tooltip-pos="bottom">
                 <label>First</label>
                 <input type="text" id="firstName" placeholder="John" title="First name">
             </div>
-            <div class="input-pill" data-tooltip="Person's last name">
+            <div class="input-pill" data-tooltip="Person's last name" data-tooltip-pos="bottom">
                 <label>Last</label>
                 <input type="text" id="lastName" placeholder="Doe" title="Last name">
             </div>
-            <div class="input-pill" data-tooltip="Social media username">
+            <div class="input-pill" data-tooltip="Social media username" data-tooltip-pos="bottom">
                 <label>User</label>
                 <input type="text" id="username" class="w-lg" placeholder="username" title="Username">
             </div>
-            <div class="input-pill" data-tooltip="Email address for lookups">
+            <div class="input-pill" data-tooltip="Email address for lookups" data-tooltip-pos="bottom">
                 <label>Email</label>
                 <input type="email" id="email" class="w-xl" placeholder="email@example.com" title="Email">
             </div>
-            <div class="input-pill" data-tooltip="Phone number">
+            <div class="input-pill" data-tooltip="Phone number" data-tooltip-pos="bottom">
                 <label>Phone</label>
                 <input type="tel" id="phone" placeholder="555-1234" title="Phone">
             </div>
-            <button class="btn btn-icon btn-sm" onclick="toggleExtended()" data-tooltip="Show/hide additional input fields like domain, IP, company, address" title="More fields">⚙️</button>
-            <button class="btn btn-primary btn-sm" onclick="runSearch()" data-tooltip="Re-run search with current parameters" title="Search">🔍</button>
+            <button class="btn btn-icon btn-sm" onclick="toggleExtended()" data-tooltip="Show/hide additional input fields like domain, IP, company, address" data-tooltip-pos="bottom" title="More fields">⚙️</button>
+            <button class="btn btn-primary btn-sm" onclick="runSearch()" data-tooltip="Re-run search with current parameters" data-tooltip-pos="bottom" title="Search">🔍</button>
         </div>
 
         <div class="header-actions">
-            <select class="select" id="themeSelectResults" onchange="setTheme(this.value)" data-tooltip="Change visual theme" title="Theme">
+            <select class="select" id="themeSelectResults" onchange="setTheme(this.value)" data-tooltip="Change visual theme" data-tooltip-pos="bottom" title="Theme">
                 <option value="dark">🌙</option>
                 <option value="light">☀️</option>
                 <option value="hacker">💻</option>
             </select>
-            <button class="btn btn-icon btn-sm" onclick="toggleSidebar()" data-tooltip="Show/hide the sidebar with history and favorites" title="Toggle sidebar">📋</button>
-            <button class="btn btn-icon btn-sm" onclick="showSettingsModal()" data-tooltip="Open application settings" title="Settings">⚙️</button>
+            <button class="btn btn-icon btn-sm" onclick="toggleSidebar()" data-tooltip="Show/hide the sidebar with history and favorites" data-tooltip-pos="bottom" title="Toggle sidebar">📋</button>
+            <button class="btn btn-icon btn-sm" onclick="showSettingsModal()" data-tooltip="Open application settings" data-tooltip-pos="bottom" title="Settings">⚙️</button>
         </div>
     </header>
 
     <div class="extended-bar" id="extendedBar">
-        <div class="input-pill" data-tooltip="City name"><label>City</label><input type="text" id="city" placeholder="Denver" title="City"></div>
-        <div class="input-pill" data-tooltip="State code (2 letters)"><label>ST</label><input type="text" id="state" class="w-sm" maxlength="2" placeholder="CO" title="State"></div>
-        <div class="input-pill" data-tooltip="Website domain"><label>Domain</label><input type="text" id="domain" class="w-lg" placeholder="example.com" title="Domain"></div>
-        <div class="input-pill" data-tooltip="IP address"><label>IP</label><input type="text" id="ip" placeholder="192.168.1.1" title="IP"></div>
-        <div class="input-pill" data-tooltip="Company name"><label>Company</label><input type="text" id="company" class="w-lg" placeholder="Acme Inc" title="Company"></div>
-        <div class="input-pill" data-tooltip="Street address"><label>Street</label><input type="text" id="streetAddress" class="w-xl" placeholder="123 Main St" title="Street"></div>
-        <div class="input-pill" data-tooltip="ZIP/Postal code"><label>ZIP</label><input type="text" id="zip" class="w-sm" placeholder="80014" title="ZIP"></div>
-        <div class="input-pill" data-tooltip="Country code"><label>Country</label><input type="text" id="country" class="w-sm" value="US" title="Country"></div>
-        <div class="input-pill" data-tooltip="Direct image URL for reverse search"><label>Image</label><input type="url" id="imageUrl" class="w-xl" placeholder="https://..." title="Image URL"></div>
-        <div class="input-pill" data-tooltip="Vehicle Identification Number"><label>VIN</label><input type="text" id="vin" class="w-xl" placeholder="1HGBH41JXMN..." title="VIN"></div>
-        <div class="input-pill" data-tooltip="License plate number"><label>Plate</label><input type="text" id="licensePlate" placeholder="ABC123" title="License Plate"></div>
-        <div class="input-pill" data-tooltip="Crypto wallet address"><label>Crypto</label><input type="text" id="cryptoAddress" class="w-xl" placeholder="0x..." title="Crypto Address"></div>
+        <div class="input-pill" data-tooltip="City name" data-tooltip-pos="bottom"><label>City</label><input type="text" id="city" placeholder="Denver" title="City"></div>
+        <div class="input-pill" data-tooltip="State code (2 letters)" data-tooltip-pos="bottom"><label>ST</label><input type="text" id="state" class="w-sm" maxlength="2" placeholder="CO" title="State"></div>
+        <div class="input-pill" data-tooltip="Website domain" data-tooltip-pos="bottom"><label>Domain</label><input type="text" id="domain" class="w-lg" placeholder="example.com" title="Domain"></div>
+        <div class="input-pill" data-tooltip="IP address" data-tooltip-pos="bottom"><label>IP</label><input type="text" id="ip" placeholder="192.168.1.1" title="IP"></div>
+        <div class="input-pill" data-tooltip="Company name" data-tooltip-pos="bottom"><label>Company</label><input type="text" id="company" class="w-lg" placeholder="Acme Inc" title="Company"></div>
+        <div class="input-pill" data-tooltip="Street address" data-tooltip-pos="bottom"><label>Street</label><input type="text" id="streetAddress" class="w-xl" placeholder="123 Main St" title="Street"></div>
+        <div class="input-pill" data-tooltip="ZIP/Postal code" data-tooltip-pos="bottom"><label>ZIP</label><input type="text" id="zip" class="w-sm" placeholder="80014" title="ZIP"></div>
+        <div class="input-pill" data-tooltip="Country code" data-tooltip-pos="bottom"><label>Country</label><input type="text" id="country" class="w-sm" value="US" title="Country"></div>
+        <div class="input-pill" data-tooltip="Direct image URL for reverse search" data-tooltip-pos="bottom"><label>Image</label><input type="url" id="imageUrl" class="w-xl" placeholder="https://..." title="Image URL"></div>
+        <div class="input-pill" data-tooltip="Vehicle Identification Number" data-tooltip-pos="bottom"><label>VIN</label><input type="text" id="vin" class="w-xl" placeholder="1HGBH41JXMN..." title="VIN"></div>
+        <div class="input-pill" data-tooltip="License plate number" data-tooltip-pos="bottom"><label>Plate</label><input type="text" id="licensePlate" placeholder="ABC123" title="License Plate"></div>
+        <div class="input-pill" data-tooltip="Crypto wallet address" data-tooltip-pos="bottom"><label>Crypto</label><input type="text" id="cryptoAddress" class="w-xl" placeholder="0x..." title="Crypto Address"></div>
     </div>
 
     <div class="controls-bar">
         <div class="controls-section">
             <div class="dropdown" id="presetsDropdown">
-                <button class="btn btn-sm" onclick="toggleDropdown('presetsDropdown')" data-tooltip="Load pre-configured search presets for common investigation types">⚡ Presets</button>
+                <button class="btn btn-sm" onclick="toggleDropdown('presetsDropdown')" data-tooltip="Load pre-configured search presets for common investigation types" data-tooltip-pos="bottom">⚡ Presets</button>
                 <div class="dropdown-menu">
                     <div class="dropdown-header">Quick Presets</div>
                     <div class="dropdown-item" onclick="applyPreset('person')" data-tooltip="Focus on people search, public records, and background checks">👤 Person Dossier</div>
@@ -1722,7 +1722,7 @@ body.results-mode {
         <div class="divider"></div>
         
         <div class="controls-section">
-            <div class="filter-search" data-tooltip="Type to filter tools by name - matches are highlighted instantly">
+            <div class="filter-search" data-tooltip="Type to filter tools by name - matches are highlighted instantly" data-tooltip-pos="bottom">
                 <input type="text" id="toolSearch" placeholder="Filter tools..." oninput="filterToolsByText(this.value)" title="Type to filter tools by name">
             </div>
         </div>
@@ -1730,17 +1730,17 @@ body.results-mode {
         <div class="divider"></div>
         
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="expandAll()" data-tooltip="Expand all category cards to show all tools">⬇️ Expand</button>
-            <button class="btn btn-sm" onclick="collapseAll()" data-tooltip="Collapse all category cards to show only headers">⬆️ Collapse</button>
+            <button class="btn btn-sm" onclick="expandAll()" data-tooltip="Expand all category cards to show all tools" data-tooltip-pos="bottom">⬇️ Expand</button>
+            <button class="btn btn-sm" onclick="collapseAll()" data-tooltip="Collapse all category cards to show only headers" data-tooltip-pos="bottom">⬆️ Collapse</button>
         </div>
         
         <div class="divider"></div>
         
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="openAllLinks()" data-tooltip="Open all active/visible tools in new browser tabs (with 200ms delay between each)">🚀 Open All</button>
-            <button class="btn btn-sm" onclick="copyAllLinks()" data-tooltip="Copy all generated URLs to clipboard as a formatted list">📋 Copy</button>
+            <button class="btn btn-sm" onclick="openAllLinks()" data-tooltip="Open all active/visible tools in new browser tabs (with 200ms delay between each)" data-tooltip-pos="bottom">🚀 Open All</button>
+            <button class="btn btn-sm" onclick="copyAllLinks()" data-tooltip="Copy all generated URLs to clipboard as a formatted list" data-tooltip-pos="bottom">📋 Copy</button>
             <div class="dropdown" id="exportDropdown">
-                <button class="btn btn-sm" onclick="toggleDropdown('exportDropdown')" data-tooltip="Export search results in various formats for documentation">💾 Export</button>
+                <button class="btn btn-sm" onclick="toggleDropdown('exportDropdown')" data-tooltip="Export search results in various formats for documentation" data-tooltip-pos="bottom">💾 Export</button>
                 <div class="dropdown-menu right">
                     <div class="dropdown-item" onclick="exportAs('json')" data-tooltip="Export as JSON file for programmatic use">📄 JSON</div>
                     <div class="dropdown-item" onclick="exportAs('csv')" data-tooltip="Export as CSV spreadsheet for Excel/Sheets">📊 CSV</div>
@@ -1752,45 +1752,45 @@ body.results-mode {
         <div class="divider"></div>
         
         <div class="controls-section">
-            <button class="btn btn-sm" onclick="clearAll()" data-tooltip="Clear all input fields and reset the search">✕ Clear</button>
+            <button class="btn btn-sm" onclick="clearAll()" data-tooltip="Clear all input fields and reset the search" data-tooltip-pos="bottom">✕ Clear</button>
         </div>
     </div>
 
     <div class="stats-bar">
         <div class="stat-group">
-            <div class="stat" data-tooltip="Number of tools that have valid URLs based on your input parameters">
+            <div class="stat" data-tooltip="Number of tools that have valid URLs based on your input parameters" data-tooltip-pos="bottom">
                 <span class="stat-value" id="activeCount">0</span>
                 <span class="stat-label">Active</span>
             </div>
-            <div class="stat" data-tooltip="Number of tools you've marked as visited/checked">
+            <div class="stat" data-tooltip="Number of tools you've marked as visited/checked" data-tooltip-pos="bottom">
                 <span class="stat-value" id="checkedCount">0</span>
                 <span class="stat-label">Checked</span>
             </div>
-            <div class="stat" data-tooltip="Total number of tools currently visible (filtered)">
+            <div class="stat" data-tooltip="Total number of tools currently visible (filtered)" data-tooltip-pos="bottom">
                 <span class="stat-value" id="visibleCount">0</span>
                 <span class="stat-label">Visible</span>
             </div>
-            <div class="progress-bar" data-tooltip="Progress: percentage of active tools you've checked">
+            <div class="progress-bar" data-tooltip="Progress: percentage of active tools you've checked" data-tooltip-pos="bottom">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
         </div>
         
         <div class="filter-pills">
-            <button class="filter-pill" data-filter="all" onclick="setFilter('all')" data-tooltip="Show all tools regardless of pricing model">All</button>
-            <button class="filter-pill active" data-filter="free" onclick="setFilter('free')" data-tooltip="Show only completely free tools (no payment required)">Free Only</button>
-            <button class="filter-pill" data-filter="freemium" onclick="setFilter('freemium')" data-tooltip="Show tools with free tier but paid upgrades available">Freemium</button>
-            <button class="filter-pill" data-filter="paid" onclick="setFilter('paid')" data-tooltip="Show tools that require payment to use">Paid</button>
-            <button class="filter-pill" data-filter="cli" onclick="setFilter('cli')" data-tooltip="Show command-line tools (requires terminal/installation)">CLI</button>
+            <button class="filter-pill" data-filter="all" onclick="setFilter('all')" data-tooltip="Show all tools regardless of pricing model" data-tooltip-pos="bottom">All</button>
+            <button class="filter-pill active" data-filter="free" onclick="setFilter('free')" data-tooltip="Show only completely free tools (no payment required)" data-tooltip-pos="bottom">Free Only</button>
+            <button class="filter-pill" data-filter="freemium" onclick="setFilter('freemium')" data-tooltip="Show tools with free tier but paid upgrades available" data-tooltip-pos="bottom">Freemium</button>
+            <button class="filter-pill" data-filter="paid" onclick="setFilter('paid')" data-tooltip="Show tools that require payment to use" data-tooltip-pos="bottom">Paid</button>
+            <button class="filter-pill" data-filter="cli" onclick="setFilter('cli')" data-tooltip="Show command-line tools (requires terminal/installation)" data-tooltip-pos="bottom">CLI</button>
             <span class="divider"></span>
-            <button class="filter-pill" data-filter="active" onclick="setFilter('active')" data-tooltip="Show only tools that have valid URLs based on your current input">Active Only</button>
+            <button class="filter-pill" data-filter="active" onclick="setFilter('active')" data-tooltip="Show only tools that have valid URLs based on your current input" data-tooltip-pos="bottom">Active Only</button>
         </div>
     </div>
 
     <div class="main-wrapper">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-tabs">
-                <div class="sidebar-tab active" data-tab="history" onclick="switchTab('history')" data-tooltip="View your recent searches">📜 History</div>
-                <div class="sidebar-tab" data-tab="favorites" onclick="switchTab('favorites')" data-tooltip="View your favorited tools">⭐ Favorites</div>
+                <div class="sidebar-tab active" data-tab="history" onclick="switchTab('history')" data-tooltip="View your recent searches" data-tooltip-pos="bottom">📜 History</div>
+                <div class="sidebar-tab" data-tab="favorites" onclick="switchTab('favorites')" data-tooltip="View your favorited tools" data-tooltip-pos="bottom">⭐ Favorites</div>
             </div>
             <div class="sidebar-content">
                 <div class="tab-panel" id="panel-history">
