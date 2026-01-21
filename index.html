@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPECTRE | OSINT Intelligence Platform</title>
+    <meta name="description" content="SPECTRE - Open Source Intelligence Platform with 500+ OSINT tools for researchers, investigators, and security professionals.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Modular CSS (load in order) -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/utilities.css">
+</head>
+<body>
+
+<!-- ============================================
+     LANDING PAGE
+     ============================================ -->
+<div class="landing-page" id="landingPage">
+    <header class="landing-header">
+        <a href="#" class="header-link" data-tooltip="Learn about SPECTRE and its capabilities" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showAboutModal(); return false;">About</a>
+        <a href="#" class="header-link" data-tooltip="Configure application preferences and export data" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showSettingsModal(); return false;">Settings</a>
+        <a href="#" class="header-link" data-tooltip="Keyboard shortcuts and help" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showHelpModal(); return false;">Help</a>
+        <select class="select" id="themeSelectLanding" data-tooltip="Change the visual theme of the interface" data-tooltip-pos="bottom" onchange="SPECTRE.ui.setTheme(this.value)">
+            <option value="dark">🌙 Dark</option>
+            <option value="light">☀️ Light</option>
+            <option value="hacker">💻 Hacker</option>
+            <option value="nord">❄️ Nord</option>
+            <option value="high-contrast">🔲 High Contrast</option>
+        </select>
+    </header>
+
+    <main class="landing-main">
+        <div class="logo-container">
+            <div class="logo-icon" data-tooltip="SPECTRE - Systematic Platform for Efficient Collection, Tracking, and Research of Evidence">👁️</div>
+            <div class="logo-text">SPECTRE</div>
+            <div class="logo-tagline">Open Source Intelligence</div>
+        </div>
+
+        <div class="search-container" data-tooltip="Smart search: Auto-detects emails (@), phones (numbers), usernames, domains (.com), or names (First Last)">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="mainSearchInput" 
+                    placeholder="Search by name, username, email, phone, domain..." 
+                    autocomplete="off"
+                    title="Type anything - SPECTRE auto-detects the input type. Press Enter to search.">
+            </div>
+        </div>
+
+        <div class="quick-fields" id="quickFields">
+            <div class="quick-field" data-tooltip="Person's first/given name for people search databases">
+                <label>First</label>
+                <input type="text" id="qFirst" placeholder="John" title="Enter first name">
+            </div>
+            <div class="quick-field" data-tooltip="Person's last/family name for people search databases">
+                <label>Last</label>
+                <input type="text" id="qLast" placeholder="Doe" title="Enter last name">
+            </div>
+            <div class="quick-field" data-tooltip="Social media handle or account name (without @) for cross-platform searches">
+                <label>Username</label>
+                <input type="text" id="qUsername" class="w-lg" placeholder="johndoe123" title="Enter username/handle">
+            </div>
+            <div class="quick-field" data-tooltip="Email address for breach checks, account discovery, and email intelligence">
+                <label>Email</label>
+                <input type="email" id="qEmail" class="w-lg" placeholder="john@example.com" title="Enter email address">
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button class="btn btn-primary" onclick="SPECTRE.app.runSearch()" data-tooltip="Generate links to all matching OSINT tools based on your input parameters">
+                🔍 Search OSINT
+            </button>
+            <button class="btn" onclick="SPECTRE.app.runSearch('lucky')" data-tooltip="Immediately open the first matching tool - great for quick lookups">
+                ⚡ I'm Feeling Lucky
+            </button>
+        </div>
+
+        <div class="advanced-toggle" id="advancedToggle" onclick="SPECTRE.ui.toggleAdvanced()" data-tooltip="Show additional search fields like phone, address, domain, IP, and more">
+            <span>Advanced Options</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        </div>
+
+        <div class="advanced-panel" id="advancedPanel">
+            <div class="advanced-grid">
+                <div class="adv-input" data-tooltip="Phone number for reverse phone lookups and caller ID services">
+                    <label>Phone</label>
+                    <input type="tel" id="qPhone" placeholder="555-123-4567" title="Enter phone number (any format)">
+                </div>
+                <div class="adv-input" data-tooltip="City name to narrow down people search results">
+                    <label>City</label>
+                    <input type="text" id="qCity" placeholder="New York" title="Enter city name">
+                </div>
+                <div class="adv-input" data-tooltip="US state abbreviation (2 letters) for location-based searches">
+                    <label>State</label>
+                    <input type="text" id="qState" placeholder="NY" maxlength="2" title="Enter 2-letter state code">
+                </div>
+                <div class="adv-input" data-tooltip="Website domain for WHOIS, DNS, certificate, and technology lookups">
+                    <label>Domain</label>
+                    <input type="text" id="qDomain" placeholder="example.com" title="Enter domain (without http://)">
+                </div>
+                <div class="adv-input" data-tooltip="IP address (IPv4/IPv6) for geolocation, reputation, and network analysis">
+                    <label>IP Address</label>
+                    <input type="text" id="qIP" placeholder="192.168.1.1" title="Enter IP address">
+                </div>
+                <div class="adv-input" data-tooltip="Business/company name for corporate filings, SEC records, and business intel">
+                    <label>Company</label>
+                    <input type="text" id="qCompany" placeholder="Acme Inc" title="Enter company name">
+                </div>
+                <div class="adv-input" data-tooltip="Street address for property records, mapping, and geolocation tools">
+                    <label>Street</label>
+                    <input type="text" id="qStreet" placeholder="123 Main St" title="Enter street address">
+                </div>
+                <div class="adv-input" data-tooltip="ZIP/postal code for location-based searches">
+                    <label>ZIP</label>
+                    <input type="text" id="qZip" placeholder="10001" title="Enter ZIP code">
+                </div>
+                <div class="adv-input" data-tooltip="Direct URL to an image for reverse image search and facial recognition">
+                    <label>Image URL</label>
+                    <input type="url" id="qImageUrl" placeholder="https://..." title="Enter direct image URL">
+                </div>
+                <div class="adv-input" data-tooltip="Vehicle Identification Number (17 chars) for vehicle history and recalls">
+                    <label>VIN</label>
+                    <input type="text" id="qVIN" placeholder="1HGBH41JXMN..." maxlength="17" title="Enter 17-character VIN">
+                </div>
+                <div class="adv-input" data-tooltip="Cryptocurrency wallet address (BTC, ETH, etc.) for blockchain analysis">
+                    <label>Crypto</label>
+                    <input type="text" id="qCrypto" placeholder="0x..." title="Enter crypto wallet address">
+                </div>
+                <div class="adv-input" data-tooltip="Country code for international searches (default: US)">
+                    <label>Country</label>
+                    <input type="text" id="qCountry" placeholder="US" value="US" title="Enter country code">
+                </div>
+            </div>
+        </div>
+
+        <div class="category-pills" id="categoryPills">
+            <span class="cat-pill active" data-cat="all" onclick="SPECTRE.app.selectCategory('all')" data-tooltip="Search across all OSINT tool categories">All Tools</span>
+            <span class="cat-pill" data-cat="people" onclick="SPECTRE.app.selectCategory('people')" data-tooltip="People search engines, background checks, public records">👤 People</span>
+            <span class="cat-pill" data-cat="social" onclick="SPECTRE.app.selectCategory('social')" data-tooltip="Social media profiles and cross-platform searches">💬 Social</span>
+            <span class="cat-pill" data-cat="username" onclick="SPECTRE.app.selectCategory('username')" data-tooltip="Username enumeration across 400+ platforms">🔎 Username</span>
+            <span class="cat-pill" data-cat="email" onclick="SPECTRE.app.selectCategory('email')" data-tooltip="Email verification, breach checks, account discovery">📧 Email</span>
+            <span class="cat-pill" data-cat="phone" onclick="SPECTRE.app.selectCategory('phone')" data-tooltip="Reverse phone lookups and carrier identification">📱 Phone</span>
+            <span class="cat-pill" data-cat="domain" onclick="SPECTRE.app.selectCategory('domain')" data-tooltip="WHOIS, DNS, certificates, and technology stack">🌐 Domain</span>
+            <span class="cat-pill" data-cat="ip" onclick="SPECTRE.app.selectCategory('ip')" data-tooltip="IP geolocation, reputation, and network analysis">📌 IP</span>
+            <span class="cat-pill" data-cat="breach" onclick="SPECTRE.app.selectCategory('breach')" data-tooltip="Data breach search and leaked credentials">🔓 Breach</span>
+            <span class="cat-pill" data-cat="image" onclick="SPECTRE.app.selectCategory('image')" data-tooltip="Reverse image search and facial recognition">🖼️ Image</span>
+            <span class="cat-pill" data-cat="archive" onclick="SPECTRE.app.selectCategory('archive')" data-tooltip="Historical snapshots and cached versions">🗄️ Archive</span>
+            <span class="cat-pill" data-cat="business" onclick="SPECTRE.app.selectCategory('business')" data-tooltip="Corporate filings, SEC records, company intel">🏢 Business</span>
+            <span class="cat-pill" data-cat="search" onclick="SPECTRE.app.selectCategory('search')" data-tooltip="General search engines and advanced queries">🔍 Search</span>
+            <span class="cat-pill" data-cat="frameworks" onclick="SPECTRE.app.selectCategory('frameworks')" data-tooltip="OSINT frameworks, toolkits, and resources">🔧 Frameworks</span>
+        </div>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="footer-section">
+            <span class="tool-count">
+                <strong id="totalToolCount">0</strong> OSINT tools available
+            </span>
+        </div>
+        <div class="footer-section">
+            <a href="#" class="footer-link" onclick="SPECTRE.ui.showShortcutsModal(); return false;" data-tooltip="View keyboard shortcuts">⌨️ Shortcuts</a>
+            <a href="https://github.com/spectre-osint" class="footer-link" target="_blank" data-tooltip="View source on GitHub">GitHub</a>
+        </div>
+    </footer>
+</div>
+
+<!-- ============================================
+     RESULTS PAGE
+     ============================================ -->
+<div class="results-page" id="resultsPage">
+    <header class="results-header">
+        <a href="#" class="results-logo" onclick="SPECTRE.app.goHome(); return false;" data-tooltip="Return to landing page">
+            <div class="results-logo-icon">👁️</div>
+            <span class="results-logo-text">SPECTRE</span>
+        </a>
+        
+        <div class="results-inputs">
+            <div class="input-pill" data-tooltip="First name">
+                <label>First</label>
+                <input type="text" id="firstName" placeholder="John" onchange="SPECTRE.app.validateInputHighlight()">
+            </div>
+            <div class="input-pill" data-tooltip="Last name">
+                <label>Last</label>
+                <input type="text" id="lastName" placeholder="Doe" onchange="SPECTRE.app.validateInputHighlight()">
+            </div>
+            <div class="input-pill" data-tooltip="Username/handle">
+                <label>User</label>
+                <input type="text" id="username" placeholder="johndoe" onchange="SPECTRE.app.validateInputHighlight()">
+            </div>
+            <div class="input-pill" data-tooltip="Email address">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="email@example.com" onchange="SPECTRE.app.validateInputHighlight()">
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <button class="btn btn-sm" onclick="SPECTRE.ui.toggleExtended()" data-tooltip="Toggle additional input fields" data-tooltip-pos="bottom">+ More</button>
+            <button class="btn btn-sm btn-primary" onclick="SPECTRE.app.renderAllTools()" data-tooltip="Refresh results with current inputs" data-tooltip-pos="bottom">Search</button>
+            <select class="select" id="themeSelectResults" data-tooltip="Change theme" data-tooltip-pos="bottom" onchange="SPECTRE.ui.setTheme(this.value)">
+                <option value="dark">🌙</option>
+                <option value="light">☀️</option>
+                <option value="hacker">💻</option>
+                <option value="nord">❄️</option>
+                <option value="high-contrast">🔲</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="extended-bar" id="extendedBar">
+        <div class="input-pill" data-tooltip="Phone number">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="555-1234">
+        </div>
+        <div class="input-pill" data-tooltip="City">
+            <label>City</label>
+            <input type="text" id="city" placeholder="New York">
+        </div>
+        <div class="input-pill" data-tooltip="State code">
+            <label>State</label>
+            <input type="text" id="state" placeholder="NY" maxlength="2">
+        </div>
+        <div class="input-pill" data-tooltip="Website domain">
+            <label>Domain</label>
+            <input type="text" id="domain" placeholder="example.com">
+        </div>
+        <div class="input-pill" data-tooltip="IP address">
+            <label>IP</label>
+            <input type="text" id="ip" placeholder="192.168.1.1">
+        </div>
+        <div class="input-pill" data-tooltip="Company name">
+            <label>Company</label>
+            <input type="text" id="company" placeholder="Acme Inc">
+        </div>
+        <div class="input-pill" data-tooltip="Street address">
+            <label>Street</label>
+            <input type="text" id="streetAddress" placeholder="123 Main St">
+        </div>
+        <div class="input-pill" data-tooltip="ZIP code">
+            <label>ZIP</label>
+            <input type="text" id="zip" placeholder="10001">
+        </div>
+        <div class="input-pill" data-tooltip="Image URL for reverse search">
+            <label>Image</label>
+            <input type="url" id="imageUrl" placeholder="https://...">
+        </div>
+        <div class="input-pill" data-tooltip="VIN number">
+            <label>VIN</label>
+            <input type="text" id="vin" placeholder="1HGBH41J...">
+        </div>
+        <div class="input-pill" data-tooltip="Crypto wallet">
+            <label>Crypto</label>
+            <input type="text" id="crypto" placeholder="0x...">
+        </div>
+        <div class="input-pill" data-tooltip="Country code">
+            <label>Country</label>
+            <input type="text" id="country" placeholder="US" value="US">
+        </div>
+    </div>
+
+    <div class="controls-bar">
+        <div class="controls-section">
+            <button class="btn btn-sm" onclick="SPECTRE.ui.toggleSidebar()" data-tooltip="Toggle sidebar panel" data-tooltip-pos="bottom">☰</button>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="controls-section">
+            <div class="dropdown" id="presetsDropdown">
+                <button class="btn btn-sm" onclick="SPECTRE.ui.toggleDropdown('presetsDropdown')" data-tooltip="Load pre-configured search presets" data-tooltip-pos="bottom">⚡ Presets</button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">Quick Presets</div>
+                    <div class="dropdown-item" onclick="SPECTRE.app.applyPreset('person')" data-tooltip="Focus on people search">👤 Person Dossier</div>
+                    <div class="dropdown-item" onclick="SPECTRE.app.applyPreset('social')" data-tooltip="Focus on social media">📱 Social Sweep</div>
+                    <div class="dropdown-item" onclick="SPECTRE.app.applyPreset('technical')" data-tooltip="Focus on domain/IP tools">🔧 Technical Recon</div>
+                    <div class="dropdown-item" onclick="SPECTRE.app.applyPreset('business')" data-tooltip="Focus on business intel">🏢 Business Intel</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="controls-section">
+            <div class="filter-search" data-tooltip="Type to filter tools by name" data-tooltip-pos="bottom">
+                <input type="text" id="toolSearch" placeholder="Filter tools..." oninput="SPECTRE.app.filterToolsByText(this.value)">
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="controls-section">
+            <button class="btn btn-sm" onclick="SPECTRE.app.expandAll()" data-tooltip="Expand all categories" data-tooltip-pos="bottom">⬇️ Expand</button>
+            <button class="btn btn-sm" onclick="SPECTRE.app.collapseAll()" data-tooltip="Collapse all categories" data-tooltip-pos="bottom">⬆️ Collapse</button>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="controls-section">
+            <button class="btn btn-sm" onclick="SPECTRE.app.openAllLinks()" data-tooltip="Open all active tools in new tabs" data-tooltip-pos="bottom">🚀 Open All</button>
+            <button class="btn btn-sm" onclick="SPECTRE.app.copyAllLinks()" data-tooltip="Copy all URLs to clipboard" data-tooltip-pos="bottom">📋 Copy</button>
+            <div class="dropdown" id="exportDropdown">
+                <button class="btn btn-sm" onclick="SPECTRE.ui.toggleDropdown('exportDropdown')" data-tooltip="Export results" data-tooltip-pos="bottom">💾 Export</button>
+                <div class="dropdown-menu right">
+                    <div class="dropdown-item" onclick="SPECTRE.export.exportAs('json')">📄 JSON</div>
+                    <div class="dropdown-item" onclick="SPECTRE.export.exportAs('csv')">📊 CSV</div>
+                    <div class="dropdown-item" onclick="SPECTRE.export.exportAs('markdown')">📝 Markdown</div>
+                    <div class="dropdown-item" onclick="SPECTRE.export.exportAs('html')">🌐 HTML Report</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="controls-section">
+            <button class="btn btn-sm" onclick="SPECTRE.app.clearAll()" data-tooltip="Clear all fields" data-tooltip-pos="bottom">✕ Clear</button>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-group">
+            <div class="stat" data-tooltip="Tools with valid URLs based on your input" data-tooltip-pos="bottom">
+                <span class="stat-value" id="activeCount">0</span>
+                <span class="stat-label">Active</span>
+            </div>
+            <div class="stat" data-tooltip="Tools you've marked as visited" data-tooltip-pos="bottom">
+                <span class="stat-value" id="checkedCount">0</span>
+                <span class="stat-label">Checked</span>
+            </div>
+            <div class="stat" data-tooltip="Currently visible tools" data-tooltip-pos="bottom">
+                <span class="stat-value" id="visibleCount">0</span>
+                <span class="stat-label">Visible</span>
+            </div>
+            <div class="progress-bar" data-tooltip="Progress: checked / active" data-tooltip-pos="bottom">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="filter-pills">
+            <button class="filter-pill" data-filter="all" onclick="SPECTRE.app.setFilter('all')" data-tooltip="Show all tools" data-tooltip-pos="bottom">All</button>
+            <button class="filter-pill active" data-filter="free" onclick="SPECTRE.app.setFilter('free')" data-tooltip="Free only" data-tooltip-pos="bottom">Free Only</button>
+            <button class="filter-pill" data-filter="freemium" onclick="SPECTRE.app.setFilter('freemium')" data-tooltip="Freemium" data-tooltip-pos="bottom">Freemium</button>
+            <button class="filter-pill" data-filter="paid" onclick="SPECTRE.app.setFilter('paid')" data-tooltip="Paid" data-tooltip-pos="bottom">Paid</button>
+            <button class="filter-pill" data-filter="cli" onclick="SPECTRE.app.setFilter('cli')" data-tooltip="CLI tools" data-tooltip-pos="bottom">CLI</button>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" data-tab="history" onclick="SPECTRE.ui.switchTab('history')" data-tooltip="Recent searches">📜 History</div>
+                <div class="sidebar-tab" data-tab="favorites" onclick="SPECTRE.ui.switchTab('favorites')" data-tooltip="Favorited tools">⭐ Favorites</div>
+            </div>
+            <div class="sidebar-content">
+                <div class="tab-panel" id="panel-history">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">
+                            <span>Recent Searches</span>
+                            <button class="btn btn-xs" onclick="SPECTRE.storage.clearHistory()" data-tooltip="Clear history">Clear</button>
+                        </div>
+                        <div id="historyList"></div>
+                    </div>
+                </div>
+                <div class="tab-panel hidden" id="panel-favorites">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">Favorite Tools</div>
+                        <div id="favoritesList"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <div class="results-grid" id="resultsGrid"></div>
+        </main>
+    </div>
+</div>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="SPECTRE.ui.closeSidebar()"></div>
+
+<!-- Toast notifications container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Modal container -->
+<div id="modalContainer"></div>
+
+<!-- ============================================
+     MODULAR JAVASCRIPT (load in order)
+     ============================================ -->
+<script src="js/tools-db.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+<script src="js/init.js"></script>
+
+</body>
+</html>
