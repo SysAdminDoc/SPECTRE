@@ -1157,15 +1157,12 @@ const toolsDB = {
             { name: "BeenVerified", url: "https://www.beenverified.com/people/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "Background check service" },
             { name: "Intelius", url: "https://www.intelius.com/people-search/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "Comprehensive background reports" },
             { name: "Radaris", url: "https://radaris.com/p/{First}/{Last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "People search with property records" },
-            { name: "Pipl", url: "https://pipl.com/search/?q={first}+{last}", badge: "paid", fields: ["firstName", "lastName"], desc: "Professional-grade identity resolution" },
             { name: "SearchPeopleFree", url: "https://www.searchpeoplefree.com/find/{first}-{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Free people finder with basic info" },
             { name: "PublicRecordsNow", url: "https://www.publicrecordsnow.com/name/{First}-{Last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "Public records aggregator" },
             { name: "Addresses.com", url: "https://www.addresses.com/people/{first}+{last}/", badge: "free", fields: ["firstName", "lastName"], desc: "Address-focused people search" },
             { name: "That'sThem Address", url: "https://thatsthem.com/address/{streetAddress}-{city}-{state}", badge: "free", fields: ["streetAddress", "city", "state"], desc: "Search people by address" },
             { name: "Clustrmaps", url: "https://clustrmaps.com/persons/{first}-{last}", badge: "free", fields: ["firstName", "lastName"], desc: "People search with location mapping" },
-            { name: "Yasni", url: "http://www.yasni.com/{first}+{last}/check+people", badge: "free", fields: ["firstName", "lastName"], desc: "International people search engine" },
-            { name: "192.com (UK)", url: "https://www.192.com/people/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "UK people and business directory" },
-            { name: "Canada411", url: "https://www.canada411.ca/search/?stype=si&what={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Canadian people directory" },
+            { name: "Yasni", url: "http://www.yasni.com/{first}+{last}/check+people", badge: "free", fields: ["firstName", "lastName"], desc: "International people search engine" }
         ]
     },
     social: {
@@ -1260,7 +1257,7 @@ const toolsDB = {
             { name: "Yelp", url: "https://www.yelp.com/user_details?userid={username}", badge: "free", fields: ["username"], desc: "View Yelp reviewer profile" },
             { name: "Tripadvisor", url: "https://www.tripadvisor.com/members/{username}", badge: "free", fields: ["username"], desc: "View Tripadvisor traveler profile" },
             { name: "Untappd", url: "https://untappd.com/user/{username}", badge: "free", fields: ["username"], desc: "View Untappd beer profile" },
-            { name: "Vivino", url: "https://www.vivino.com/users/{username}", badge: "free", fields: ["username"], desc: "View Vivino wine profile" },
+            { name: "Vivino", url: "https://www.vivino.com/users/{username}", badge: "free", fields: ["username"], desc: "View Vivino wine profile" }
         ]
     },
     username: {
@@ -1279,7 +1276,7 @@ const toolsDB = {
             { name: "Sherlock", url: "https://github.com/sherlock-project/sherlock", badge: "cli", fields: ["username"], desc: "CLI tool: Hunt usernames across 400+ social networks" },
             { name: "Maigret", url: "https://github.com/soxoj/maigret", badge: "cli", fields: ["username"], desc: "CLI tool: Collect dossier on person by username" },
             { name: "Social Analyzer", url: "https://github.com/qeeqbox/social-analyzer", badge: "cli", fields: ["username"], desc: "CLI tool: Analyze social media profiles" },
-            { name: "WhatsMyName (CLI)", url: "https://github.com/WebBreacher/WhatsMyName", badge: "cli", fields: ["username"], desc: "CLI tool: Username enumeration" },
+            { name: "WhatsMyName (CLI)", url: "https://github.com/WebBreacher/WhatsMyName", badge: "cli", fields: ["username"], desc: "CLI tool: Username enumeration" }
         ]
     },
     email: {
@@ -1304,13 +1301,12 @@ const toolsDB = {
             { name: "GHunt", url: "https://github.com/mxrch/GHunt", badge: "cli", fields: ["email"], desc: "CLI tool: Extract Google account info from email" },
             { name: "Holehe", url: "https://github.com/megadose/holehe", badge: "cli", fields: ["email"], desc: "CLI tool: Check which sites email is registered on" },
             { name: "Infoga", url: "https://github.com/m4ll0k/Infoga", badge: "cli", fields: ["email"], desc: "CLI tool: Email information gathering" },
-            { name: "theHarvester", url: "https://github.com/laramies/theHarvester", badge: "cli", fields: ["domain"], desc: "CLI tool: Gather emails from public sources" },
+            { name: "theHarvester", url: "https://github.com/laramies/theHarvester", badge: "cli", fields: ["domain"], desc: "CLI tool: Gather emails from public sources" }
         ]
     },
     phone: {
         name: "Phone Lookup", icon: "📱", group: "people",
         tools: [
-            { name: "TrueCaller", url: "https://www.truecaller.com/search/{country}/{phoneClean}", badge: "freemium", fields: ["phone", "country"], desc: "Global caller ID and spam detection" },
             { name: "ThatsThem Phone", url: "https://thatsthem.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Free reverse phone lookup" },
             { name: "Spy Dialer", url: "https://spydialer.com/default.aspx?rp={phoneClean}", badge: "free", fields: ["phone"], desc: "Free reverse phone with voicemail" },
             { name: "FastPeopleSearch Phone", url: "https://www.fastpeoplesearch.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Free phone number lookup" },
@@ -1320,12 +1316,11 @@ const toolsDB = {
             { name: "Phone Validator", url: "https://www.phonevalidator.com/index.aspx?p={phoneClean}", badge: "free", fields: ["phone"], desc: "Validate US phone numbers" },
             { name: "Sync.me", url: "https://sync.me/search/?number={phoneClean}", badge: "freemium", fields: ["phone"], desc: "Caller ID and spam blocking" },
             { name: "411 Phone", url: "https://www.411.com/phone/{phoneClean}", badge: "free", fields: ["phone"], desc: "Reverse phone directory" },
-            { name: "CallerID Test", url: "https://www.calleridtest.com/", badge: "free", fields: ["phone"], desc: "Caller ID lookup tool" },
             { name: "WhitePages Phone", url: "https://www.whitepages.com/phone/{phoneClean}", badge: "freemium", fields: ["phone"], desc: "Premium reverse phone lookup" },
             { name: "Zlookup", url: "https://www.zlookup.com/", badge: "free", fields: ["phone"], desc: "Free reverse phone search" },
             { name: "ReversePhoneLookup", url: "https://www.reversephonelookup.com/{phoneClean}", badge: "free", fields: ["phone"], desc: "Basic phone reverse lookup" },
             { name: "CNAM Lookup", url: "https://www.opencnam.com/", badge: "freemium", fields: ["phone"], desc: "Caller name (CNAM) lookup" },
-            { name: "PhoneInfoga", url: "https://github.com/sundowndev/phoneinfoga", badge: "cli", fields: ["phone"], desc: "CLI tool: Advanced phone number OSINT" },
+            { name: "PhoneInfoga", url: "https://github.com/sundowndev/phoneinfoga", badge: "cli", fields: ["phone"], desc: "CLI tool: Advanced phone number OSINT" }
         ]
     },
     domain: {
@@ -1350,14 +1345,13 @@ const toolsDB = {
             { name: "Robtex", url: "https://www.robtex.com/dns-lookup/{domain}", badge: "free", fields: ["domain"], desc: "DNS and network intelligence" },
             { name: "DNSlytics", url: "https://dnslytics.com/domain/{domain}", badge: "freemium", fields: ["domain"], desc: "DNS intelligence and analytics" },
             { name: "ViewDNS Reverse NS", url: "https://viewdns.info/reversens/?ns={domain}", badge: "free", fields: ["domain"], desc: "Find domains using same nameserver" },
-            { name: "SpyOnWeb", url: "https://spyonweb.com/{domain}", badge: "freemium", fields: ["domain"], desc: "Find related websites" },
             { name: "SimilarWeb", url: "https://www.similarweb.com/website/{domain}/", badge: "freemium", fields: ["domain"], desc: "Website traffic and analytics" },
             { name: "W3Techs", url: "https://w3techs.com/sites/info/{domain}", badge: "free", fields: ["domain"], desc: "Web technology survey" },
             { name: "Sublist3r", url: "https://github.com/aboul3la/Sublist3r", badge: "cli", fields: ["domain"], desc: "CLI tool: Subdomain enumeration" },
             { name: "Subfinder", url: "https://github.com/projectdiscovery/subfinder", badge: "cli", fields: ["domain"], desc: "CLI tool: Fast subdomain discovery" },
             { name: "Amass", url: "https://github.com/owasp-amass/amass", badge: "cli", fields: ["domain"], desc: "CLI tool: OWASP network mapping" },
             { name: "dnsrecon", url: "https://github.com/darkoperator/dnsrecon", badge: "cli", fields: ["domain"], desc: "CLI tool: DNS enumeration script" },
-            { name: "Fierce", url: "https://github.com/mschwager/fierce", badge: "cli", fields: ["domain"], desc: "CLI tool: DNS reconnaissance" },
+            { name: "Fierce", url: "https://github.com/mschwager/fierce", badge: "cli", fields: ["domain"], desc: "CLI tool: DNS reconnaissance" }
         ]
     },
     ip: {
@@ -1370,20 +1364,18 @@ const toolsDB = {
             { name: "AbuseIPDB", url: "https://www.abuseipdb.com/check/{ip}", badge: "free", fields: ["ip"], desc: "IP abuse reports and blacklist check" },
             { name: "GreyNoise", url: "https://viz.greynoise.io/ip/{ip}", badge: "freemium", fields: ["ip"], desc: "Internet background noise analysis" },
             { name: "BGP Toolkit", url: "https://bgp.he.net/ip/{ip}", badge: "free", fields: ["ip"], desc: "BGP routing and ASN information" },
-            { name: "BGPView", url: "https://bgpview.io/ip/{ip}", badge: "free", fields: ["ip"], desc: "BGP prefix and ASN lookup" },
             { name: "IP Location", url: "https://www.iplocation.net/ip-lookup", badge: "free", fields: ["ip"], desc: "IP geolocation lookup" },
             { name: "ViewDNS Reverse", url: "https://viewdns.info/reverseip/?host={ip}", badge: "free", fields: ["ip"], desc: "Find domains hosted on IP" },
             { name: "Talos Intelligence", url: "https://talosintelligence.com/reputation_center/lookup?search={ip}", badge: "free", fields: ["ip"], desc: "Cisco Talos IP reputation" },
             { name: "IPVoid", url: "https://www.ipvoid.com/ip-blacklist-check/", badge: "free", fields: ["ip"], desc: "IP blacklist check" },
             { name: "AlienVault OTX", url: "https://otx.alienvault.com/indicator/ip/{ip}", badge: "free", fields: ["ip"], desc: "Open Threat Exchange IP intel" },
-            { name: "ThreatCrowd", url: "https://www.threatcrowd.org/ip.php?ip={ip}", badge: "free", fields: ["ip"], desc: "IP threat intelligence" },
             { name: "IP2Location", url: "https://www.ip2location.com/demo/{ip}", badge: "free", fields: ["ip"], desc: "IP geolocation demo" },
             { name: "MaxMind GeoIP", url: "https://www.maxmind.com/en/geoip-demo", badge: "free", fields: ["ip"], desc: "IP geolocation database demo" },
             { name: "Whois IP", url: "https://www.whois.com/whois/{ip}", badge: "free", fields: ["ip"], desc: "IP WHOIS information" },
             { name: "ARIN WHOIS", url: "https://whois.arin.net/rest/ip/{ip}", badge: "free", fields: ["ip"], desc: "American Registry IP WHOIS" },
             { name: "RIPE Database", url: "https://apps.db.ripe.net/db-web-ui/query?searchtext={ip}", badge: "free", fields: ["ip"], desc: "European IP registry" },
             { name: "Nmap", url: "https://nmap.org/", badge: "cli", fields: ["ip"], desc: "CLI tool: Network scanner" },
-            { name: "Masscan", url: "https://github.com/robertdavidgraham/masscan", badge: "cli", fields: ["ip"], desc: "CLI tool: Fast port scanner" },
+            { name: "Masscan", url: "https://github.com/robertdavidgraham/masscan", badge: "cli", fields: ["ip"], desc: "CLI tool: Fast port scanner" }
         ]
     },
     breach: {
@@ -1402,7 +1394,7 @@ const toolsDB = {
             { name: "HaveIBeenSold", url: "https://haveibeensold.app/", badge: "free", fields: ["email"], desc: "Check if email was sold" },
             { name: "Pwned Passwords", url: "https://haveibeenpwned.com/Passwords", badge: "free", fields: [], desc: "Check if password was leaked" },
             { name: "ScatteredSecrets", url: "https://scatteredsecrets.com/", badge: "paid", fields: ["email"], desc: "Credential breach monitoring" },
-            { name: "SpyCloud", url: "https://spycloud.com/check-your-exposure/", badge: "freemium", fields: ["email"], desc: "Enterprise breach exposure check" },
+            { name: "SpyCloud", url: "https://spycloud.com/check-your-exposure/", badge: "freemium", fields: ["email"], desc: "Enterprise breach exposure check" }
         ]
     },
     archive: {
@@ -1410,18 +1402,14 @@ const toolsDB = {
         tools: [
             { name: "Wayback Machine", url: "https://web.archive.org/web/*/{domain}", badge: "free", fields: ["domain"], desc: "Internet Archive's website history" },
             { name: "Wayback Availability", url: "https://archive.org/wayback/available?url={domain}", badge: "free", fields: ["domain"], desc: "Check Wayback availability API" },
-            { name: "Google Cache", url: "https://webcache.googleusercontent.com/search?q=cache:{domain}", badge: "free", fields: ["domain"], desc: "Google's cached page version" },
             { name: "Archive.today", url: "https://archive.today/{domain}", badge: "free", fields: ["domain"], desc: "Webpage snapshot service" },
             { name: "Archive.is", url: "https://archive.is/{domain}", badge: "free", fields: ["domain"], desc: "Alternative archive service" },
             { name: "Archive.ph", url: "https://archive.ph/{domain}", badge: "free", fields: ["domain"], desc: "Archive.today mirror" },
             { name: "CachedView", url: "https://cachedview.com/", badge: "free", fields: ["domain"], desc: "Multi-source cache finder" },
-            { name: "Memento", url: "https://timetravel.mementoweb.org/list/20200101000000/{domain}", badge: "free", fields: ["domain"], desc: "Aggregated web archive search" },
             { name: "Common Crawl", url: "https://commoncrawl.org/", badge: "free", fields: ["domain"], desc: "Open web crawl data" },
             { name: "UK Web Archive", url: "https://www.webarchive.org.uk/en/ukwa/search?text={domain}", badge: "free", fields: ["domain"], desc: "British Library web archive" },
             { name: "Arquivo.pt", url: "https://arquivo.pt/page/search?q={domain}", badge: "free", fields: ["domain"], desc: "Portuguese web archive" },
-            { name: "Perma.cc", url: "https://perma.cc/", badge: "free", fields: ["domain"], desc: "Create permanent web citations" },
-            { name: "WebCite", url: "https://www.webcitation.org/query", badge: "free", fields: ["domain"], desc: "Scholarly web archiving" },
-            { name: "Screenshots.com", url: "https://www.screenshots.com/{domain}", badge: "free", fields: ["domain"], desc: "Website screenshot history" },
+            { name: "Perma.cc", url: "https://perma.cc/", badge: "free", fields: ["domain"], desc: "Create permanent web citations" }
         ]
     },
     image: {
@@ -1440,11 +1428,10 @@ const toolsDB = {
             { name: "IQDB", url: "https://iqdb.org/?url={imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Anime image search" },
             { name: "ImgOps", url: "https://imgops.com/{imageUrl}", badge: "free", fields: ["imageUrl"], desc: "Multi-engine image search tool" },
             { name: "FotoForensics", url: "https://fotoforensics.com/", badge: "free", fields: ["imageUrl"], desc: "Image manipulation analysis (ELA)" },
-            { name: "Jeffrey's Exif", url: "http://exif.regex.info/exif.cgi", badge: "free", fields: ["imageUrl"], desc: "EXIF metadata viewer" },
             { name: "Pic2Map", url: "https://www.pic2map.com/", badge: "free", fields: ["imageUrl"], desc: "Extract GPS from photos" },
             { name: "Forensically", url: "https://29a.ch/photo-forensics/", badge: "free", fields: ["imageUrl"], desc: "Photo forensics toolkit" },
             { name: "InVID", url: "https://www.invid-project.eu/tools-and-services/invid-verification-plugin/", badge: "free", fields: [], desc: "Video/image verification plugin" },
-            { name: "RevEye", url: "https://chrome.google.com/webstore/detail/reveye-reverse-image-sear/keaaclcjhehbbapnphnmpiklalfhelgf", badge: "free", fields: [], desc: "Browser extension for reverse search" },
+            { name: "RevEye", url: "https://chrome.google.com/webstore/detail/reveye-reverse-image-sear/keaaclcjhehbbapnphnmpiklalfhelgf", badge: "free", fields: [], desc: "Browser extension for reverse search" }
         ]
     },
     business: {
@@ -1468,8 +1455,7 @@ const toolsDB = {
             { name: "OpenSanctions", url: "https://www.opensanctions.org/search/?q={company}", badge: "free", fields: ["company"], desc: "Global sanctions database" },
             { name: "Corporation Wiki", url: "https://www.corporationwiki.com/search/results?term={company}", badge: "free", fields: ["company"], desc: "US corporation search" },
             { name: "Bizapedia", url: "https://www.bizapedia.com/search.aspx?q={company}", badge: "free", fields: ["company"], desc: "US business entity search" },
-            { name: "Owler", url: "https://www.owler.com/company/{company}", badge: "freemium", fields: ["company"], desc: "Competitive intelligence" },
-            { name: "Craft.co", url: "https://craft.co/search?q={company}", badge: "freemium", fields: ["company"], desc: "Company profiles and data" },
+            { name: "Owler", url: "https://www.owler.com/company/{company}", badge: "freemium", fields: ["company"], desc: "Competitive intelligence" }
         ]
     },
     court: {
@@ -1481,13 +1467,11 @@ const toolsDB = {
             { name: "Justia Dockets", url: "https://dockets.justia.com/search?query={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Federal court docket search" },
             { name: "Justia Cases", url: "https://law.justia.com/cases/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Case law search" },
             { name: "Google Scholar Legal", url: "https://scholar.google.com/scholar?q={first}+{last}&hl=en&as_sdt=6", badge: "free", fields: ["firstName", "lastName"], desc: "Legal opinions and journals" },
-            { name: "Case.law", url: "https://case.law/search/?search={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Harvard case law access" },
             { name: "UniCourt", url: "https://unicourt.com/", badge: "freemium", fields: ["firstName", "lastName"], desc: "State and federal court data" },
             { name: "Trellis Law", url: "https://trellis.law/", badge: "paid", fields: ["firstName", "lastName"], desc: "State court analytics" },
-            { name: "Docket Alarm", url: "https://www.docketalarm.com/", badge: "paid", fields: ["firstName", "lastName"], desc: "Legal docket search" },
             { name: "CaseMine", url: "https://www.casemine.com/search/us?q={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "AI-powered case search" },
             { name: "Federal Judicial Center", url: "https://www.fjc.gov/history/judges/search", badge: "free", fields: [], desc: "Federal judge biographies" },
-            { name: "State Court Locator", url: "https://www.ncsc.org/information-and-resources/state-court-websites", badge: "free", fields: [], desc: "Links to all state courts" },
+            { name: "State Court Locator", url: "https://www.ncsc.org/information-and-resources/state-court-websites", badge: "free", fields: [], desc: "Links to all state courts" }
         ]
     },
     property: {
@@ -1505,7 +1489,7 @@ const toolsDB = {
             { name: "Melissa Lookups", url: "https://www.melissa.com/v2/lookups/propertyviewer/", badge: "free", fields: ["streetAddress"], desc: "Address and property lookup" },
             { name: "Foreclosure.com", url: "https://www.foreclosure.com/search.html?q={city}+{state}", badge: "freemium", fields: ["city", "state"], desc: "Foreclosure listings" },
             { name: "FEMA Flood Map", url: "https://msc.fema.gov/portal/search", badge: "free", fields: ["streetAddress"], desc: "Flood zone lookup" },
-            { name: "AcreValue", url: "https://www.acrevalue.com/", badge: "freemium", fields: ["streetAddress"], desc: "Agricultural land data" },
+            { name: "AcreValue", url: "https://www.acrevalue.com/", badge: "freemium", fields: ["streetAddress"], desc: "Agricultural land data" }
         ]
     },
     geo: {
@@ -1528,8 +1512,7 @@ const toolsDB = {
             { name: "Mapillary", url: "https://www.mapillary.com/app/", badge: "free", fields: [], desc: "Crowdsourced street imagery" },
             { name: "KartaView", url: "https://kartaview.org/", badge: "free", fields: [], desc: "Open street-level imagery" },
             { name: "Overpass Turbo", url: "https://overpass-turbo.eu/", badge: "free", fields: [], desc: "OpenStreetMap data extraction" },
-            { name: "CalcMaps", url: "https://www.calcmaps.com/", badge: "free", fields: [], desc: "Map measurement tools" },
-            { name: "Wikimapia", url: "https://wikimapia.org/", badge: "free", fields: [], desc: "Collaborative map annotations" },
+            { name: "CalcMaps", url: "https://www.calcmaps.com/", badge: "free", fields: [], desc: "Map measurement tools" }
         ]
     },
     aviation: {
@@ -1549,7 +1532,7 @@ const toolsDB = {
             { name: "FlightConnections", url: "https://www.flightconnections.com/", badge: "free", fields: [], desc: "Flight route maps" },
             { name: "AeroTransport", url: "https://www.aerotransport.org/", badge: "free", fields: [], desc: "Aircraft production lists" },
             { name: "Planespotters.net", url: "https://www.planespotters.net/search?q={company}", badge: "free", fields: ["company"], desc: "Aircraft photo database" },
-            { name: "JetPhotos", url: "https://www.jetphotos.com/", badge: "free", fields: [], desc: "Aviation photography database" },
+            { name: "JetPhotos", url: "https://www.jetphotos.com/", badge: "free", fields: [], desc: "Aviation photography database" }
         ]
     },
     maritime: {
@@ -1557,14 +1540,11 @@ const toolsDB = {
         tools: [
             { name: "MarineTraffic", url: "https://www.marinetraffic.com/", badge: "freemium", fields: [], desc: "Live ship tracking worldwide" },
             { name: "VesselFinder", url: "https://www.vesselfinder.com/", badge: "freemium", fields: [], desc: "Ship positions and tracking" },
-            { name: "FleetMon", url: "https://www.fleetmon.com/", badge: "freemium", fields: [], desc: "Vessel tracking platform" },
-            { name: "ShipTracker", url: "https://shiptracker.live/", badge: "free", fields: [], desc: "Free ship tracking" },
             { name: "CruiseMapper", url: "https://www.cruisemapper.com/", badge: "free", fields: [], desc: "Cruise ship tracker" },
             { name: "Equasis", url: "https://www.equasis.org/", badge: "free", fields: [], desc: "Ship safety database (registration required)" },
             { name: "IMO Ship Search", url: "https://gisis.imo.org/Public/SHIPS/Default.aspx", badge: "free", fields: [], desc: "IMO vessel search" },
             { name: "USCG PSIX", url: "https://cgmix.uscg.mil/PSIX/", badge: "free", fields: [], desc: "US Coast Guard vessel info" },
-            { name: "ITU MARS", url: "https://www.itu.int/mmsapp/ShipStation/list", badge: "free", fields: [], desc: "Maritime mobile stations" },
-            { name: "VesselTracker", url: "https://www.vesseltracker.com/", badge: "freemium", fields: [], desc: "Commercial vessel tracking" },
+            { name: "ITU MARS", url: "https://www.itu.int/mmsapp/ShipStation/list", badge: "free", fields: [], desc: "Maritime mobile stations" }
         ]
     },
     vehicle: {
@@ -1584,7 +1564,7 @@ const toolsDB = {
             { name: "SearchQuarry Plates", url: "https://www.searchquarry.com/license-plate-lookup/", badge: "freemium", fields: ["licensePlate"], desc: "License plate search" },
             { name: "DMV.org", url: "https://www.dmv.org/vehicle-history/vin-check.php", badge: "free", fields: ["vin"], desc: "DMV resources guide" },
             { name: "FMCSA Carrier", url: "https://safer.fmcsa.dot.gov/CompanySnapshot.aspx", badge: "free", fields: ["company"], desc: "Commercial carrier lookup" },
-            { name: "FMCSA VIN", url: "https://ai.fmcsa.dot.gov/hhg/search.asp", badge: "free", fields: ["vin"], desc: "Household goods carrier search" },
+            { name: "FMCSA VIN", url: "https://ai.fmcsa.dot.gov/hhg/search.asp", badge: "free", fields: ["vin"], desc: "Household goods carrier search" }
         ]
     },
     crypto: {
@@ -1596,15 +1576,12 @@ const toolsDB = {
             { name: "Polygonscan", url: "https://polygonscan.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Polygon blockchain explorer" },
             { name: "Arbiscan", url: "https://arbiscan.io/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Arbitrum blockchain explorer" },
             { name: "Optimism Explorer", url: "https://optimistic.etherscan.io/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Optimism blockchain explorer" },
-            { name: "Solscan", url: "https://solscan.io/account/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Solana blockchain explorer" },
             { name: "Blockchair", url: "https://blockchair.com/search?q={cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Multi-blockchain search engine" },
             { name: "Wallet Explorer", url: "https://www.walletexplorer.com/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Bitcoin wallet clustering" },
-            { name: "OXT.me", url: "https://oxt.me/address/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "Bitcoin transaction analysis" },
-            { name: "Bitcoin Abuse", url: "https://www.bitcoinabuse.com/", badge: "free", fields: ["cryptoAddress"], desc: "Report and track Bitcoin scams" },
             { name: "Arkham Intel", url: "https://platform.arkhamintelligence.com/", badge: "freemium", fields: ["cryptoAddress"], desc: "Crypto intelligence platform" },
             { name: "Breadcrumbs", url: "https://www.breadcrumbs.app/", badge: "freemium", fields: ["cryptoAddress"], desc: "Blockchain investigation tool" },
             { name: "Dune Analytics", url: "https://dune.com/", badge: "freemium", fields: [], desc: "Crypto data dashboards" },
-            { name: "DeBank", url: "https://debank.com/profile/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "DeFi portfolio tracker" },
+            { name: "DeBank", url: "https://debank.com/profile/{cryptoAddress}", badge: "free", fields: ["cryptoAddress"], desc: "DeFi portfolio tracker" }
         ]
     },
     government: {
@@ -1612,11 +1589,9 @@ const toolsDB = {
         tools: [
             { name: "FEC Campaign Finance", url: "https://www.fec.gov/data/receipts/individual-contributions/?contributor_name={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "US campaign contribution search" },
             { name: "OpenSecrets", url: "https://www.opensecrets.org/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Money in politics data" },
-            { name: "FollowTheMoney", url: "https://www.followthemoney.org/", badge: "free", fields: [], desc: "State campaign finance" },
             { name: "Lobbying Disclosure", url: "https://lda.senate.gov/system/public/", badge: "free", fields: [], desc: "Federal lobbying database" },
             { name: "FARA Database", url: "https://efile.fara.gov/ords/fara/f?p=1381:1", badge: "free", fields: [], desc: "Foreign agent registrations" },
             { name: "USASpending", url: "https://www.usaspending.gov/search/?hash=", badge: "free", fields: ["company"], desc: "Federal contract spending" },
-            { name: "FPDS", url: "https://www.fpds.gov/", badge: "free", fields: ["company"], desc: "Federal procurement data" },
             { name: "SAM.gov", url: "https://sam.gov/search/?keywords={company}", badge: "free", fields: ["company"], desc: "Federal contractor registry" },
             { name: "GovTribe", url: "https://govtribe.com/", badge: "freemium", fields: ["company"], desc: "Government contracting intel" },
             { name: "FOIA.gov", url: "https://www.foia.gov/", badge: "free", fields: [], desc: "FOIA request portal" },
@@ -1631,7 +1606,7 @@ const toolsDB = {
             { name: "OSHA Inspections", url: "https://www.osha.gov/ords/imis/establishment.html", badge: "free", fields: ["company"], desc: "OSHA inspection search" },
             { name: "Little Sis", url: "https://littlesis.org/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Power elite relationships" },
             { name: "OpenPayments", url: "https://openpaymentsdata.cms.gov/search", badge: "free", fields: ["firstName", "lastName"], desc: "Pharma payments to doctors" },
-            { name: "NPPES NPI", url: "https://npiregistry.cms.hhs.gov/search", badge: "free", fields: ["firstName", "lastName"], desc: "Healthcare provider registry" },
+            { name: "NPPES NPI", url: "https://npiregistry.cms.hhs.gov/search", badge: "free", fields: ["firstName", "lastName"], desc: "Healthcare provider registry" }
         ]
     },
     academic: {
@@ -1649,11 +1624,10 @@ const toolsDB = {
             { name: "JSTOR", url: "https://www.jstor.org/action/doBasicSearch?Query=au:{first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "Academic journal archive" },
             { name: "IEEE Xplore", url: "https://ieeexplore.ieee.org/search/searchresult.jsp?queryText={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "Engineering publications" },
             { name: "ACM Digital Library", url: "https://dl.acm.org/search/basic?q={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "Computing literature" },
-            { name: "Microsoft Academic", url: "https://academic.microsoft.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Academic knowledge graph" },
             { name: "BASE Search", url: "https://www.base-search.net/Search/Results?lookfor={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Bielefeld academic search" },
             { name: "CORE", url: "https://core.ac.uk/search?q=author:({first}+{last})", badge: "free", fields: ["firstName", "lastName"], desc: "Open access aggregator" },
             { name: "Unpaywall", url: "https://unpaywall.org/", badge: "free", fields: [], desc: "Find open access versions" },
-            { name: "Directory of Open Access Journals", url: "https://doaj.org/search/articles?ref=homepage-box&source={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Open access journals" },
+            { name: "Directory of Open Access Journals", url: "https://doaj.org/search/articles?ref=homepage-box&source={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Open access journals" }
         ]
     },
     darkweb: {
@@ -1662,21 +1636,16 @@ const toolsDB = {
             { name: "Ahmia", url: "https://ahmia.fi/search/?q={username}", badge: "free", fields: ["username"], desc: "Tor hidden service search" },
             { name: "Torch", url: "http://xmh57jrknzkhv6y3ls3ubitzfqnkrwxhopf5aygthi7d6rplyvk3noyd.onion/cgi-bin/omega/omega?P={username}", badge: "free", fields: ["username"], desc: "Dark web search engine (Tor)" },
             { name: "Haystak", url: "http://haystak5njsmn2hqkewecpaxetahtwhsbsa64jom2k22z5afxhnpxfid.onion/?q={username}", badge: "free", fields: ["username"], desc: "Onion search engine (Tor)" },
-            { name: "DarkSearch", url: "https://darksearch.io/search?query={username}", badge: "free", fields: ["username"], desc: "Dark web search (clearnet)" },
-            { name: "OnionSearch", url: "https://github.com/megadose/OnionSearch", badge: "cli", fields: ["username"], desc: "CLI tool: Search onion sites" },
             { name: "DarkOwl", url: "https://www.darkowl.com/", badge: "paid", fields: [], desc: "Darknet data platform" },
-            { name: "Webhose Dark Web", url: "https://webhose.io/dark-web-api", badge: "paid", fields: [], desc: "Dark web data API" },
             { name: "Recorded Future", url: "https://www.recordedfuture.com/", badge: "paid", fields: [], desc: "Threat intelligence platform" },
             { name: "Flashpoint", url: "https://www.flashpoint-intel.com/", badge: "paid", fields: [], desc: "Business risk intelligence" },
-            { name: "Intel471", url: "https://intel471.com/", badge: "paid", fields: [], desc: "Cybercrime intelligence" },
+            { name: "Intel471", url: "https://intel471.com/", badge: "paid", fields: [], desc: "Cybercrime intelligence" }
         ]
     },
     international: {
         name: "International", icon: "🌍", group: "general",
         tools: [
-            { name: "192.com (UK)", url: "https://www.192.com/people/{first}-{last}/", badge: "freemium", fields: ["firstName", "lastName"], desc: "UK people and business directory" },
             { name: "Companies House (UK)", url: "https://find-and-update.company-information.service.gov.uk/search/companies?q={company}", badge: "free", fields: ["company"], desc: "UK company registry" },
-            { name: "Canada411", url: "https://www.canada411.ca/search/?stype=si&what={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Canadian people directory" },
             { name: "Canadian Corp (SEDAR+)", url: "https://www.sedarplus.ca/landingpage/", badge: "free", fields: ["company"], desc: "Canadian corporate filings" },
             { name: "Societe.com (FR)", url: "https://www.societe.com/cgi-bin/search?champs={company}", badge: "freemium", fields: ["company"], desc: "French company database" },
             { name: "Infogreffe (FR)", url: "https://www.infogreffe.fr/recherche-entreprise-dirigeants", badge: "freemium", fields: ["company"], desc: "French business registry" },
@@ -1689,7 +1658,6 @@ const toolsDB = {
             { name: "KRS Online (PL)", url: "https://ekrs.ms.gov.pl/", badge: "free", fields: ["company"], desc: "Polish company registry" },
             { name: "VK (Russia)", url: "https://vk.com/search?c[q]={first}+{last}&c[section]=people", badge: "free", fields: ["firstName", "lastName"], desc: "Russian social network search" },
             { name: "OK.ru (Russia)", url: "https://ok.ru/search?st.query={first}+{last}&st.cmd=userSearchResults", badge: "free", fields: ["firstName", "lastName"], desc: "Russian social network Odnoklassniki" },
-            { name: "Tianyancha (CN)", url: "https://www.tianyancha.com/", badge: "freemium", fields: ["company"], desc: "Chinese company database" },
             { name: "Qichacha (CN)", url: "https://www.qcc.com/", badge: "freemium", fields: ["company"], desc: "Chinese business info" },
             { name: "NAVER (KR)", url: "https://search.naver.com/search.naver?query={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Korean search engine" },
             { name: "DART (KR)", url: "https://dart.fss.or.kr/", badge: "free", fields: ["company"], desc: "Korean company filings" },
@@ -1698,7 +1666,7 @@ const toolsDB = {
             { name: "NZ Companies", url: "https://companies-register.companiesoffice.govt.nz/", badge: "free", fields: ["company"], desc: "New Zealand company register" },
             { name: "MCA (India)", url: "https://www.mca.gov.in/", badge: "free", fields: ["company"], desc: "Indian company affairs" },
             { name: "Zaubacorp (India)", url: "https://www.zaubacorp.com/", badge: "freemium", fields: ["company"], desc: "Indian company search" },
-            { name: "CIPC (South Africa)", url: "https://eservices.cipc.co.za/", badge: "free", fields: ["company"], desc: "South African company registry" },
+            { name: "CIPC (South Africa)", url: "https://eservices.cipc.co.za/", badge: "free", fields: ["company"], desc: "South African company registry" }
         ]
     },
     search: {
@@ -1714,14 +1682,13 @@ const toolsDB = {
             { name: "Yandex", url: "https://yandex.com/search/?text={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Russian search engine" },
             { name: "Brave Search", url: "https://search.brave.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Independent privacy search" },
             { name: "Startpage", url: "https://www.startpage.com/sp/search?query={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Private Google results" },
-            { name: "Searx", url: "https://searx.be/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Metasearch engine" },
             { name: "Mojeek", url: "https://www.mojeek.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Independent search engine" },
             { name: "Ecosia", url: "https://www.ecosia.org/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Eco-friendly search" },
             { name: "Qwant", url: "https://www.qwant.com/?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "European privacy search" },
             { name: "Carrot2", url: "https://search.carrot2.org/#/search/web/{first}+{last}/folders", badge: "free", fields: ["firstName", "lastName"], desc: "Clustered search results" },
             { name: "Million Short", url: "https://millionshort.com/search?keywords={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Remove top results" },
             { name: "Boardreader", url: "https://boardreader.com/s/{first}+{last}.html", badge: "free", fields: ["firstName", "lastName"], desc: "Forum search engine" },
-            { name: "Marginalia", url: "https://search.marginalia.nu/search?query={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Non-commercial web search" },
+            { name: "Marginalia", url: "https://search.marginalia.nu/search?query={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Non-commercial web search" }
         ]
     },
     news: {
@@ -1729,7 +1696,6 @@ const toolsDB = {
         tools: [
             { name: "Google News", url: "https://news.google.com/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Google news aggregator" },
             { name: "Bing News", url: "https://www.bing.com/news/search?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Microsoft news search" },
-            { name: "Google News Archive", url: "https://news.google.com/newspapers?q={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Historical newspaper archive" },
             { name: "Newspapers.com", url: "https://www.newspapers.com/search/#query={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "Historical newspaper database" },
             { name: "NewspaperArchive", url: "https://newspaperarchive.com/search/?pep={first}+{last}", badge: "paid", fields: ["firstName", "lastName"], desc: "Historical papers archive" },
             { name: "Chronicling America", url: "https://chroniclingamerica.loc.gov/search/pages/results/?andtext={first}+{last}", badge: "free", fields: ["firstName", "lastName"], desc: "Library of Congress newspapers" },
@@ -1738,7 +1704,7 @@ const toolsDB = {
             { name: "GDELT", url: "https://www.gdeltproject.org/", badge: "free", fields: [], desc: "Global news events database" },
             { name: "MediaCloud", url: "https://mediacloud.org/", badge: "free", fields: [], desc: "Media ecosystem analysis" },
             { name: "AllSides", url: "https://www.allsides.com/unbiased-balanced-news", badge: "free", fields: [], desc: "Media bias analysis" },
-            { name: "Ground News", url: "https://ground.news/find?query={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "News coverage comparison" },
+            { name: "Ground News", url: "https://ground.news/find?query={first}+{last}", badge: "freemium", fields: ["firstName", "lastName"], desc: "News coverage comparison" }
         ]
     },
     frameworks: {
@@ -1751,13 +1717,10 @@ const toolsDB = {
             { name: "cipher387 Collection", url: "https://github.com/cipher387/osint_stuff_tool_collection", badge: "free", fields: [], desc: "1000+ OSINT tools collection" },
             { name: "OSINT.sh", url: "https://osint.sh/", badge: "free", fields: [], desc: "OSINT tools collection" },
             { name: "Technisette OSINT", url: "https://technisette.com/p/tools", badge: "free", fields: [], desc: "OSINT tools for journalists" },
-            { name: "OSINT Combine", url: "https://www.osintcombine.com/tools", badge: "freemium", fields: [], desc: "OSINT training and tools" },
             { name: "Sector035 Links", url: "https://sector035.nl/links", badge: "free", fields: [], desc: "Week in OSINT resources" },
-            { name: "Yoga OSINT", url: "https://yoga.osint.ninja/", badge: "free", fields: [], desc: "OSINT tool search engine" },
             { name: "Trace Labs OSINT VM", url: "https://www.tracelabs.org/initiatives/osint-vm", badge: "free", fields: [], desc: "Pre-built OSINT virtual machine" },
             { name: "Recon-ng", url: "https://github.com/lanmaster53/recon-ng", badge: "cli", fields: [], desc: "CLI tool: Web reconnaissance framework" },
-            { name: "SpiderFoot", url: "https://github.com/smicallef/spiderfoot", badge: "cli", fields: [], desc: "CLI tool: OSINT automation" },
-            { name: "Maltego", url: "https://www.maltego.com/", badge: "freemium", fields: [], desc: "Visual link analysis tool" },
+            { name: "Maltego", url: "https://www.maltego.com/", badge: "freemium", fields: [], desc: "Visual link analysis tool" }
         ]
     }
 };
