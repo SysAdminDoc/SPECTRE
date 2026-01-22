@@ -16,7 +16,7 @@
  * This provides a clean API for accessing all modules
  */
 window.SPECTRE = {
-    // Module references
+    // Core module references
     app: SPECTRE_APP,
     ui: SPECTRE_UI,
     storage: SPECTRE_STORAGE,
@@ -24,9 +24,23 @@ window.SPECTRE = {
     utils: SPECTRE_UTILS,
     tools: SPECTRE_TOOLS,
 
+    // Enhanced module references (v2.1)
+    cases: typeof SPECTRE_CASES !== 'undefined' ? SPECTRE_CASES : null,
+    customTools: typeof SPECTRE_CUSTOM_TOOLS !== 'undefined' ? SPECTRE_CUSTOM_TOOLS : null,
+    urlState: typeof SPECTRE_URL_STATE !== 'undefined' ? SPECTRE_URL_STATE : null,
+    api: typeof SPECTRE_API !== 'undefined' ? SPECTRE_API : null,
+    workflows: typeof SPECTRE_WORKFLOWS !== 'undefined' ? SPECTRE_WORKFLOWS : null,
+    suggestions: typeof SPECTRE_SUGGESTIONS !== 'undefined' ? SPECTRE_SUGGESTIONS : null,
+
+    // Power feature references (v2.2)
+    commandPalette: typeof SPECTRE_COMMAND_PALETTE !== 'undefined' ? SPECTRE_COMMAND_PALETTE : null,
+    bulk: typeof SPECTRE_BULK !== 'undefined' ? SPECTRE_BULK : null,
+    workspace: typeof SPECTRE_WORKSPACE !== 'undefined' ? SPECTRE_WORKSPACE : null,
+    pwa: typeof SPECTRE_PWA !== 'undefined' ? SPECTRE_PWA : null,
+
     // Version info
-    version: '2.0.0',
-    build: 'modular',
+    version: '2.2.0',
+    build: 'power-features',
 
     /**
      * Initialize the entire application
@@ -36,7 +50,7 @@ window.SPECTRE = {
 ╔═══════════════════════════════════════════════════════╗
 ║                                                       ║
 ║   👁️  SPECTRE OSINT Platform                          ║
-║   Version ${this.version} (${this.build})                           ║
+║   Version ${this.version} (${this.build})                      ║
 ║                                                       ║
 ║   Systematic Platform for Efficient Collection,       ║
 ║   Tracking, and Research of Evidence                  ║
@@ -44,7 +58,7 @@ window.SPECTRE = {
 ╚═══════════════════════════════════════════════════════╝
         `);
 
-        // Initialize storage (loads cached data)
+        // Initialize core storage (loads cached data)
         SPECTRE_STORAGE.init();
 
         // Initialize theme
@@ -73,6 +87,31 @@ window.SPECTRE = {
         // Setup input validation handlers
         this.setupInputValidation();
 
+        // ========================================
+        // Initialize Enhanced Modules (v2.1)
+        // ========================================
+
+        // Initialize Case Manager
+        if (this.cases) {
+            this.cases.init();
+            this.renderActiveCaseIndicator();
+        }
+
+        // Initialize Custom Tools (merges into tools DB)
+        if (this.customTools) {
+            this.customTools.init();
+        }
+
+        // Initialize URL State (handles deep links)
+        if (this.urlState) {
+            this.urlState.init();
+        }
+
+        // Initialize Workflows
+        if (this.workflows) {
+            this.workflows.init();
+        }
+
         // Focus main search on landing page
         const mainInput = document.getElementById('mainSearchInput');
         if (mainInput) {
@@ -80,6 +119,46 @@ window.SPECTRE = {
         }
 
         console.log('[SPECTRE] Initialization complete');
+        console.log('[SPECTRE] Enhanced modules loaded:', {
+            cases: !!this.cases,
+            customTools: !!this.customTools,
+            urlState: !!this.urlState,
+            api: !!this.api,
+            workflows: !!this.workflows,
+            suggestions: !!this.suggestions
+        });
+        console.log('[SPECTRE] Power features loaded:', {
+            commandPalette: !!this.commandPalette,
+            bulk: !!this.bulk,
+            workspace: !!this.workspace,
+            pwa: !!this.pwa
+        });
+    },
+
+    /**
+     * Render active case indicator in UI
+     */
+    renderActiveCaseIndicator() {
+        if (!this.cases) return;
+        
+        const activeCase = this.cases.getActiveCase();
+        const indicator = document.getElementById('activeCaseIndicator');
+        
+        if (indicator) {
+            if (activeCase) {
+                indicator.innerHTML = `
+                    <span class="case-indicator active" onclick="SPECTRE.cases.showCaseManagerModal()" data-tooltip="Active Investigation: ${SPECTRE_UTILS.string.escapeHtml(activeCase.name)}">
+                        📁 ${SPECTRE_UTILS.string.truncate(activeCase.name, 15)}
+                    </span>
+                `;
+            } else {
+                indicator.innerHTML = `
+                    <span class="case-indicator" onclick="SPECTRE.cases.showCaseManagerModal()" data-tooltip="No active investigation">
+                        📁 No Case
+                    </span>
+                `;
+            }
+        }
     },
 
     /**

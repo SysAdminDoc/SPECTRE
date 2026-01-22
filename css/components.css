@@ -1032,3 +1032,208 @@
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+
+/* ============================================
+   ENHANCED MODULE STYLES (v2.1)
+   ============================================ */
+
+/* Case Indicator */
+.case-indicator-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.case-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.case-indicator:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-default);
+    color: var(--text-secondary);
+}
+
+.case-indicator.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* Dropdown Divider */
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0.5rem 0;
+}
+
+/* Form Input (for modals) */
+.form-input {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* API Preview */
+.api-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    margin-top: 0.35rem;
+}
+
+.api-preview.mini {
+    padding: 0.25rem 0.4rem;
+}
+
+.api-preview.loading {
+    color: var(--text-muted);
+}
+
+.api-preview.error {
+    color: var(--accent-amber);
+}
+
+.api-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.35rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 3px;
+    color: var(--accent-primary);
+}
+
+.api-stat {
+    color: var(--text-muted);
+}
+
+.api-flags {
+    font-size: 0.65rem;
+}
+
+.api-loader {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--border-default);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Loading Spinner for Modals */
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-default);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.intel-loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+/* Workflow Progress */
+.workflow-progress {
+    margin: 1rem 0;
+}
+
+.progress-bar {
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    height: 24px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Tool Chips */
+.tool-chip {
+    display: inline-block;
+    background: var(--bg-tertiary);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    margin: 0.1rem;
+}
+
+.tool-chip.essential {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-primary);
+}
+
+/* Modal Enhancements */
+.modal-body .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Scrollable Lists in Modals */
+.modal-body .scrollable-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for modal lists */
+.modal-body .scrollable-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body .scrollable-list::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.modal-body .scrollable-list::-webkit-scrollbar-thumb {
+    background: var(--border-emphasis);
+    border-radius: 3px;
+}
+
+.modal-body .scrollable-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}

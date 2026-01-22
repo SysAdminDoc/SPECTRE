@@ -1,6 +1,6 @@
 # SPECTRE OSINT Platform - Modular Structure Guide
 
-> **Version:** 2.0.0 (Modular)  
+> **Version:** 2.2.0 (Power Features)  
 > **Last Updated:** January 2026
 
 ---
@@ -10,6 +10,8 @@
 ```
 spectre-modular/
 ├── index.html          ← Main HTML page (edit for layout changes)
+├── manifest.json       ← PWA manifest for installable app
+├── sw.js               ← Service Worker for offline support
 ├── STRUCTURE.md        ← This documentation file
 ├── css/
 │   ├── variables.css   ← Colors, fonts, themes (EDIT THIS FOR BRANDING)
@@ -17,6 +19,8 @@ spectre-modular/
 │   ├── components.css  ← Buttons, cards, inputs (UI elements)
 │   ├── layout.css      ← Page structure (landing, results)
 │   └── utilities.css   ← Helper classes (spacing, animations)
+├── icons/
+│   └── icon.svg        ← PWA app icon
 └── js/
     ├── tools-db.js     ← 🔧 TOOL DATABASE (EDIT THIS TO ADD/REMOVE TOOLS)
     ├── utils.js        ← Utility functions (rarely needs editing)
@@ -24,7 +28,21 @@ spectre-modular/
     ├── ui.js           ← User interface logic
     ├── export.js       ← Export functionality (JSON, CSV, etc.)
     ├── app.js          ← Core application logic
-    └── init.js         ← Initialization (loads last)
+    ├── init.js         ← Initialization (loads last)
+    │
+    │── ENHANCED MODULES (v2.1) ──────────────────────
+    ├── case-manager.js    ← 📁 Investigation/case management
+    ├── custom-tools.js    ← 🛠️ User-defined custom tools
+    ├── url-state.js       ← 🔗 URL state for shareable searches
+    ├── api-integrations.js← 🌐 Live API integrations (EmailRep, IPinfo, etc.)
+    ├── workflows.js       ← ⚡ Automated tool chains/workflows
+    ├── smart-suggestions.js← 💡 Pattern detection & tool recommendations
+    │
+    │── POWER FEATURES (v2.2) ────────────────────────
+    ├── command-palette.js ← 🎹 Ctrl+K quick command access
+    ├── bulk-processing.js ← 📋 Bulk input processing
+    ├── workspace.js       ← 🖥️ Split-pane results workspace
+    └── pwa.js             ← 📱 PWA support & offline mode
 ```
 
 ---
@@ -276,6 +294,92 @@ Set theme in `index.html` by adding `data-theme="themename"` to the `<html>` tag
 - Ensure JavaScript files load in the correct order
 - Verify all files are in the correct folders
 - Check for missing commas or brackets in edited files
+
+---
+
+## 🚀 Power Features (v2.2)
+
+### 🎹 Command Palette (Ctrl+K)
+
+Press `Ctrl+K` (or `Cmd+K` on Mac) anywhere to open the command palette:
+
+- **Quick Search**: Type to fuzzy-search any command, tool, or action
+- **Run Workflows**: Execute workflows directly from the palette
+- **Tool Jump**: Open any tool instantly by typing its name
+- **Export Data**: Quick export to JSON, CSV, Markdown, or HTML
+- **Theme Switch**: Change themes without opening settings
+- **Recent Commands**: Your last 10 commands are remembered
+
+### 📋 Bulk Input Processing
+
+Process multiple targets at once:
+
+1. Click **📋 Bulk** in the header or press `Ctrl+Shift+B`
+2. Paste your list (one item per line):
+   ```
+   john.doe@example.com
+   jane.smith@company.org
+   bob.wilson@test.net
+   ```
+3. SPECTRE auto-detects the input type (email, IP, username, etc.)
+4. Click **Process** to run API lookups on all items
+5. Results include breach data, reputation scores, and geolocation
+6. Export all results to CSV or JSON
+
+**Supported Input Types:**
+- Emails → EmailRep breach check
+- IP addresses → IPinfo geolocation
+- Domains → Certificate transparency
+- Usernames → Cross-platform enumeration
+- Phone numbers → Format validation
+
+### 🖥️ Results Workspace
+
+A professional split-pane workspace for reviewing results:
+
+1. Run a search as normal
+2. Click **🖥️ Workspace** in the toolbar
+3. **Left Panel**: List of all active tools with status indicators
+4. **Right Panel**: Live iframe preview of the selected tool
+5. **Bottom Panel**: Notes area for findings
+
+**Features:**
+- Navigate tools with keyboard (←/→ arrows)
+- Mark tools as ✅ Useful or 👎 Dead End
+- Take notes on each tool directly
+- Add findings to your active case
+- Filter tools by name
+- Open any tool in a new tab
+
+**Note:** Some sites block iframe embedding (Google, Facebook, etc.) - use "New Tab" button for these.
+
+### 📱 PWA Support (Installable App)
+
+SPECTRE can be installed as a standalone app:
+
+1. Click **📱 App** in the header to see install options
+2. Or look for the browser's install prompt
+3. Once installed, SPECTRE works offline!
+
+**PWA Features:**
+- **Install to Home Screen**: Works like a native app
+- **Offline Mode**: Core features work without internet
+- **Background Sync**: Automatically syncs when back online
+- **Cache Management**: View and clear cached data
+
+---
+
+## ⌨️ All Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+K` | Open Command Palette |
+| `Ctrl+Shift+B` | Bulk Input Processor |
+| `Ctrl+Shift+W` | Toggle Workspace |
+| `Ctrl+Shift+C` | Copy All URLs |
+| `Enter` | Run Search |
+| `Escape` | Close Modal/Palette |
+| `←/→` | Navigate Workspace Tools |
 
 ---
 
