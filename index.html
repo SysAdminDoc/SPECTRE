@@ -6,6 +6,22 @@
     <title>SPECTRE | OSINT Intelligence Platform</title>
     <meta name="description" content="SPECTRE - Open Source Intelligence Platform with 500+ OSINT tools for researchers, investigators, and security professionals.">
     
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SPECTRE">
+    <meta name="application-name" content="SPECTRE">
+    <meta name="msapplication-TileColor" content="#0a0a0f">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,9 +41,12 @@
      ============================================ -->
 <div class="landing-page" id="landingPage">
     <header class="landing-header">
-        <a href="#" class="header-link" data-tooltip="Learn about SPECTRE and its capabilities" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showAboutModal(); return false;">About</a>
+        <a href="#" class="header-link" data-tooltip="Manage investigations and cases" data-tooltip-pos="bottom" onclick="SPECTRE.cases?.showCaseManagerModal(); return false;">📁 Cases</a>
+        <a href="#" class="header-link" data-tooltip="Add your own OSINT tools" data-tooltip-pos="bottom" onclick="SPECTRE.customTools?.showCustomToolsModal(); return false;">🛠️ Custom Tools</a>
+        <a href="#" class="header-link" data-tooltip="Run predefined tool workflows" data-tooltip-pos="bottom" onclick="SPECTRE.workflows?.showWorkflowsModal(); return false;">⚡ Workflows</a>
+        <a href="#" class="header-link" data-tooltip="Process multiple inputs at once" data-tooltip-pos="bottom" onclick="SPECTRE.bulk?.showBulkInputModal(); return false;">📋 Bulk</a>
         <a href="#" class="header-link" data-tooltip="Configure application preferences and export data" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showSettingsModal(); return false;">Settings</a>
-        <a href="#" class="header-link" data-tooltip="Keyboard shortcuts and help" data-tooltip-pos="bottom" onclick="SPECTRE.ui.showHelpModal(); return false;">Help</a>
+        <a href="#" class="header-link" data-tooltip="Install as app, offline support" data-tooltip-pos="bottom" onclick="SPECTRE.pwa?.showPWASettings(); return false;">📱 App</a>
         <select class="select" id="themeSelectLanding" data-tooltip="Change the visual theme of the interface" data-tooltip-pos="bottom" onchange="SPECTRE.ui.setTheme(this.value)">
             <option value="dark">🌙 Dark</option>
             <option value="light">☀️ Light</option>
@@ -284,8 +303,30 @@
                     <div class="dropdown-item" onclick="SPECTRE.app.applyPreset('business')" data-tooltip="Focus on business intel">🏢 Business Intel</div>
                 </div>
             </div>
+            <div class="dropdown" id="workflowsDropdown">
+                <button class="btn btn-sm" onclick="SPECTRE.ui.toggleDropdown('workflowsDropdown')" data-tooltip="Run automated tool sequences" data-tooltip-pos="bottom">⚙️ Workflows</button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">Quick Workflows</div>
+                    <div class="dropdown-item" onclick="SPECTRE.workflows?.runWorkflow('person-full')">👤 Full Person Workup</div>
+                    <div class="dropdown-item" onclick="SPECTRE.workflows?.runWorkflow('domain-recon')">🌐 Domain Recon</div>
+                    <div class="dropdown-item" onclick="SPECTRE.workflows?.runWorkflow('email-osint')">📧 Email OSINT</div>
+                    <div class="dropdown-item" onclick="SPECTRE.workflows?.runWorkflow('username-enum')">🔎 Username Enum</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" onclick="SPECTRE.workflows?.showWorkflowsModal()">📋 All Workflows...</div>
+                </div>
+            </div>
         </div>
         
+        <div class="divider"></div>
+
+        <div class="controls-section">
+            <span id="activeCaseIndicator" class="case-indicator-wrapper"></span>
+            <button class="btn btn-sm" onclick="SPECTRE.workspace?.openWorkspace()" data-tooltip="Open split-pane workspace with iframe preview (Ctrl+W)" data-tooltip-pos="bottom">🖥️ Workspace</button>
+            <button class="btn btn-sm" onclick="SPECTRE.bulk?.showBulkInputModal()" data-tooltip="Process multiple inputs at once" data-tooltip-pos="bottom">📋 Bulk</button>
+            <button class="btn btn-sm" onclick="SPECTRE.suggestions?.showSuggestionsModal()" data-tooltip="Get smart tool recommendations" data-tooltip-pos="bottom">💡 Tips</button>
+            <button class="btn btn-sm" onclick="SPECTRE.urlState?.showShareModal()" data-tooltip="Share or bookmark this search" data-tooltip-pos="bottom">🔗 Share</button>
+        </div>
+
         <div class="divider"></div>
         
         <div class="controls-section">
@@ -395,12 +436,29 @@
 <!-- ============================================
      MODULAR JAVASCRIPT (load in order)
      ============================================ -->
+<!-- Core Modules -->
 <script src="js/tools-db.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/export.js"></script>
 <script src="js/app.js"></script>
+
+<!-- Enhanced Modules (v2.1) -->
+<script src="js/case-manager.js"></script>
+<script src="js/custom-tools.js"></script>
+<script src="js/url-state.js"></script>
+<script src="js/api-integrations.js"></script>
+<script src="js/workflows.js"></script>
+<script src="js/smart-suggestions.js"></script>
+
+<!-- Power Features (v2.2) -->
+<script src="js/command-palette.js"></script>
+<script src="js/bulk-processing.js"></script>
+<script src="js/workspace.js"></script>
+<script src="js/pwa.js"></script>
+
+<!-- Initialization (must be last) -->
 <script src="js/init.js"></script>
 
 </body>
