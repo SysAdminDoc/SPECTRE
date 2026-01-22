@@ -1089,14 +1089,13 @@ body.results-mode { overflow: hidden; height: 100vh; }
     <div class="stats-bar">
         <div class="stat-group">
             <div class="stat"><span class="stat-value" id="activeCount">0</span><span class="stat-label">Active</span></div>
-            <div class="stat"><span class="stat-value" id="checkedCount">0</span><span class="stat-label">Checked</span></div>
             <div class="stat"><span class="stat-value" id="totalCount">0</span><span class="stat-label">Total</span></div>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
         </div>
         <div class="filter-pills">
-            <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
-            <button class="filter-pill" data-filter="free" onclick="setFilter('free')">Free</button>
-            <button class="filter-pill" data-filter="active" onclick="setFilter('active')">Active</button>
+            <button class="filter-pill" data-filter="all" onclick="setFilter('all')">All</button>
+            <button class="filter-pill active" data-filter="free" onclick="setFilter('free')">Free</button>
+            <button class="filter-pill" data-filter="freemium" onclick="setFilter('freemium')">Freemium</button>
+            <button class="filter-pill" data-filter="active" onclick="setFilter('active')">Active Only</button>
             <span class="divider"></span>
             <button class="filter-pill" data-filter="people" onclick="setFilter('people')">People</button>
             <button class="filter-pill" data-filter="social" onclick="setFilter('social')">Social</button>
@@ -1105,27 +1104,6 @@ body.results-mode { overflow: hidden; height: 100vh; }
     </div>
 
     <div class="main-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-tabs">
-                <div class="sidebar-tab active" data-tab="history" onclick="switchTab('history')">📜 History</div>
-                <div class="sidebar-tab" data-tab="favorites" onclick="switchTab('favorites')">⭐ Favorites</div>
-            </div>
-            <div class="sidebar-content">
-                <div class="tab-panel" id="panel-history">
-                    <div class="sidebar-section">
-                        <div class="sidebar-title"><span>Recent Searches</span><button class="btn btn-xs" onclick="clearHistory()">Clear</button></div>
-                        <div id="historyList"></div>
-                    </div>
-                </div>
-                <div class="tab-panel hidden" id="panel-favorites">
-                    <div class="sidebar-section">
-                        <div class="sidebar-title">Favorite Tools</div>
-                        <div id="favoritesList"></div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
         <main class="main-content" id="mainContent">
             <div class="results-grid" id="resultsGrid"></div>
             <div class="empty-state" id="emptyState">
@@ -1146,15 +1124,12 @@ body.results-mode { overflow: hidden; height: 100vh; }
 // ============================================
 const state = {
     mode: 'landing',
-    filter: 'all',
+    filter: 'free',
+    badgeFilter: 'free',
     searchTerm: '',
     selectedCategory: 'all',
-    checkedTools: new Set(),
     generatedLinks: []
 };
-
-let favorites = JSON.parse(localStorage.getItem('spectre-fav') || '[]');
-let searchHistory = JSON.parse(localStorage.getItem('spectre-hist') || '[]');
 
 // ============================================
 // TOOLS DATABASE (530+ tools across 25 categories)
@@ -1881,7 +1856,6 @@ function runSearch(mode = 'normal') {
     const v = getInputValues();
     const has = Object.entries(v).some(([k, val]) => !['first','last','First','Last','phoneClean'].includes(k) && val?.length > 0);
     if (!has) { toast('Enter at least one parameter', 'error'); return; }
-    saveHistory(v);
     syncInputs(v);
     showResults();
     setTimeout(() => renderResults(v, mode), 300);
@@ -1891,37 +1865,45 @@ function renderResults(v, mode) {
     grid.innerHTML = '';
     document.getElementById('emptyState').style.display = 'none';
     state.generatedLinks = [];
-    state.checkedTools = new Set();
     let totalActive = 0, totalTools = 0;
 
     Object.entries(toolsDB).forEach(([catId, cat]) => {
         if (!cat.tools?.length) return;
         if (state.selectedCategory !== 'all' && catId !== state.selectedCategory) return;
-        const active = cat.tools.filter(t => hasFields(t, v));
+        
+        // Filter tools by badge type and active status
+        const filteredTools = cat.tools.filter(t => {
+            const isActive = hasFields(t, v);
+            if (!isActive) return false; // Hide inactive tools
+            
+            // Badge filter
+            if (state.badgeFilter === 'free') return t.badge === 'free';
+            if (state.badgeFilter === 'freemium') return t.badge === 'free' || t.badge === 'freemium';
+            return true; // 'all' shows everything active
+        });
+        
         totalTools += cat.tools.length;
-        totalActive += active.length;
+        totalActive += filteredTools.length;
+
+        if (filteredTools.length === 0) return; // Skip empty categories
 
         const card = document.createElement('div');
-        card.className = `category-card ${active.length > 0 ? 'has-results' : ''}`;
+        card.className = 'category-card has-results';
         card.dataset.category = catId;
         card.dataset.group = cat.group;
 
-        const toolsHtml = cat.tools.map((t, idx) => {
-            const isActive = hasFields(t, v);
-            const url = isActive ? buildUrl(t.url, v) : '#';
-            const isFav = favorites.some(f => f.name === t.name);
+        const toolsHtml = filteredTools.map((t, idx) => {
+            const url = buildUrl(t.url, v);
             const tid = `${catId}-${idx}`;
-            if (isActive) state.generatedLinks.push({ id: tid, category: cat.name, name: t.name, url });
-            return `<div class="tool-item ${isActive ? '' : 'inactive'}" data-tid="${tid}">
-                <div class="tool-checkbox ${state.checkedTools.has(tid) ? 'checked' : ''}" onclick="toggleCheck('${tid}')">${state.checkedTools.has(tid) ? '✓' : ''}</div>
+            state.generatedLinks.push({ id: tid, category: cat.name, name: t.name, url, badge: t.badge });
+            return `<div class="tool-item" data-tid="${tid}" data-badge="${t.badge}">
                 <div class="tool-info">
-                    <a href="${url}" target="_blank" class="tool-name" ${isActive ? '' : 'onclick="return false;"'}>${t.name}</a>
+                    <a href="${url}" target="_blank" class="tool-name">${t.name}</a>
                     ${t.desc ? `<div class="tool-desc">${t.desc}</div>` : ''}
                 </div>
                 <div class="tool-badges"><span class="badge badge-${t.badge}">${t.badge}</span></div>
                 <div class="tool-actions">
-                    <button class="tool-action ${isFav ? 'favorited' : ''}" onclick="toggleFav('${catId}',${idx})" title="Favorite">⭐</button>
-                    <button class="tool-action" onclick="copyUrl('${url}')" title="Copy">📋</button>
+                    <button class="tool-action" onclick="copyUrl('${url}')" title="Copy URL">📋</button>
                 </div>
             </div>`;
         }).join('');
@@ -1930,7 +1912,7 @@ function renderResults(v, mode) {
             <div class="category-title">
                 <span class="category-icon">${cat.icon}</span>
                 <span class="category-name">${cat.name}</span>
-                <span class="category-count ${active.length > 0 ? 'active' : ''}">${active.length}/${cat.tools.length}</span>
+                <span class="category-count active">${filteredTools.length}</span>
             </div>
             <span class="category-toggle">▼</span>
         </div>
@@ -1940,7 +1922,6 @@ function renderResults(v, mode) {
 
     document.getElementById('activeCount').textContent = totalActive;
     document.getElementById('totalCount').textContent = totalTools;
-    updateProgress();
     if (mode === 'lucky' && state.generatedLinks.length > 0) {
         window.open(state.generatedLinks[0].url, '_blank');
         toast(`Opening ${state.generatedLinks[0].name}`, 'success');
@@ -1951,32 +1932,12 @@ function renderResults(v, mode) {
 // TOOL ACTIONS
 // ============================================
 function toggleCat(h) { h.closest('.category-card').classList.toggle('collapsed'); }
-function toggleCheck(tid) {
-    state.checkedTools.has(tid) ? state.checkedTools.delete(tid) : state.checkedTools.add(tid);
-    const cb = document.querySelector(`[data-tid="${tid}"] .tool-checkbox`);
-    if (cb) { cb.classList.toggle('checked'); cb.textContent = state.checkedTools.has(tid) ? '✓' : ''; }
-    document.getElementById('checkedCount').textContent = state.checkedTools.size;
-    updateProgress();
-}
-function updateProgress() {
-    const a = parseInt(document.getElementById('activeCount').textContent);
-    const c = state.checkedTools.size;
-    document.getElementById('progressFill').style.width = `${a > 0 ? Math.round(c/a*100) : 0}%`;
-}
-function toggleFav(catId, idx) {
-    const t = toolsDB[catId].tools[idx];
-    const i = favorites.findIndex(f => f.name === t.name);
-    if (i >= 0) { favorites.splice(i, 1); toast(`Removed ${t.name}`, 'info'); }
-    else { favorites.push({...t, src: catId}); toast(`Added ${t.name} to favorites`, 'success'); }
-    localStorage.setItem('spectre-fav', JSON.stringify(favorites));
-    renderFavorites();
-}
 function copyUrl(u) { navigator.clipboard.writeText(u); toast('URL copied', 'success'); }
 function openAllLinks() {
-    const links = state.generatedLinks.filter(l => !state.checkedTools.has(l.id));
+    const links = state.generatedLinks;
     if (!links.length) { toast('No links to open', 'warning'); return; }
     if (links.length > 10 && !confirm(`Open ${links.length} links?`)) return;
-    links.forEach((l, i) => setTimeout(() => { window.open(l.url, '_blank'); toggleCheck(l.id); }, i * 200));
+    links.forEach((l, i) => setTimeout(() => window.open(l.url, '_blank'), i * 200));
     toast(`Opening ${links.length} links...`, 'info');
 }
 function copyAllLinks() {
@@ -1987,11 +1948,10 @@ function expandAll() { document.querySelectorAll('.category-card').forEach(c => 
 function collapseAll() { document.querySelectorAll('.category-card').forEach(c => c.classList.add('collapsed')); }
 function clearAll() {
     document.querySelectorAll('input').forEach(i => { if (!['country','qCountry'].includes(i.id)) i.value = ''; });
-    state.checkedTools.clear(); state.generatedLinks = [];
+    state.generatedLinks = [];
     document.getElementById('resultsGrid').innerHTML = '';
     document.getElementById('emptyState').style.display = '';
     document.getElementById('activeCount').textContent = '0';
-    document.getElementById('checkedCount').textContent = '0';
     validateInputs();
     toast('Cleared', 'info');
 }
@@ -2002,11 +1962,28 @@ function clearAll() {
 function setFilter(f) {
     state.filter = f;
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === f));
+    
+    // Handle badge filters
+    if (['free', 'freemium', 'all'].includes(f)) {
+        state.badgeFilter = f;
+        // Re-render results with new badge filter
+        const v = getInputValues();
+        const has = Object.entries(v).some(([k, val]) => !['first','last','First','Last','phoneClean'].includes(k) && val?.length > 0);
+        if (has) renderResults(v, 'normal');
+        return;
+    }
+    
+    // Handle active-only filter
+    if (f === 'active') {
+        // Already showing only active tools by default now
+        return;
+    }
+    
+    // Handle category group filters
     document.querySelectorAll('.category-card').forEach(c => {
         const g = c.dataset.group;
         let show = true;
-        if (f === 'active') show = c.classList.contains('has-results');
-        else if (['people','social','technical','records'].includes(f)) show = g === f;
+        if (['people','social','technical','records'].includes(f)) show = g === f;
         c.style.display = show ? '' : 'none';
     });
 }
@@ -2031,60 +2008,6 @@ function toggleAdvanced() {
     document.getElementById('advancedPanel').classList.toggle('open');
 }
 function toggleExtended() { document.getElementById('extendedBar').classList.toggle('visible'); }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
-function switchTab(tab) {
-    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== `panel-${tab}`));
-}
-
-// ============================================
-// HISTORY
-// ============================================
-function saveHistory(v) {
-    const parts = [];
-    if (v.first && v.last) parts.push(`${v.First} ${v.Last}`);
-    if (v.username) parts.push(`@${v.username}`);
-    if (v.email) parts.push(v.email);
-    if (v.domain) parts.push(v.domain);
-    const entry = { values: {...v}, display: parts.join(' • ') || 'Search', ts: Date.now() };
-    searchHistory.unshift(entry);
-    searchHistory = searchHistory.slice(0, 30);
-    localStorage.setItem('spectre-hist', JSON.stringify(searchHistory));
-    renderHistory();
-}
-function renderHistory() {
-    const list = document.getElementById('historyList');
-    if (!list) return;
-    if (!searchHistory.length) { list.innerHTML = '<div style="padding:0.5rem;color:var(--text-muted);font-size:0.75rem;">No recent searches</div>'; return; }
-    list.innerHTML = searchHistory.slice(0, 15).map((e, i) => `<div class="history-item" onclick="loadHistory(${i})">
-        <span>🔍</span><span class="history-text">${e.display}</span>
-        <span class="history-time">${new Date(e.ts).toLocaleDateString()}</span>
-    </div>`).join('');
-}
-function loadHistory(i) {
-    const e = searchHistory[i]; if (!e) return;
-    const v = e.values;
-    document.getElementById('qFirst').value = v.first || '';
-    document.getElementById('qLast').value = v.last || '';
-    document.getElementById('qUsername').value = v.username || '';
-    document.getElementById('qEmail').value = v.email || '';
-    runSearch();
-}
-function clearHistory() { searchHistory = []; localStorage.removeItem('spectre-hist'); renderHistory(); toast('History cleared', 'info'); }
-
-// ============================================
-// FAVORITES
-// ============================================
-function renderFavorites() {
-    const list = document.getElementById('favoritesList');
-    if (!list) return;
-    if (!favorites.length) { list.innerHTML = '<div style="padding:0.5rem;color:var(--text-muted);font-size:0.75rem;">No favorites</div>'; return; }
-    list.innerHTML = favorites.map((f, i) => `<div class="fav-item">
-        <span>⭐</span><span class="history-text">${f.name}</span>
-        <button class="btn btn-xs" onclick="removeFav(${i})">✕</button>
-    </div>`).join('');
-}
-function removeFav(i) { favorites.splice(i, 1); localStorage.setItem('spectre-fav', JSON.stringify(favorites)); renderFavorites(); toast('Removed', 'info'); }
 
 // ============================================
 // PRESETS
@@ -2144,14 +2067,7 @@ function showSettingsModal() {
     showModal('Settings', `<div class="form-group"><label class="form-label">Theme</label>
         <select class="form-input" id="setTheme" onchange="setTheme(this.value)">
             <option value="dark">🌙 Dark</option><option value="light">☀️ Light</option><option value="hacker">💻 Hacker</option>
-        </select></div>
-        <hr style="border-color:var(--border-subtle);margin:1rem 0">
-        <div class="form-group"><label class="form-label">Data</label>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-                <button class="btn btn-sm" onclick="exportData()">📤 Export</button>
-                <button class="btn btn-sm" onclick="clearData()">🗑️ Clear All</button>
-            </div>
-        </div>`, [{text:'Close',action:'closeModal()'}]);
+        </select></div>`, [{text:'Close',action:'closeModal()'}]);
     document.getElementById('setTheme').value = localStorage.getItem('spectre-theme') || 'dark';
 }
 function showAboutModal() {
@@ -2167,9 +2083,9 @@ function showHelpModal() {
     <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem;">Enter any combination of search parameters and click Search. SPECTRE generates links to all relevant OSINT tools.</p>
     <h3 style="margin-bottom:0.75rem;">Tips</h3>
     <ul style="color:var(--text-secondary);font-size:0.85rem;margin-left:1rem;">
-        <li>Use checkboxes to track visited tools</li>
-        <li>Star tools to add to favorites</li>
-        <li>Use filters to focus on specific categories</li>
+        <li>Default filter shows only free tools</li>
+        <li>Use badge filters to include freemium/paid tools</li>
+        <li>Use category filters to focus on specific types</li>
         <li>Export results for documentation</li>
     </ul>`, [{text:'Close',action:'closeModal()'}]);
 }
@@ -2186,17 +2102,6 @@ function showShortcutsModal() {
         </div>
     </div>`, [{text:'Close',action:'closeModal()'}]);
 }
-function exportData() {
-    const data = { favorites, searchHistory, settings: { theme: localStorage.getItem('spectre-theme') } };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'spectre-backup.json';
-    a.click();
-    toast('Data exported', 'success');
-}
-function clearData() { if (confirm('Delete ALL data?')) { localStorage.clear(); location.reload(); } }
-
 // ============================================
 // TOAST
 // ============================================
@@ -2247,8 +2152,6 @@ document.querySelectorAll('.input-pill input, .quick-field input, .adv-input inp
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
-    renderHistory();
-    renderFavorites();
     let total = 0;
     Object.values(toolsDB).forEach(c => total += c.tools?.length || 0);
     document.getElementById('totalToolCount').textContent = total;
