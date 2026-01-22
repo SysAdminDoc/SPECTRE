@@ -1813,6 +1813,77 @@ function validateInputs() {
 }
 
 // ============================================
+// CATEGORY RELEVANCE MAPPING
+// ============================================
+// Maps input types to relevant categories
+const categoryMapping = {
+    // Name-based searches (first/last name)
+    name: ['people', 'social', 'court', 'government', 'academic', 'international', 'search', 'news'],
+    // Username-based searches
+    username: ['social', 'username', 'darkweb'],
+    // Email-based searches
+    email: ['email', 'breach'],
+    // Phone-based searches
+    phone: ['phone', 'people'],
+    // Domain-based searches
+    domain: ['domain', 'archive', 'business'],
+    // IP address searches
+    ip: ['ip'],
+    // Company/business searches
+    company: ['business', 'government', 'international', 'aviation', 'maritime', 'court'],
+    // Address/location searches (street, city, state, zip)
+    location: ['property', 'geo', 'people'],
+    // Image URL searches
+    imageUrl: ['image'],
+    // VIN/vehicle searches
+    vin: ['vehicle'],
+    // License plate searches
+    licensePlate: ['vehicle'],
+    // Cryptocurrency address searches
+    cryptoAddress: ['crypto']
+};
+
+// Determine which categories are relevant based on filled inputs
+function getRelevantCategories(v) {
+    const relevant = new Set();
+    
+    // Check which input types have values
+    const hasName = (v.first?.length > 0 || v.last?.length > 0);
+    const hasUsername = v.username?.length > 0;
+    const hasEmail = v.email?.length > 0;
+    const hasPhone = v.phoneClean?.length > 0;
+    const hasDomain = v.domain?.length > 0;
+    const hasIP = v.ip?.length > 0;
+    const hasCompany = v.company?.length > 0;
+    const hasLocation = (v.streetAddress?.length > 0 || v.city?.length > 0 || v.state?.length > 0 || v.zip?.length > 0);
+    const hasImageUrl = v.imageUrl?.length > 0 && v.imageUrl !== 'undefined';
+    const hasVIN = v.vin?.length > 0;
+    const hasLicensePlate = v.licensePlate?.length > 0;
+    const hasCrypto = v.cryptoAddress?.length > 0;
+    
+    // Add relevant categories based on inputs
+    if (hasName) categoryMapping.name.forEach(c => relevant.add(c));
+    if (hasUsername) categoryMapping.username.forEach(c => relevant.add(c));
+    if (hasEmail) categoryMapping.email.forEach(c => relevant.add(c));
+    if (hasPhone) categoryMapping.phone.forEach(c => relevant.add(c));
+    if (hasDomain) categoryMapping.domain.forEach(c => relevant.add(c));
+    if (hasIP) categoryMapping.ip.forEach(c => relevant.add(c));
+    if (hasCompany) categoryMapping.company.forEach(c => relevant.add(c));
+    if (hasLocation) categoryMapping.location.forEach(c => relevant.add(c));
+    if (hasImageUrl) categoryMapping.imageUrl.forEach(c => relevant.add(c));
+    if (hasVIN) categoryMapping.vin.forEach(c => relevant.add(c));
+    if (hasLicensePlate) categoryMapping.licensePlate.forEach(c => relevant.add(c));
+    if (hasCrypto) categoryMapping.cryptoAddress.forEach(c => relevant.add(c));
+    
+    // Always include frameworks as general reference tools (but only if something else is selected)
+    if (relevant.size > 0) {
+        relevant.add('frameworks');
+    }
+    
+    return relevant;
+}
+
+// ============================================
 // SEARCH
 // ============================================
 function runSearch(mode = 'normal') {
@@ -1829,10 +1900,16 @@ function renderResults(v, mode) {
     document.getElementById('emptyState').style.display = 'none';
     state.generatedLinks = [];
     let totalActive = 0, totalTools = 0;
+    
+    // Get relevant categories based on input
+    const relevantCategories = getRelevantCategories(v);
 
     Object.entries(toolsDB).forEach(([catId, cat]) => {
         if (!cat.tools?.length) return;
         if (state.selectedCategory !== 'all' && catId !== state.selectedCategory) return;
+        
+        // Skip categories that aren't relevant to the current search inputs
+        if (!relevantCategories.has(catId)) return;
         
         // Filter tools by badge type and active status
         const filteredTools = cat.tools.filter(t => {
